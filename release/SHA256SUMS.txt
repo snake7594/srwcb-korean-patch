@@ -1,1 +1,1 @@
-03748915e62ff9aabb4ee91ffcdbdb00984227d261d9704e4495738f254718de  hangul-krom-bios-test-v0.0.1-pre.xdelta
+0894206e6fc99ea65ef7d45f9987a73ee925563ecb0c50da8fafea5dbf373cf1  srwcb-hangul-exe-font-test-v0.0.2-pre.xdelta

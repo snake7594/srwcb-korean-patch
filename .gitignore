@@ -1,6 +1,6 @@
 # Disc images and firmware
 *.bin
-!font/hangul_galmuri14_ksx1001_16x15.bin
+!font/hangul_galmuri14_ksx1001_16x16.bin
 *.iso
 *.img
 *.cue
