@@ -1,0 +1,1 @@
+03748915e62ff9aabb4ee91ffcdbdb00984227d261d9704e4495738f254718de  hangul-krom-bios-test-v0.0.1-pre.xdelta

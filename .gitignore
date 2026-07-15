@@ -1,0 +1,60 @@
+# Disc images and firmware
+*.bin
+!font/hangul_galmuri14_ksx1001_16x15.bin
+*.iso
+*.img
+*.cue
+*.chd
+*.pbp
+*.mdf
+*.mds
+*.ccd
+*.sub
+*.toc
+*.nrg
+*.cso
+*.ecm
+*.rom
+
+# Executables, emulator modules, saves, and states
+*.exe
+*.dll
+*.so
+*.dylib
+*.mcr
+*.srm
+*.state*
+scph*.bin
+
+# Archives can accidentally carry ignored game data
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+
+# Common extracted PS1 game assets
+SLPS_*
+*.WAR
+*.XA
+*.STR
+*.VAB
+
+# Extracted or local test material
+extracted/
+test_build/
+font_candidates/
+screenshots/
+saves/
+states/
+bios/
+system/
+logs/
+RetroArch*/
+release/GITHUB_RELEASE_SHA256SUMS.txt
+
+# Tool caches and platform files
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+*.bdf text eol=lf
+*.md text eol=lf
+*.ps1 text eol=crlf
+*.py text eol=lf
+*.tsv text eol=lf
+*.txt text eol=lf
+*.bin binary
+*.png binary
+*.xdelta binary
+*.zip binary
