@@ -19,7 +19,8 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $ExpectedSourceHash = '3f25650b588774d55c3bbb5b771779beab408eaca020e9a622133ade323a0f94'
-$ExpectedOutputHash = '4749e1c85c28999ae0abc0e9128cbe2b18d113c552f0e93aa2328e092cc317f6'
+$ExpectedOutputHash = 'd8e5d2d04c79147817d2f3ac179e480ddea5075b82fdc00cde694632399a11a5'
+$ExpectedPatchHash = '70baa8cc6be876968a893bbe0723f398201ed48f35b173249044ec029f4d50b8'
 $ExpectedTrack2Hash = '2fbf5a94ffc8b475741529c4a95d580c937ca37db31db227e0d6c7a917a1e95f'
 
 function Get-RelativeFilePath {
@@ -38,32 +39,41 @@ function Get-RelativeFilePath {
     if ($baseUri.Scheme -ne $targetUri.Scheme) {
         return $targetUri.LocalPath
     }
-    return [Uri]::UnescapeDataString($baseUri.MakeRelativeUri($targetUri).ToString()).Replace('/', $separator)
+    return [Uri]::UnescapeDataString(
+        $baseUri.MakeRelativeUri($targetUri).ToString()
+    ).Replace('/', $separator)
 }
 
 if (-not $XdeltaPath) {
     $XdeltaPath = Join-Path $PSScriptRoot 'xdelta.exe'
 }
 if (-not $PatchPath) {
-    $PatchPath = Join-Path $PSScriptRoot 'release\srwcb-hangul-exe-font-test-v0.0.2-pre.xdelta'
+    $PatchPath = Join-Path $PSScriptRoot 'release\srwcb-second-korean-v0.1.0-pre.xdelta'
 }
 
 $source = (Resolve-Path -LiteralPath $SourceTrack1).Path
 $xdelta = (Resolve-Path -LiteralPath $XdeltaPath).Path
 $patch = (Resolve-Path -LiteralPath $PatchPath).Path
 
+$patchHash = (Get-FileHash -LiteralPath $patch -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($patchHash -ne $ExpectedPatchHash) {
+    throw "지원하지 않거나 손상된 xdelta입니다. SHA-256: $patchHash"
+}
+
 if (-not $OutputTrack1) {
-    $OutputTrack1 = Join-Path ([IO.Path]::GetDirectoryName($source)) 'Super Robot Taisen Complete Box Hangul Font Test (Track 1).bin'
+    $OutputTrack1 = Join-Path (
+        [IO.Path]::GetDirectoryName($source)
+    ) 'Super Robot Taisen Complete Box Second Korean v0.1.0-pre (Track 1).bin'
 }
 $output = [IO.Path]::GetFullPath($OutputTrack1)
 if ($source.Equals($output, [StringComparison]::OrdinalIgnoreCase)) {
-    throw 'The output path must be different from the source Track 1 path.'
+    throw '출력 경로는 원본 Track 1 경로와 달라야 합니다.'
 }
 $outputDirectory = [IO.Path]::GetDirectoryName($output)
 
 $sourceHash = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
 if ($sourceHash -ne $ExpectedSourceHash) {
-    throw "Unsupported source Track 1. SHA-256: $sourceHash"
+    throw "지원하지 않는 원본 Track 1입니다. SHA-256: $sourceHash"
 }
 
 $track2 = $null
@@ -71,27 +81,31 @@ $cue = $null
 $cueDirectory = $null
 if ($SourceTrack2) {
     $track2 = (Resolve-Path -LiteralPath $SourceTrack2).Path
-    $track2Hash = (Get-FileHash -LiteralPath $track2 -Algorithm SHA256).Hash.ToLowerInvariant()
+    $track2Hash = (
+        Get-FileHash -LiteralPath $track2 -Algorithm SHA256
+    ).Hash.ToLowerInvariant()
     if ($track2Hash -ne $ExpectedTrack2Hash) {
-        throw "Unsupported source Track 2. SHA-256: $track2Hash"
+        throw "지원하지 않는 원본 Track 2입니다. SHA-256: $track2Hash"
     }
 
     if (-not $OutputCue) {
-        $OutputCue = Join-Path $outputDirectory 'Super Robot Taisen Complete Box Hangul Font Test.cue'
+        $OutputCue = Join-Path (
+            $outputDirectory
+        ) 'Super Robot Taisen Complete Box Second Korean v0.1.0-pre.cue'
     }
     $cue = [IO.Path]::GetFullPath($OutputCue)
     if ($cue.Equals($output, [StringComparison]::OrdinalIgnoreCase)) {
-        throw 'The output CUE path must be different from the output Track 1 path.'
+        throw '출력 CUE 경로는 출력 Track 1 경로와 달라야 합니다.'
     }
     if ((Test-Path -LiteralPath $cue) -and -not $Force) {
-        throw "The output CUE already exists. Choose another path or pass -Force: $cue"
+        throw "출력 CUE가 이미 있습니다. 다른 경로를 선택하거나 -Force를 사용하십시오: $cue"
     }
     $cueDirectory = [IO.Path]::GetDirectoryName($cue)
 }
 
 if (Test-Path -LiteralPath $output) {
     if (-not $Force) {
-        throw "The output already exists. Choose another path or pass -Force: $output"
+        throw "출력 파일이 이미 있습니다. 다른 경로를 선택하거나 -Force를 사용하십시오: $output"
     }
     Remove-Item -LiteralPath $output -Force
 }
@@ -106,12 +120,14 @@ if ($cueDirectory -and -not (Test-Path -LiteralPath $cueDirectory)) {
 try {
     & $xdelta -d -s $source $patch $output
     if ($LASTEXITCODE -ne 0) {
-        throw "xdelta decode failed with exit code $LASTEXITCODE"
+        throw "xdelta 적용이 종료 코드 ${LASTEXITCODE}(으)로 실패했습니다."
     }
 
-    $outputHash = (Get-FileHash -LiteralPath $output -Algorithm SHA256).Hash.ToLowerInvariant()
+    $outputHash = (
+        Get-FileHash -LiteralPath $output -Algorithm SHA256
+    ).Hash.ToLowerInvariant()
     if ($outputHash -ne $ExpectedOutputHash) {
-        throw "Output verification failed. SHA-256: $outputHash"
+        throw "출력 검증에 실패했습니다. SHA-256: $outputHash"
     }
 }
 catch {
@@ -121,18 +137,19 @@ catch {
     throw
 }
 
-Write-Host 'Track 1 patch and SHA-256 verification completed.'
-Write-Host "Output: $output"
+Write-Host 'Track 1 패치와 SHA-256 검증을 완료했습니다.'
+Write-Host "출력: $output"
 Write-Host "SHA-256: $ExpectedOutputHash"
 
 if ($track2) {
     $track1Reference = Get-RelativeFilePath -FromDirectory $cueDirectory -ToPath $output
     $track2Reference = Get-RelativeFilePath -FromDirectory $cueDirectory -ToPath $track2
+    $quote = [char]34
     $cueLines = @(
-        "FILE `"$track1Reference`" BINARY"
+        "$quote$track1Reference$quote BINARY" -replace '^', 'FILE '
         '  TRACK 01 MODE2/2352'
         '    INDEX 01 00:00:00'
-        "FILE `"$track2Reference`" BINARY"
+        "$quote$track2Reference$quote BINARY" -replace '^', 'FILE '
         '  TRACK 02 AUDIO'
         '    INDEX 00 00:00:00'
         '    INDEX 01 00:02:00'

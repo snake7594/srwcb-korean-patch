@@ -1,31 +1,46 @@
-# 슈퍼로봇대전 컴플리트 박스 한글 글꼴 시험판
+# 슈퍼로봇대전 컴플리트 박스 — 제2차 슈퍼로봇대전 한국어 패치
 
-`v0.0.2-pre`는 게임 실행 파일에 내장된 일본어 글꼴을 갈무리14 기반 KS X 1001 한글 2,350자로 바꾸는 **표시 경로 확인용 시험판**입니다. 일본어 메시지의 한자가 임의의 한글로 보이면 내장 글꼴 교체 경로가 정상적으로 작동하는 것입니다.
+`v0.1.0-pre`는 《슈퍼로봇대전 컴플리트 박스》에 수록된
+《제2차 슈퍼로봇대전》의 대사를 한국어로 바꾸는 조기 시험판입니다.
+원문보다 긴 번역을 잘라 넣지 않고, 메시지 저장소와 포인터를 다시
+구성하는 가변 길이 패치를 사용합니다.
 
-![갈무리14 한글 2,350자](font/hangul_galmuri14_ksx1001_16x16.png)
+## 번역 범위
 
-## 확인된 글꼴 구조
+- 시나리오 대사: 4,616건
+- 전투 대사: 17,364건
+- 격추·사망 대사: 95건
+- 전체 적용 위치: 22,075건
+- 중복을 합친 한국어 번역: 6,503종
+- 갈무리14 기반 KS X 1001 한글 2,350자와 추가 글리프
 
-게임은 BIOS KROM이 아니라 `SLPS_020.70`, `TR.WAR`, `EX.WAR`, `SECOND.WAR`, `THIRD.WAR`에 각각 들어 있는 동일한 글꼴을 사용합니다.
+《제3차 슈퍼로봇대전》, 《슈퍼로봇대전 EX》,
+《슈퍼로봇대전 외전 마장기신》의 대사는 번역하지 않습니다. 실행 파일의
+공통 메뉴와 일부 UI도 아직 일본어입니다.
 
-- 글꼴 크기: `0x16000`바이트
-- 구성: 2,816자 × 32바이트
-- 셀 형식: 16×16, 1bpp, 행당 2바이트, MSB 우선
-- 원본 글꼴 SHA-256: `6d84a02c49592abc9b0a7d66d91b5aa132543090a2698ca45af001ad3aea3752`
-- 문자 인코딩: Shift-JIS가 아닌 게임 전용 글리프 인덱스
+## 중요한 시험판 안내
 
-첫 257개 기호·영문·가나를 보존하고, 전체폭으로 처리되는 인덱스 `0x101–0xA2E`에 한글 2,350자를 넣었습니다. 일본어 문장 번역과 메시지 재인코딩은 아직 포함하지 않습니다.
+이 버전은 전체 구조 검사와 xdelta 역적용 검증을 통과했지만, 6,503개
+번역 전체의 독립 인적 교정과 처음부터 끝까지의 실기 플레이 검증은
+완료되지 않았습니다. 오역, 말투 불일치, 화면 전환 문제 또는 특정
+전투 조합에서의 오류가 남아 있을 수 있습니다. 원본 이미지는 별도로
+보관하고 시험용으로 사용하십시오.
 
-## xdelta 적용
+## 패치 적용
 
-정상 소유한 원본 Track 1과 별도로 구한 xdelta3 실행 파일이 필요합니다. 원본 BIN을 덮어쓰지 마십시오.
+정상 소유한 아래 원본 Track 1과 별도로 구한 xdelta3 실행 파일이
+필요합니다. 저장소와 릴리스에는 게임 ROM과 `xdelta.exe`가 포함되지
+않습니다.
 
 ```text
-입력 파일: Super Robot Taisen Complete Box (Track 1).bin
-입력 크기: 565,543,104 bytes
-입력 SHA-256: 3f25650b588774d55c3bbb5b771779beab408eaca020e9a622133ade323a0f94
+원본 파일: Super Robot Taisen Complete Box (Track 1).bin
+원본 크기: 565,543,104 bytes
+원본 SHA-256:
+3f25650b588774d55c3bbb5b771779beab408eaca020e9a622133ade323a0f94
 
-출력 SHA-256: 4749e1c85c28999ae0abc0e9128cbe2b18d113c552f0e93aa2328e092cc317f6
+패치 결과 크기: 566,980,176 bytes
+패치 결과 SHA-256:
+d8e5d2d04c79147817d2f3ac179e480ddea5075b82fdc00cde694632399a11a5
 ```
 
 저장소 루트에 `xdelta.exe`가 있을 때:
@@ -36,39 +51,48 @@
   -SourceTrack2 ".\Super Robot Taisen Complete Box (Track 2).bin"
 ```
 
+`SourceTrack2`는 선택 사항입니다. 지정하면 패치된 Track 1과 원본
+Track 2를 연결하는 CUE를 함께 만듭니다. Track 2 자체는 변경하지
+않습니다.
+
 직접 적용하려면:
 
 ```powershell
 .\xdelta.exe -d -s `
   ".\Super Robot Taisen Complete Box (Track 1).bin" `
-  ".\release\srwcb-hangul-exe-font-test-v0.0.2-pre.xdelta" `
-  ".\Super Robot Taisen Complete Box Hangul Font Test (Track 1).bin"
+  ".\release\srwcb-second-korean-v0.1.0-pre.xdelta" `
+  ".\Super Robot Taisen Complete Box Second Korean v0.1.0-pre (Track 1).bin"
 ```
 
-Track 2는 수정하지 않습니다. 동봉된 PowerShell 스크립트에 Track 2를 지정하면 출력 Track 1과 원본 Track 2를 연결하는 CUE도 생성합니다.
+## 가변 길이 패치
 
-## 시험할 내용
+한국어 문장을 원래 일본어 바이트 수에 맞추기 위해 화자, 띄어쓰기,
+문장 끝을 삭제하지 않습니다.
 
-- 게임의 메뉴·대화에서 기존 한자가 한글 음절로 바뀌는지 확인합니다.
-- 가나, 영문, 숫자와 기호는 그대로 보여야 합니다.
-- 갈무리14는 16×16 셀 안에 14×14로 배치했습니다. 글자가 너무 크거나 세로 위치가 어색하면 다음 판에서 12픽셀급으로 조정합니다.
-- 에뮬레이터별 확인은 아직 완료하지 않았습니다.
+- 한 줄 26칸, 한 페이지 3줄을 기준으로 줄바꿈과 페이지 전환을 생성
+- `2_SCE.BIN`의 시나리오 블록과 B1/B3/B4 참조를 재구성
+- `BMESS2.BIN`의 실제 런타임 leaf 대상만 재배치
+- `2_DEAD.BIN`의 start/end 슬롯을 재구성
+- 커진 세 파일을 새 ISO extent로 옮기고 양방향 디렉터리 필드를 갱신
+- 변경한 MODE2 Form 1 섹터의 EDC/ECC 재계산
 
-## 재현
+세부 구조는 [확장 빌드 문서](docs/SECOND_EXPANDED_BUILD.md),
+[시나리오 재배치](docs/SECOND_SCE_RELOCATION.md),
+[전투·격추 메시지 저장소](docs/SECOND_MESSAGE_ARCHIVES.md)에서 확인할 수
+있습니다.
 
-```powershell
-python -m pip install -r requirements.txt
+## 소스와 권리
 
-python .\tools\build_exe_hangul_font.py `
-  .\font\Galmuri14.bdf `
-  .\extracted `
-  .\test_build\exe_font_test
+저장소에는 자체 제작 도구, 한국어 번역 overlay, 용어집, 문서와
+갈무리14 라이선스만 싣습니다. 게임 실행 파일, 추출된 게임 바이너리,
+원본 일본어 대사 원장, BIOS, 에뮬레이터와 xdelta 실행 파일은 배포하지
+않습니다. 로컬에서 빌드를 재현하려면 정상 소유한 원본에서 필요한
+파일과 원장을 직접 추출해야 합니다.
 
-python .\tools\patch_raw_track_exes.py `
-  ".\Super Robot Taisen Complete Box (Track 1).bin" `
-  ".\Super Robot Taisen Complete Box Hangul Font Test (Track 1).bin" `
-  .\extracted `
-  .\test_build\exe_font_test\extracted
-```
+갈무리14는 SIL Open Font License 1.1로 제공됩니다. 자세한 고지는
+[NOTICE](NOTICE.md)와 [갈무리 OFL 전문](LICENSES/Galmuri-OFL-1.1.md)을
+확인하십시오.
 
-저장소에는 게임 실행 파일, 게임 ROM, BIOS, 에뮬레이터, xdelta 실행 파일을 포함하지 않습니다. 자세한 분석 주소는 [조사 기록](docs/RESEARCH.md), 라이선스와 권리 고지는 [NOTICE](NOTICE.md)를 확인하십시오.
+릴리스별 상세 내용은
+[`v0.1.0-pre` 릴리스 노트](docs/RELEASE_NOTES_v0.1.0-pre.md)에
+기록되어 있습니다.

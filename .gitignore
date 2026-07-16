@@ -42,6 +42,7 @@ SLPS_*
 
 # Extracted or local test material
 extracted/
+local_inputs/
 test_build/
 font_candidates/
 screenshots/

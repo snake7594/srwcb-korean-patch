@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Build and inject a 2,350-glyph Hangul test font into SRW Complete Box EXEs.
 
-The five game executables contain the same 2,816-glyph bitmap table. Each
+The five game executables contain the same 2,816-glyph bitmap table.  Each
 glyph occupies a 16x16, one-bit cell (32 bytes, two MSB-first bytes per row).
 Indices 0x000-0x100 are kept intact for the game's half-width symbols and
-kana. KS X 1001 Hangul is installed in indices 0x101-0xA2E, which are all
+kana.  KS X 1001 Hangul is installed in indices 0x101-0xA2E, which are all
 rendered through the game's full-width path.
 """
 
@@ -26,6 +26,7 @@ from build_hangul_krom import BdfGlyph, ks_x_1001_hangul, parse_bdf
 GLYPH_WIDTH = 16
 GLYPH_HEIGHT = 16
 GLYPH_BYTES = 32
+DEFAULT_INK_WIDTH = 11
 GLYPH_COUNT = 0xB00
 FONT_BYTES = GLYPH_COUNT * GLYPH_BYTES
 HANGUL_START_INDEX = 0x101
@@ -49,13 +50,23 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def render_glyph(glyph: BdfGlyph) -> bytes:
-    """Render Galmuri at its native 14-pixel height inside a 16x16 cell."""
+def render_glyph(glyph: BdfGlyph, ink_width: int = DEFAULT_INK_WIDTH) -> bytes:
+    """Render Galmuri in a 16x16 cell with a safe right-side margin.
+
+    The Japanese EXE font uses a 16-pixel cell but its normal glyph ink is
+    about 11 pixels wide.  A native 13/14-pixel Galmuri glyph therefore
+    touches the next cell in-game.  Compressing the bitmap horizontally to
+    11 pixels keeps every foreground pixel inside the visual advance width.
+    """
+    if not 1 <= ink_width <= GLYPH_WIDTH - 2:
+        raise ValueError(f"ink width must be 1..{GLYPH_WIDTH - 2}")
 
     canvas = [[0 for _ in range(GLYPH_WIDTH)] for _ in range(GLYPH_HEIGHT)]
+    # Galmuri14 Hangul has BBX height 14/y-offset 0.  Baseline row 14 places
+    # it on rows 1-14, leaving a one-pixel margin above and below.
     baseline_row = 14
     top = baseline_row - (glyph.y_offset + glyph.height - 1)
-    left = glyph.x_offset
+    left = 1
     clipped = 0
     for source_y, row_bits in enumerate(glyph.bitmap):
         target_y = top + source_y
@@ -63,7 +74,11 @@ def render_glyph(glyph: BdfGlyph) -> bytes:
             mask = 1 << (glyph.bitmap_bits - 1 - source_x)
             if not row_bits & mask:
                 continue
-            target_x = left + source_x
+            if glyph.width <= ink_width:
+                scaled_x = source_x + (ink_width - glyph.width) // 2
+            else:
+                scaled_x = (source_x * ink_width) // glyph.width
+            target_x = left + scaled_x
             if 0 <= target_x < GLYPH_WIDTH and 0 <= target_y < GLYPH_HEIGHT:
                 canvas[target_y][target_x] = 1
             else:
@@ -80,6 +95,8 @@ def render_glyph(glyph: BdfGlyph) -> bytes:
             if pixel:
                 word |= 0x8000 >> x
         output.extend(word.to_bytes(2, "big"))
+    if len(output) != GLYPH_BYTES:
+        raise AssertionError("unexpected glyph size")
     return bytes(output)
 
 
@@ -144,9 +161,17 @@ def main() -> int:
     parser.add_argument("extracted_dir", type=Path, help="directory with the five EXEs")
     parser.add_argument("output_dir", type=Path, help="output directory")
     parser.add_argument("--columns", type=int, default=64)
+    parser.add_argument(
+        "--ink-width",
+        type=int,
+        default=DEFAULT_INK_WIDTH,
+        help=f"maximum foreground width inside each 16px cell (default: {DEFAULT_INK_WIDTH})",
+    )
     args = parser.parse_args()
     if args.columns <= 0:
         parser.error("--columns must be positive")
+    if not 1 <= args.ink_width <= GLYPH_WIDTH - 2:
+        parser.error(f"--ink-width must be between 1 and {GLYPH_WIDTH - 2}")
 
     glyphs = parse_bdf(args.bdf)
     hangul = ks_x_1001_hangul()
@@ -154,7 +179,9 @@ def main() -> int:
     if missing:
         raise ValueError(f"BDF is missing {len(missing)} KS X 1001 Hangul glyphs")
 
-    hangul_font = b"".join(render_glyph(glyphs[ord(character)]) for _, character in hangul)
+    hangul_font = b"".join(
+        render_glyph(glyphs[ord(character)], args.ink_width) for _, character in hangul
+    )
     if len(hangul_font) != HANGUL_COUNT * GLYPH_BYTES:
         raise AssertionError("unexpected Hangul font size")
 
@@ -190,6 +217,7 @@ def main() -> int:
     common_metadata = {
         "Source BDF SHA-256": sha256(args.bdf.read_bytes()),
         "Glyph format": "16x16, 1bpp, 32 bytes/glyph, row-major MSB-first",
+        "Ink width": str(args.ink_width),
         "Hangul range": f"0x{HANGUL_START_INDEX:03X}-0x{HANGUL_END_INDEX:03X}",
     }
     save_sheet(

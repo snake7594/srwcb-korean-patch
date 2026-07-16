@@ -106,6 +106,7 @@ def rebuild_mode2_form1(sector: bytearray) -> None:
 
     edc = compute_edc(sector[0x10:EDC_OFFSET])
     sector[EDC_OFFSET:ECC_P_OFFSET] = edc.to_bytes(4, "little")
+    # In MODE2 Form 1, the address/header contribution is zero for ECC.
     address = bytes(4)
     sector[ECC_P_OFFSET:ECC_Q_OFFSET] = compute_ecc(
         address,
