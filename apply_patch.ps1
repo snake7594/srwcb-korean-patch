@@ -20,7 +20,7 @@ $ErrorActionPreference = 'Stop'
 
 $ExpectedSourceHash = '3f25650b588774d55c3bbb5b771779beab408eaca020e9a622133ade323a0f94'
 $ExpectedOutputHash = 'ad96c2564d5c0667473f878ae4444d19b57a00056711fcfde8ab287ba0139f6b'
-$ExpectedPatchHash = 'e0fdd52db1a840af121340814b9def63caf0c05c4891a492e26a97a75034a129'
+$ExpectedPatchHash = 'da03fd939e8183e3d6b360ab407af896715d9fe67e5d0574411f38e37f7796fc'
 $ExpectedTrack2Hash = '2fbf5a94ffc8b475741529c4a95d580c937ca37db31db227e0d6c7a917a1e95f'
 
 function Get-RelativeFilePath {

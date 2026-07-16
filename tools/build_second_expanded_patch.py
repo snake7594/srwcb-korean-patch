@@ -733,9 +733,23 @@ def create_and_verify_xdelta(
     if output_path.exists():
         output_path.unlink()
     subprocess.run(
-        [str(xdelta_path), "-9", "-e", "-s", str(original_track), str(patched_track), str(output_path)],
+        [
+            str(xdelta_path),
+            "-A",
+            "-9",
+            "-e",
+            "-s",
+            str(original_track),
+            str(patched_track),
+            str(output_path),
+        ],
         check=True,
     )
+    vcdiff_header = output_path.read_bytes()[:5]
+    if len(vcdiff_header) != 5 or vcdiff_header[:4] != b"\xD6\xC3\xC4\x00":
+        raise AssertionError("xdelta output has an invalid VCDIFF header")
+    if vcdiff_header[4] & 0x04:
+        raise AssertionError("xdelta output contains a path-leaking VCDIFF appheader")
     decoded = output_path.with_suffix(".decoded.bin")
     if decoded.exists():
         decoded.unlink()
@@ -752,6 +766,7 @@ def create_and_verify_xdelta(
         "path": str(output_path),
         "size": output_path.stat().st_size,
         "sha256": sha256_file(output_path),
+        "appheader_present": False,
         "decoded_sha256": decoded_hash,
         "decoded_matches_patched_track": True,
     }

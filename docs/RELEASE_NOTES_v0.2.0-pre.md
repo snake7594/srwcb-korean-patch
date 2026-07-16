@@ -38,6 +38,7 @@
 - 전투 scratch 최대 사용량 366/512바이트
 - 최종 heap 583,676바이트, 최소 기준 393,216바이트 통과
 - 네 ISO extent의 내용·LBA·크기와 MODE2 Form 1 EDC/ECC 검증 통과
+- xdelta VCDIFF appheader 비활성화 및 로컬 경로 미포함 검사 통과
 - xdelta 독립 decode 결과가 최종 Track 1과 바이트 단위로 일치
 
 빌드 과정에서 에뮬레이터는 자동 실행하지 않았습니다.
@@ -56,9 +57,9 @@ SHA-256:
 ad96c2564d5c0667473f878ae4444d19b57a00056711fcfde8ab287ba0139f6b
 
 srwcb-second-korean-v0.2.0-pre.xdelta
-크기: 803,654 bytes
+크기: 803,461 bytes
 SHA-256:
-e0fdd52db1a840af121340814b9def63caf0c05c4891a492e26a97a75034a129
+da03fd939e8183e3d6b360ab407af896715d9fe67e5d0574411f38e37f7796fc
 ```
 
 ## 알려진 제한
