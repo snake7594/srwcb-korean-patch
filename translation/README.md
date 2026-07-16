@@ -18,3 +18,18 @@
 
 `glossary_candidates.json`의 `ko_approved`가 현재 고정 표기이며,
 판단 기록은 `APPROVED_GLOSSARY_NOTES.md`에 있습니다.
+
+## 메뉴·인터미션 자산
+
+`v0.2.0-pre`부터 제2차 실행 파일의 UI 번역도 별도 overlay로 제공합니다.
+공개 파일에는 한국어 번역, 구조 식별자, 포인터 위치와 원본 레코드
+SHA-256 guard만 남기고 일본어 문자열과 원본 바이트는 제거했습니다.
+
+- `second_ui_inventory.json`: UI 구조 레코드 3,608건
+- `second_ui_scripts_overlay.json`: 스크립트 335레코드, 708개 치환
+- `second_ui_tables_overlay.json`: 메뉴 테이블 1,754건
+- `second_ui_names_overlay.json`: 파일럿·기체 이름 1,248건
+- `second_ui_common_master_overlay.json`: 공통 메뉴 레코드 5건
+
+빌더는 guard가 일치하지 않거나 번역이 비어 있거나 인코딩할 수 없는
+글자가 있으면 패치 생성을 중단합니다.

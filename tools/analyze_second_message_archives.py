@@ -59,7 +59,7 @@ import struct
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Mapping
+from typing import Any, Mapping, Sequence
 
 
 CONTROL_ARG_LENGTHS: dict[int, int] = {
@@ -77,6 +77,7 @@ CONTROL_ARG_LENGTHS: dict[int, int] = {
 CPE_MAGIC = b"CPE\x01"
 CPE_FIXED_OVERHEAD = 16
 BMESS_RUNTIME_SLOT_BYTES = 0x3000
+BMESS_LEGACY_SCRATCH_BYTES = 0x100
 
 
 def sha256(data: bytes) -> str:
@@ -303,6 +304,182 @@ def parse_bmess(data: bytes) -> BMessArchive:
         )
 
     return BMessArchive(data, table, tuple(blocks))
+
+
+def analyze_bmess_runtime_scratch(
+    data: bytes,
+    speaker_prefix_lengths: Sequence[int],
+) -> dict[str, Any]:
+    """Compute the maximum battle-text scratch use for every runtime entry.
+
+    SECOND's graph evaluator concatenates every selected leaf into one scratch
+    buffer.  A leaf contributes the speaker prefix (without its FF), one F6,
+    the quoted BMESS record (including its FF), and one additional FF list
+    terminator.  The original executable gives each of modes 0..3 only 0x100
+    bytes and performs no bounds check.
+
+    This is deliberately a fail-closed evaluator for the node types reachable
+    from all ten dispatch roots and both selector tables in the retail archive.
+    If a future input exposes another node type, an invalid target, or a cycle,
+    the build must stop until that runtime behavior has been reviewed.
+    """
+
+    if len(speaker_prefix_lengths) != 400:
+        raise ValueError(
+            f"SECOND speaker table must contain 400 names, got {len(speaker_prefix_lengths)}"
+        )
+    if any(length < 0 for length in speaker_prefix_lengths):
+        raise ValueError("speaker prefix lengths must be nonnegative")
+
+    archive = parse_bmess(data)
+    start_count = 0
+    reachable_types: Counter[int] = Counter()
+    results: list[dict[str, Any]] = []
+
+    for block in archive.blocks:
+        payload = block.payload
+        starts = set(block.top_targets)
+        cursor = 0x14
+        for _table_index in range(2):
+            while True:
+                if cursor + 6 > len(payload):
+                    raise ValueError(
+                        f"BMESS block {block.index} has a truncated selector table"
+                    )
+                selector_id = u16(payload, cursor)
+                starts.add(u32(payload, cursor + 2))
+                cursor += 6
+                if selector_id == 0xFFFF:
+                    break
+
+        start_count += len(starts)
+        memo: dict[int, tuple[int, int, tuple[int, ...]]] = {}
+        active: set[int] = set()
+
+        def require_range(position: int, size: int) -> None:
+            if position < 0 or position + size > len(payload):
+                raise ValueError(
+                    f"BMESS block {block.index} graph range "
+                    f"{position:#x}..{position + size:#x} is outside payload"
+                )
+
+        def target_at(position: int) -> int:
+            require_range(position, 4)
+            target = u32(payload, position)
+            if target >= len(payload):
+                raise ValueError(
+                    f"BMESS block {block.index} graph target {target:#x} is outside payload"
+                )
+            return target
+
+        def visit(position: int) -> tuple[int, int, tuple[int, ...]]:
+            if position in memo:
+                return memo[position]
+            if position in active:
+                raise ValueError(
+                    f"BMESS block {block.index} graph cycle reaches {position:#x}"
+                )
+            require_range(position, 2)
+            active.add(position)
+            node_type = u16(payload, position)
+            reachable_types[node_type] += 1
+            weight = 0
+            leaf_count = 0
+
+            if node_type in (0x00, 0x02, 0x04, 0x06, 0x09):
+                require_range(position, 8)
+                successors = (position + 8, target_at(position + 4))
+            elif node_type == 0x0D:
+                require_range(position, 4)
+                choice_count = u16(payload, position + 2)
+                if choice_count == 0:
+                    raise ValueError(
+                        f"BMESS block {block.index} random node {position:#x} has no choices"
+                    )
+                require_range(position + 4, choice_count * 4)
+                successors = tuple(
+                    target_at(position + 4 + choice * 4)
+                    for choice in range(choice_count)
+                )
+            elif node_type in (0x10, 0x11):
+                require_range(position, 10)
+                speaker_index = u16(payload, position + 2) >> 6
+                if speaker_index >= len(speaker_prefix_lengths):
+                    raise ValueError(
+                        f"BMESS block {block.index} leaf {position:#x} uses "
+                        f"speaker {speaker_index}, outside the 400-name table"
+                    )
+                message_target = target_at(position + 6)
+                record = parse_message_record(payload, message_target)
+                weight = (
+                    speaker_prefix_lengths[speaker_index]
+                    + (record.end - record.start)
+                    + 2
+                )
+                leaf_count = 1
+                successors = (position + 10,)
+            elif node_type == 0x14:
+                require_range(position, 6)
+                successors = (position + 6, target_at(position + 2))
+            elif node_type == 0xFFFF:
+                successors = ()
+            else:
+                raise ValueError(
+                    f"BMESS block {block.index} runtime entry reaches unsupported "
+                    f"node type {node_type:#x} at {position:#x}"
+                )
+
+            for successor in successors:
+                require_range(successor, 2)
+            if successors:
+                tail_bytes, tail_leaves, tail_path = max(
+                    (visit(successor) for successor in successors),
+                    key=lambda item: (item[0], item[1]),
+                )
+                result = (
+                    weight + tail_bytes,
+                    leaf_count + tail_leaves,
+                    (position,) + tail_path,
+                )
+            else:
+                result = (weight, leaf_count, (position,))
+            active.remove(position)
+            memo[position] = result
+            return result
+
+        for start in sorted(starts):
+            maximum_bytes, leaf_count, path = visit(start)
+            results.append(
+                {
+                    "block_index": block.index,
+                    "start": start,
+                    "maximum_bytes": maximum_bytes,
+                    "leaf_count": leaf_count,
+                    "path": list(path),
+                }
+            )
+
+    worst = max(
+        results,
+        key=lambda item: (item["maximum_bytes"], item["leaf_count"]),
+    )
+    legacy_overflows = [
+        item for item in results if item["maximum_bytes"] > BMESS_LEGACY_SCRATCH_BYTES
+    ]
+    return {
+        "block_count": len(archive.blocks),
+        "unique_runtime_start_count": start_count,
+        "reachable_node_types": {
+            f"0x{node_type:04X}": count
+            for node_type, count in sorted(reachable_types.items())
+        },
+        "maximum_bytes": worst["maximum_bytes"],
+        "maximum_leaf_count": worst["leaf_count"],
+        "worst": worst,
+        "legacy_slot_bytes": BMESS_LEGACY_SCRATCH_BYTES,
+        "legacy_overflow_count": len(legacy_overflows),
+        "legacy_overflows": legacy_overflows,
+    }
 
 
 def rebuild_bmess_append(

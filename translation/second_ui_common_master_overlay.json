@@ -1,0 +1,72 @@
+{
+  "schema": "srwcb-second-ui-common-master-overlay-v1",
+  "purpose": "Length-preserving Korean labels from the shared SECOND.WAR UI master",
+  "policy": {
+    "source_sha256_guarded": true,
+    "fixed_width_groups_preserved": true,
+    "truncation_allowed": false
+  },
+  "records": [
+    {
+      "asset_id": "common_ui_master_labels",
+      "entry_index": 0,
+      "pointer_field": 37376,
+      "source_offset": 37528,
+      "raw_sha256": "21410e5f8bd7ff776e8dc3d2903266c3aca29d91b1e4cefbc86a8e9656d51672",
+      "korean_text": "끔켬",
+      "status": "approved"
+    },
+    {
+      "asset_id": "common_ui_master_labels",
+      "entry_index": 2,
+      "pointer_field": 37384,
+      "source_offset": 37575,
+      "raw_sha256": "b2623b7260ab92336b1b49c6b5df379eac9fe35535cd7196a76b1e72cfe48b19",
+      "korean_text": "이동공격출격탑재합체분리변형절단파츠지상공중수중지중정신수리보급설득능력대기",
+      "status": "approved"
+    },
+    {
+      "asset_id": "common_ui_master_labels",
+      "entry_index": 23,
+      "pointer_field": 37468,
+      "source_offset": 38866,
+      "raw_sha256": "d75e1da64734f1c66c811466bf289d1657d2079f206a04af8aaa291989c6ee8b",
+      "korean_text": "모노    스테레오",
+      "status": "approved"
+    },
+    {
+      "asset_id": "common_ui_master_labels",
+      "entry_index": 24,
+      "pointer_field": 37472,
+      "source_offset": 38875,
+      "raw_sha256": "528d016cb8c23ea869a01ea2dd186c357a74f8a47820f231726abaefb98ee39b",
+      "korean_text": "전환식고정식",
+      "status": "approved"
+    },
+    {
+      "asset_id": "common_ui_master_labels",
+      "entry_index": 25,
+      "pointer_field": 37476,
+      "source_offset": 38888,
+      "raw_sha256": "44ba82976065b0670fb21b70368b57190974525c343f7bb0ba81c37eecd1af85",
+      "status": "approved",
+      "replacements": [
+        {
+          "relative_start": 0,
+          "relative_end_exclusive": 4,
+          "korean_text": "없음"
+        },
+        {
+          "relative_start": 36,
+          "relative_end_exclusive": 40,
+          "korean_text": "시작"
+        },
+        {
+          "relative_start": 40,
+          "relative_end_exclusive": 44,
+          "korean_text": "선택"
+        }
+      ]
+    }
+  ]
+}
