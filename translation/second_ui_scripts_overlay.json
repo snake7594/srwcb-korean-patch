@@ -2,7 +2,7 @@
   "schema": "srwcb-second-ui-scripts-overlay-v1",
   "source_inventory": {
     "path": "translation/second_ui_inventory.json",
-    "sha256": "4341dc515648ff69fd96df69a918cfa6937b8ad81befe30c44ac5dafaf776396",
+    "sha256": "0af5aa68426ef35a5f788b5e390709cc876c3097c33c087368d904ca9ba0b824",
     "format": "srwcb-second-executable-ui-full-inventory-v1"
   },
   "policy": {
@@ -15,11 +15,11 @@
   },
   "statistics": {
     "asset_count": 3,
-    "record_count": 335,
+    "record_count": 339,
     "preview_record_count": 91,
     "nested_record_count": 171,
-    "second_master_target_count": 73,
-    "replacement_span_count": 708,
+    "second_master_target_count": 77,
+    "replacement_span_count": 727,
     "partial": false
   },
   "assets": {
@@ -139,19 +139,19 @@
               "relative_start": 7,
               "relative_end": 37,
               "source_sha256": "867aa0ba8ffbe9265eff8261226b180dc60419167dadd068125e0654ac95b1a7",
-              "korean_text": "Dr.J「콜로니에 핵 공격을 가하는 비인도적인"
+              "korean_text": "Dr.J「콜로니에 핵 공격을 가하는 비인도적"
             },
             {
               "relative_start": 38,
               "relative_end": 65,
               "source_sha256": "c86fe4e1fd0fce23bfac78a4705020f95652744fad9c725a47b15ffff90c16b4",
-              "korean_text": "전술도, 수단을 가리지 않는 승리를 위해서라면"
+              "korean_text": "전술도, 무슨 수를 써서든 이기려면"
             },
             {
               "relative_start": 66,
               "relative_end": 96,
               "source_sha256": "529b6a89439297b502b65a1487f29414566c2c04e6e2f81ec28524a2d20c5b26",
-              "korean_text": "어쩔 수 없겠지. 그러므로 여기서 항복을 선언한다」"
+              "korean_text": "어쩔 수 없겠지. 따라서 여기서 항복을 선언한다」"
             }
           ]
         },
@@ -177,7 +177,7 @@
               "relative_start": 0,
               "relative_end": 29,
               "source_sha256": "ed19293b1a33d5c038bd774b5e20895c8ab493613894483365d9929c03782f05",
-              "korean_text": "레이디「좋다, 항복을 받아들인다. 즉시 건담 흉내들은"
+              "korean_text": "레이디「좋아, 항복을 인정한다. 가짜 건담은 즉시"
             },
             {
               "relative_start": 30,
@@ -231,7 +231,7 @@
               "relative_start": 0,
               "relative_end": 30,
               "source_sha256": "b3c86a968ebfd10a2e1953cd66bfcb141e1f7aad0454eac0d0857c5853fca21a",
-              "korean_text": "브라이트「!! 저 소년은… 히이로 유이라고 했던가…」"
+              "korean_text": "브라이트「!!? 그는… 히이로 유이라고 했던가…」"
             }
           ]
         },
@@ -311,7 +311,7 @@
               "relative_start": 0,
               "relative_end": 23,
               "source_sha256": "cc08ac6ee0a70d1f1ee68cfc463ca0469c44a38e7852283cb391c26c9c135ce6",
-              "korean_text": "레이디「뭐!? 자폭했다는 말인가!?」"
+              "korean_text": "레이디「뭐!? 자폭했다는 건가!?」"
             }
           ]
         },
@@ -343,7 +343,7 @@
               "relative_start": 27,
               "relative_end": 46,
               "source_sha256": "b37983d7e8ce6d66d1a1301b5b024c40483020802a35224979b8e490ae96f634",
-              "korean_text": "지켜 주었구나. 감사를 표하지」"
+              "korean_text": "지켜 주었구나. 고맙다」"
             }
           ]
         },
@@ -393,13 +393,13 @@
               "relative_start": 0,
               "relative_end": 34,
               "source_sha256": "d1c9a63077392692b4726798c5bd601798b5faa0749432a32ee6a8013574dd5a",
-              "korean_text": "키시리아「하지만 총수님, 현재 상황은 결코 순조롭다고"
+              "korean_text": "키시리아「하지만 총수님, 지금 상황은 결코 순조롭지"
             },
             {
               "relative_start": 35,
               "relative_end": 69,
               "source_sha256": "18261f3dfcb89035059011918b9c45c88c7fec7bf7e0711c60c4f37760c49598",
-              "korean_text": "할 수 없습니다. 서둘러 조직을 재편해야 합니다」"
+              "korean_text": "않습니다. 서둘러 조직을 재편해야 합니다」"
             }
           ]
         },
@@ -447,7 +447,7 @@
               "relative_start": 0,
               "relative_end": 32,
               "source_sha256": "d30e00c0e4c72a67fc4f8e88183062c52f6269a5565c122a20f993765b3a35a0",
-              "korean_text": "레이디「각하… 이제 어떻게 하실 생각이십니까?」"
+              "korean_text": "레이디「각하… 앞으로 어찌하실 생각입니까?」"
             }
           ]
         },
@@ -473,13 +473,13 @@
               "relative_start": 0,
               "relative_end": 26,
               "source_sha256": "75c8607ad455bbafb6d17a99e3d9a7770dbd0a80322a5d21be359657e0363c5a",
-              "korean_text": "트레즈「시대가 나를 배제하려 하고 있다."
+              "korean_text": "트레즈「시대는 나를 배제하려 한다."
             },
             {
               "relative_start": 27,
               "relative_end": 52,
               "source_sha256": "d6ecc530f5fd50b248d04fc8106a3363f5e02901042496fd890e2ddd37ec11f4",
-              "korean_text": "그렇다면 나는 그 흐름을 거스를 수 없겠지」"
+              "korean_text": "그렇다면 난 그 흐름을 거스를 수 없다」"
             }
           ]
         },
@@ -527,7 +527,7 @@
               "relative_start": 0,
               "relative_end": 30,
               "source_sha256": "bf1ea52665a319c48a73547685e0d1fc62706a7d88a57a3e18cd6bc873c45666",
-              "korean_text": "트레즈「이해해 다오, 레이디. 지금은 그때가 아니다」"
+              "korean_text": "트레즈「이해해 다오, 레이디. 지금은 때가 아니다」"
             }
           ]
         },
@@ -560,13 +560,13 @@
               "relative_start": 29,
               "relative_end": 55,
               "source_sha256": "47069394367cce674667fc2998fbdac3200ce7dc2b5eb36595b8b4d873b17ff9",
-              "korean_text": "지구연방도 티탄즈도 어리석은 자들의"
+              "korean_text": "지구연방도 티탄즈도 하찮은 자들의"
             },
             {
               "relative_start": 56,
               "relative_end": 77,
               "source_sha256": "b5f864eb35414a138ce37d3c68d2202b449568e4381191fa96091edb50a19063",
-              "korean_text": "어리석은 행동을 허용하고 말겠지…)"
+              "korean_text": "하찮은 행동을 허용하고 말겠지…)"
             }
           ]
         },
@@ -590,7 +590,7 @@
               "relative_start": 0,
               "relative_end": 35,
               "source_sha256": "50f5509617d13704e8e6a7c304e50111facce467661bb4e51033afdd252d3839",
-              "korean_text": "하타리「베스! 이것 좀 봐! 이 전천 좌표의 위치를…」"
+              "korean_text": "하타리「베스! 이것 좀 봐! 이 전천 좌표 위치를…」"
             }
           ]
         },
@@ -640,7 +640,7 @@
               "relative_start": 0,
               "relative_end": 27,
               "source_sha256": "0975409703581919848434a322f92b1529029d8f2b4acc26b351255063d490cc",
-              "korean_text": "하타리「그래, 모니터에 보이는 건 아무리 봐도"
+              "korean_text": "하타리「그래, 모니터엔 아무리 봐도"
             },
             {
               "relative_start": 28,
@@ -744,7 +744,7 @@
               "relative_start": 0,
               "relative_end": 26,
               "source_sha256": "5287c6fd65789c01e396a92c04854221f47aee19b6d3d8c3a4765fb6f01e71fd",
-              "korean_text": "베스「버프 클랜인가!? 말도 안 돼, 데스 드라이브를"
+              "korean_text": "베스「버프 클랜인가!? 설마 데스 드라이브를"
             },
             {
               "relative_start": 27,
@@ -798,7 +798,7 @@
               "relative_start": 0,
               "relative_end": 24,
               "source_sha256": "e360b099a617f9f1625ad1fd7ea25b9fc71aed165510ec651b6cf9e80222c91c",
-              "korean_text": "다람「뜻밖의 행운이라고 해야겠군…」"
+              "korean_text": "다람「뜻밖의 행운이라 해야겠군…」"
             }
           ]
         },
@@ -850,13 +850,13 @@
               "relative_start": 0,
               "relative_end": 27,
               "source_sha256": "332302d1f744e0f717a9f091ace206fdf2a20b3483959bc69ba2e0d7bf9a1e25",
-              "korean_text": "다람「이렇게 가까운 곳에서 로고다우 이성인의 함선을"
+              "korean_text": "다람「이렇게 가까이서 로고다우 이성인의 함선을"
             },
             {
               "relative_start": 28,
               "relative_end": 48,
               "source_sha256": "006cdfc312137654e583ab672934cb911ff84f4681c05b30a41d242bd968992f",
-              "korean_text": "포착할 수 있었다는 사실 말이다."
+              "korean_text": "포착했다는 사실 말이다."
             },
             {
               "relative_start": 50,
@@ -924,7 +924,7 @@
               "relative_start": 28,
               "relative_end": 57,
               "source_sha256": "09908cb0ddf59e16edde249eb69a850fbee19400e7128a8719823e597bf037a5",
-              "korean_text": "거신을 붙잡기 위해 봉급을 받는 몸이니까」"
+              "korean_text": "거신을 잡으라고 봉급을 받으니까」"
             }
           ]
         },
@@ -1032,7 +1032,7 @@
               "relative_start": 108,
               "relative_end": 138,
               "source_sha256": "d1541cc74f1bc978f5ca0ca781f8a0505009aa9397e9d0c037caabf14abb48a1",
-              "korean_text": "축하하려고 다 같이 케이크를 만들어 봤는데요…」"
+              "korean_text": "축하하려고 함께 케이크를 만들어 봤는데요…」"
             }
           ]
         },
@@ -1059,13 +1059,13 @@
               "relative_start": 0,
               "relative_end": 28,
               "source_sha256": "edce311eb923ed5cc010ad71c0df127e079d8b6ab17c50b8bc9b1a12d83ac6d7",
-              "korean_text": "아스카「그래, 널 위해 우리가 정성을 다해"
+              "korean_text": "아스카「그래, 널 위해 우리가 정성껏"
             },
             {
               "relative_start": 29,
               "relative_end": 53,
               "source_sha256": "fc6483743f6e96ae6155c80a5a71d69f5c7dba42f551a73f9d78f0e9212e32e9",
-              "korean_text": "만들었으니까 소원이나 빌고 얼른 불을"
+              "korean_text": "만들었으니 소원이나 빌고 얼른 불을"
             },
             {
               "relative_start": 54,
@@ -1168,7 +1168,7 @@
               "relative_start": 13,
               "relative_end": 23,
               "source_sha256": "79041c7b4af6bc44c692795b2d3a2372fb6c7dbde8a50e5ce02f60d8f2399c01",
-              "korean_text": "여자(싸우지 않는다)"
+              "korean_text": "여자(안 싸운다)"
             },
             {
               "relative_start": 25,
@@ -1248,7 +1248,7 @@
               "relative_start": 0,
               "relative_end": 28,
               "source_sha256": "45d17b65976c342fd8289d80595e528983be42dd811b3ee3582b44b8b01267a8",
-              "korean_text": "신지「!? 아, 아스카, 오늘은 중요한 날이니까"
+              "korean_text": "신지「!? 아, 아스카, 오늘은 중요한 날이니"
             },
             {
               "relative_start": 29,
@@ -1280,7 +1280,7 @@
               "relative_start": 0,
               "relative_end": 22,
               "source_sha256": "068f3c63079bd29854ce611ca3f8b75aed3c577432b99e32c2043ee80ccd0aec",
-              "korean_text": "아스카「뭐, 뭐야 그게!? …뭐, 좋아."
+              "korean_text": "아스카「뭐, 뭐야 그게!? …됐어."
             },
             {
               "relative_start": 23,
@@ -1314,7 +1314,7 @@
               "relative_start": 0,
               "relative_end": 20,
               "source_sha256": "c698805585b0ea56a8fb9e388d0524db1471d002d7611748a9df0f316d7671de",
-              "korean_text": "토우지「자, 싸움도 끝난 것 같으니"
+              "korean_text": "토우지「자, 싸움도 끝났으니"
             },
             {
               "relative_start": 23,
@@ -1366,7 +1366,7 @@
               "relative_start": 33,
               "relative_end": 49,
               "source_sha256": "f9e656e4a99f5316aa1771e501c758aab8da7c6c8b31ed4254e524f1b4e7ee22",
-              "korean_text": "님을 위해 준비한 겁니다."
+              "korean_text": "님을 위해 준비했습니다."
             },
             {
               "relative_start": 50,
@@ -1450,7 +1450,7 @@
               "relative_start": 68,
               "relative_end": 90,
               "source_sha256": "70de112f31ff0ae14cb9c5f03b254095f252982d65c41aee7ae1274af159d4aa",
-              "korean_text": "카지 씨의 신부가 되게 해 주세요♥)"
+              "korean_text": "카지 씨와 결혼하게 해 주세요♥)"
             }
           ]
         },
@@ -1532,7 +1532,7 @@
               "relative_start": 0,
               "relative_end": 20,
               "source_sha256": "50d26f48bda8b3fb3bd8583503cf8043a68b514ff693290b67e0d38603a81448",
-              "korean_text": "신지「맞아, 토우지. 아무리 아스카라도"
+              "korean_text": "신지「맞아, 토우지. 아스카라 해도"
             },
             {
               "relative_start": 21,
@@ -1586,7 +1586,7 @@
               "relative_start": 0,
               "relative_end": 29,
               "source_sha256": "11ca5550cad58ec1c4d2d2ba8b7b9c42fb18163ab273e444e87587a07169ca9c",
-              "korean_text": "신지「그래, 솔직히 말하면 아스카는 언제나…」"
+              "korean_text": "신지「그래, 솔직히 말해 아스카는 늘…」"
             }
           ]
         },
@@ -1755,7 +1755,7 @@
               "relative_start": 6,
               "relative_end": 22,
               "source_sha256": "8643e716dfd54b247a7041a4abb70de6d06b91cb47d5a10c63c3f07c26fa4be8",
-              "korean_text": "님, 저 둘은 내버려 두고"
+              "korean_text": "님, 저 둘은 놔두고"
             },
             {
               "relative_start": 23,
@@ -1793,7 +1793,7 @@
               "relative_start": 7,
               "relative_end": 12,
               "source_sha256": "4c3d6f892dbfc7c3b05d1dc24bd2ecec236ed8a973f6c356801ffedaa929f986",
-              "korean_text": "끄지 않는다"
+              "korean_text": "안 끈다"
             }
           ]
         },
@@ -1961,7 +1961,7 @@
               "relative_start": 0,
               "relative_end": 14,
               "source_sha256": "22adfe578c555462c584b94653130b5d50f42d5551b7a342cb413493d6a0c699",
-              "korean_text": "아스카「그래서 어쨌다는 거야」"
+              "korean_text": "아스카「그래서 어쩌라고」"
             }
           ]
         },
@@ -1994,13 +1994,13 @@
               "relative_start": 12,
               "relative_end": 21,
               "source_sha256": "163582b74c9f2d1c1dabc08f44f19de238fd8ca7350c709572a33b7b250f8f38",
-              "korean_text": "님께 축하한다는 말도"
+              "korean_text": "님께 축하 인사도"
             },
             {
               "relative_start": 22,
               "relative_end": 52,
               "source_sha256": "64b58e2ec3839f34a1d8cdaa5fdb4aed951bb094a6f635fa6d9acc33b42ddf99",
-              "korean_text": "못 했어. 싸움은 그만하고 방으로 돌아가자…」"
+              "korean_text": "못 했어. 그만 싸우고 방으로 돌아가자…」"
             }
           ]
         },
@@ -2027,13 +2027,13 @@
               "relative_start": 0,
               "relative_end": 25,
               "source_sha256": "5defa864d6e4d309527e9ba86a969c1cc35144112ae74779adb0010bc3b380e0",
-              "korean_text": "아스카「너 바보야? 창피해서 돌아갈 수 있을"
+              "korean_text": "아스카「너 바보야? 창피해서 돌아갈"
             },
             {
               "relative_start": 26,
               "relative_end": 46,
               "source_sha256": "610f5f34f46f00d1318c6db10f8a2797c301e6ca1412021c4cb76bfb05559d0d",
-              "korean_text": "리가 없잖아! 축하하고 싶으면"
+              "korean_text": "수 없잖아! 축하하고 싶으면"
             },
             {
               "relative_start": 47,
@@ -2063,7 +2063,7 @@
               "relative_start": 0,
               "relative_end": 31,
               "source_sha256": "a75ba08b59fc10ea5fcf603192ab2893be92b64815d545e62660d1f3ea9b6334",
-              "korean_text": "신지「여, 여기서라니… 그건 못 하겠어…」"
+              "korean_text": "신지「여, 여기서라니… 그런 말 못 해…」"
             }
           ]
         },
@@ -2256,7 +2256,7 @@
               "relative_start": 0,
               "relative_end": 18,
               "source_sha256": "08da894e880273d45447fc5e128b5396b3733f76b55f05cd67e5f46f2ba6acd7",
-              "korean_text": "토우지「그만 궁시렁거리고"
+              "korean_text": "토우지「잔말 말고"
             },
             {
               "relative_start": 19,
@@ -2268,7 +2268,7 @@
               "relative_start": 31,
               "relative_end": 38,
               "source_sha256": "e94b4043ef0507bcf5b40b404317b9a426cc8b0190465004ec9319ee82ada1ad",
-              "korean_text": "님을 다 같이"
+              "korean_text": "님을 함께"
             },
             {
               "relative_start": 39,
@@ -2413,7 +2413,7 @@
               "relative_start": 28,
               "relative_end": 54,
               "source_sha256": "ce1c5b27d57bb366d36e30b4dc8689fe6e47e33ce24d3348e8ea25a3fd192db1",
-              "korean_text": "짜증 나. 게다가 왜 카지 씨는 없는 거야?"
+              "korean_text": "짜증 나. 게다가 카지 씨는 왜 없어?"
             },
             {
               "relative_start": 55,
@@ -2425,7 +2425,7 @@
               "relative_start": 80,
               "relative_end": 105,
               "source_sha256": "c76a198c6dae95883d966ab3a0cf595903fe3f123f11f3d2d53a7b7005c01856",
-              "korean_text": "뭔가 속 시원한 일 없을까? …!?)"
+              "korean_text": "뭔가 속 풀릴 일 없을까? …!?)"
             }
           ]
         },
@@ -2758,7 +2758,7 @@
               "relative_start": 0,
               "relative_end": 35,
               "source_sha256": "05aa36275801ef36c9aecd9fdb1fcd90790f4d27a036cdc2c9f5de5cbe44c578",
-              "korean_text": "베스「코스모… 우리는… 모든 일이 너무 늦었던 건지도"
+              "korean_text": "베스「코스모… 우린… 하는 일마다 너무 늦었는지도"
             },
             {
               "relative_start": 36,
@@ -7706,8 +7706,8 @@
       ]
     },
     "second_ui_script_master": {
-      "required_record_count": 73,
-      "relocation_group": "second_ui_script_master_73_pointer_records",
+      "required_record_count": 77,
+      "relocation_group": "second_ui_script_master_77_pointer_records",
       "records": [
         {
           "asset_id": "second_ui_script_master",
@@ -7720,7 +7720,9 @@
           "raw_sha256": "cf41896a2a70bcc60bd3ec0de79a11db786f32f5c36b151345bd04d8af3232d9",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 01 00 00",
             "F8 03",
             "FC 04 11",
             "FC 01 00",
@@ -7738,7 +7740,7 @@
             "F6",
             "FC 03 FF",
             "F8 04",
-            "F7",
+            "F7 00 40",
             "FC F6 EE",
             "F6",
             "FC FB 01",
@@ -7804,7 +7806,7 @@
           "status": "approved",
           "entry_index": 1,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -7904,7 +7906,9 @@
           "raw_sha256": "cec2ce0083552dcf21df7ffd034553270362dfc7857c7bb3cb4fa78f48536c96",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 02 00 00",
             "F8 03",
             "FC 04 11",
             "FC 01 00",
@@ -7922,7 +7926,7 @@
             "F6",
             "FC 03 FF",
             "F8 04",
-            "F7",
+            "F7 00 40",
             "FC F6 EE",
             "F6",
             "FC 08 FE",
@@ -7988,7 +7992,7 @@
           "status": "approved",
           "entry_index": 7,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8088,8 +8092,10 @@
           "raw_sha256": "e1dc34fd64a84dbc0eb7184e8f36a4174413b4def5bade61f2e69ec1a0f74dcc",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 03 00 00",
+            "F7 00 40",
             "FC 03 01",
             "F8 00",
             "F6",
@@ -8121,34 +8127,35 @@
             "F8 83",
             "F6",
             "F8 83",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC 05 FE",
             "F6",
             "FC 04 FE",
             "F8 83",
             "F8 00",
             "F6",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC FC 00",
             "F6",
             "FC 04 FE",
             "F8 83",
             "F8 00",
             "F6",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC 0B FC",
             "F6",
             "FC 04 FE",
             "F8 83",
             "F6",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F4 01",
+            "F7 00 40",
             "FC FC 00",
             "F6",
             "FC 04 FE",
@@ -8163,27 +8170,28 @@
             "FD 03 34",
             "FC F9 03",
             "F9 02",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FC 06 FE",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FC 06 FE",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FC F4 00",
             "FA",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F4 01",
+            "F7 00 40",
             "FC 11 F6",
             "F6",
             "F9 00",
@@ -8209,7 +8217,7 @@
           "status": "approved",
           "entry_index": 8,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8327,8 +8335,10 @@
           "raw_sha256": "87907d302fad91284ce7730f02eaebef10abca40801f4c3df42294ee0a7b24ff",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 04 00 00",
+            "F7 00 40",
             "FC 03 01",
             "F8 00",
             "F8 00",
@@ -8342,9 +8352,9 @@
             "F6",
             "FC E1 01",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F8 00",
             "FB FF FF",
             "F8 00",
@@ -8361,8 +8371,9 @@
             "F8 82",
             "FC DE 02",
             "FA",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F4 01",
+            "F7 00 40",
             "FD 03 34",
             "F6",
             "FC 03 FE",
@@ -8410,7 +8421,7 @@
           "status": "approved",
           "entry_index": 9,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8497,6 +8508,157 @@
           "asset_id": "second_ui_script_master",
           "scope": "SECOND_only",
           "exe": "SECOND/SECOND.WAR",
+          "pointer_field": 148300,
+          "source_offset": 154127,
+          "source_offset_hex": "0x25A0F",
+          "end_offset_exclusive": 154192,
+          "raw_sha256": "fff6bc43fda4fcc9cf2b04f59ee7aee21dd457b72f63a112d164d6c4afb8a60d",
+          "control_signature": [
+            "FD 00 00",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 05 FF FF",
+            "F8 03",
+            "F7 00 40",
+            "FC 06 01",
+            "F6",
+            "F6",
+            "FC 04 FC",
+            "F8 00",
+            "F6",
+            "F8 00",
+            "F6",
+            "FC F7 01",
+            "FB FF FF",
+            "F8 01",
+            "F7 00 00",
+            "F8 00",
+            "FC 00 02",
+            "F7 00 40",
+            "F8 00",
+            "FE 00"
+          ],
+          "status": "approved",
+          "entry_index": 10,
+          "category": "status_and_combat_information",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
+          "translation_target": true,
+          "replacements": [
+            {
+              "relative_start": 22,
+              "relative_end": 26,
+              "source_sha256": "87984866c97f10048bb168ec496c316474019cffdd34fce0b7f2aadabc6e7846",
+              "korean_text": "방어"
+            },
+            {
+              "relative_start": 27,
+              "relative_end": 31,
+              "source_sha256": "b51a3a19511671bb0bb322dd03f51a4400217d1cb9a95ac8b751f6da0d63de70",
+              "korean_text": "명중"
+            }
+          ]
+        },
+        {
+          "asset_id": "second_ui_script_master",
+          "scope": "SECOND_only",
+          "exe": "SECOND/SECOND.WAR",
+          "pointer_field": 148304,
+          "source_offset": 154192,
+          "source_offset_hex": "0x25A50",
+          "end_offset_exclusive": 154299,
+          "raw_sha256": "69c9ee3b8a0ebcc4d2802e0d227eb634bbb1f8ce9cb00b771951b8d03174303a",
+          "control_signature": [
+            "FD 00 00",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 07 FF FF",
+            "F8 03",
+            "F7 00 40",
+            "F6",
+            "F6",
+            "F6",
+            "F6",
+            "F6",
+            "F6",
+            "F6",
+            "F7 00 00",
+            "F5 08 FF FF",
+            "F8 03",
+            "F7 00 40",
+            "F6",
+            "F6",
+            "FC 09 FC",
+            "F8 82",
+            "FC F9 02",
+            "F8 87",
+            "FE 00"
+          ],
+          "status": "approved",
+          "entry_index": 11,
+          "category": "map_command_menu",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
+          "translation_target": true,
+          "replacements": [
+            {
+              "relative_start": 19,
+              "relative_end": 27,
+              "source_sha256": "c980fa95eaa8e3e54eb94c75d61664131f5e3ed6755f68540b1db95bfd8f60b4",
+              "korean_text": "페이즈 종료"
+            },
+            {
+              "relative_start": 28,
+              "relative_end": 34,
+              "source_sha256": "42b778b0ae94497d3789917b67c2fab69a4e8cfc35b780b1058a51f6d6b4b815",
+              "korean_text": "부대 목록"
+            },
+            {
+              "relative_start": 35,
+              "relative_end": 43,
+              "source_sha256": "3cd9e372bac7eea68f495736b2f09ac7080f575f86ba494cac4484c900caab02",
+              "korean_text": "반격 명령"
+            },
+            {
+              "relative_start": 44,
+              "relative_end": 52,
+              "source_sha256": "5b383476c9e09a1649bfbcc70872916a6fb623748178df8e2caff7bf9d2e5006",
+              "korean_text": "작전 목적"
+            },
+            {
+              "relative_start": 53,
+              "relative_end": 61,
+              "source_sha256": "fc1d59bc4bec1c2ccbe33b30d3ee6cb9724b59c5354061a1360c0e6413def2b4",
+              "korean_text": "정신기 검색"
+            },
+            {
+              "relative_start": 62,
+              "relative_end": 66,
+              "source_sha256": "651f221818ec7c1316795fb861e4de466c5945bf22efff360ee799d6c5341d7d",
+              "korean_text": "시스템"
+            },
+            {
+              "relative_start": 67,
+              "relative_end": 70,
+              "source_sha256": "a745042f61ca836c3b1ef9c74152ce5491f8cba74f932a3b81cb60f7cb4d93b2",
+              "korean_text": "저장"
+            },
+            {
+              "relative_start": 83,
+              "relative_end": 88,
+              "source_sha256": "233dae8a0cfc7aead2354a9bccd77770f6ed677706c6379750e828b186fb10c5",
+              "korean_text": "턴 수"
+            },
+            {
+              "relative_start": 89,
+              "relative_end": 93,
+              "source_sha256": "93d23ef218b331b0147e350fce7d1f7cf540e27cd75634cfc16925db67f0ed59",
+              "korean_text": "자금"
+            }
+          ]
+        },
+        {
+          "asset_id": "second_ui_script_master",
+          "scope": "SECOND_only",
+          "exe": "SECOND/SECOND.WAR",
           "pointer_field": 148316,
           "source_offset": 154374,
           "source_offset_hex": "0x25B06",
@@ -8504,11 +8666,13 @@
           "raw_sha256": "1fecb845e2a3dd10bdad3d9c8014db8b2f39d13e66c8dd5059af1b9122a686aa",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 0D 00 01",
             "F8 03",
             "FC 02 02",
             "F9 02",
-            "F7",
+            "F7 00 00",
             "FC 02 00",
             "F8 85",
             "FC 00 00",
@@ -8525,7 +8689,7 @@
             "FC 03 FF",
             "F8 06",
             "FC EE 03",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FB FF FF",
@@ -8550,7 +8714,7 @@
           "status": "approved",
           "entry_index": 14,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8584,16 +8748,21 @@
           "raw_sha256": "fc50a3943cc54e00df0e0bede811a3e99e4207434844293524af91258afd57eb",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
+            "F5 0F 01 00",
             "F8 03",
-            "F7",
+            "F7 00 40",
             "FC 02 01",
             "F8 00",
             "F8 00",
@@ -8606,13 +8775,13 @@
             "F6",
             "FC E2 02",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 02",
             "F8 01",
             "FC FF 01",
             "F8 01",
             "FC 01 FF",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FC 13 FE",
@@ -8629,7 +8798,7 @@
           "status": "approved",
           "entry_index": 15,
           "category": "sortie_and_confirmation",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8651,15 +8820,19 @@
           "raw_sha256": "150307858ba7e024e9eae289603184a7379b51065b4218702a7c6e6eb3908510",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
             "FC 10 08",
+            "F2 06 08 00",
             "F6",
             "F9 04",
+            "F2 06 0C 00",
             "F6",
             "FA",
+            "F2 06 45 00",
             "F6",
             "FD 11 29",
-            "F7",
+            "F7 00 40",
             "F6",
             "F6",
             "FE 01"
@@ -8667,7 +8840,7 @@
           "status": "approved",
           "entry_index": 17,
           "category": "sortie_and_confirmation",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8689,26 +8862,33 @@
           "raw_sha256": "71f42363422902940100b41b6f079b41975b89fb7665884393bd743f18cbd267",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
-            "F7",
+            "F7 00 40",
             "F8 03",
             "F8 00",
             "F6",
             "FD 1A 2E",
-            "F7",
+            "F7 00 00",
+            "F2 03 08 00",
             "F6",
             "F9 04",
+            "F2 03 0C 00",
             "F6",
             "FA",
+            "F2 03 45 00",
             "F6",
             "FC 01 FB",
-            "F7",
+            "F7 00 40",
             "F6",
             "F6",
             "FE 01"
@@ -8716,7 +8896,7 @@
           "status": "approved",
           "entry_index": 18,
           "category": "sortie_and_confirmation",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8744,14 +8924,18 @@
           "raw_sha256": "81fbbeadb440a7b18719f80e8bfd1b515070fa2ac1cfb6fd9c40e52dc46fc80f",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "FC 0D 05",
+            "F2 0C 08 00",
             "F6",
             "F9 04",
+            "F2 0C 0C 00",
             "F6",
             "FA",
+            "F2 0C 45 00",
             "F6",
-            "F7",
+            "F7 00 40",
             "FC 01 FB",
             "F6",
             "FC 05 FE",
@@ -8761,27 +8945,27 @@
             "F6",
             "FC 06 FE",
             "F8 86",
-            "F7",
+            "F7 00 00",
             "F8 00",
-            "F7",
+            "F7 00 40",
             "F8 00",
-            "F7",
+            "F7 00 00",
             "F8 00",
-            "F7",
+            "F7 00 40",
             "FD 06 10",
             "F8 00",
             "F8 00",
             "F8 00",
-            "F7",
+            "F7 00 00",
             "F8 00",
-            "F7",
+            "F7 00 40",
             "F8 00",
             "FE 00"
           ],
           "status": "approved",
           "entry_index": 19,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8802,6 +8986,118 @@
           "asset_id": "second_ui_script_master",
           "scope": "SECOND_only",
           "exe": "SECOND/SECOND.WAR",
+          "pointer_field": 148340,
+          "source_offset": 154955,
+          "source_offset_hex": "0x25D4B",
+          "end_offset_exclusive": 155040,
+          "raw_sha256": "2356298829aa82194263c8e72f0e728d5cc71635a36c780f57881694d1d09f93",
+          "control_signature": [
+            "FD 00 20",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 32 FF FF",
+            "F7 00 40",
+            "F8 03",
+            "F6",
+            "F6",
+            "FC 10 FC",
+            "F8 82",
+            "FC FE 05",
+            "F6",
+            "F6",
+            "FE 01"
+          ],
+          "status": "approved",
+          "entry_index": 20,
+          "category": "phase_end_confirmation",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
+          "translation_target": true,
+          "replacements": [
+            {
+              "relative_start": 19,
+              "relative_end": 45,
+              "source_sha256": "b3656ebd034cdc2906bb2e8f6298cac3486a430936ccbc7d239e50a17ea169ba",
+              "korean_text": "행동을 마치지 않은 유닛이　　기 남았습니다"
+            },
+            {
+              "relative_start": 46,
+              "relative_end": 66,
+              "source_sha256": "378be5866d4d1cae8ddce968ccc7af82e103a0f0c69eddc18a146ec2717ede45",
+              "korean_text": "페이즈를 종료하시겠습니까?"
+            },
+            {
+              "relative_start": 75,
+              "relative_end": 77,
+              "source_sha256": "6443d52d95ed14614ce04c14dfcf90a729744248a18348f2c2f89fabc22c7f59",
+              "korean_text": "예"
+            },
+            {
+              "relative_start": 78,
+              "relative_end": 81,
+              "source_sha256": "9b8a462be3aa64e5338cc45fc73c450b90c7cff4f7382cd7765f7a3ddc114c9b",
+              "korean_text": "아니요"
+            }
+          ]
+        },
+        {
+          "asset_id": "second_ui_script_master",
+          "scope": "SECOND_only",
+          "exe": "SECOND/SECOND.WAR",
+          "pointer_field": 148344,
+          "source_offset": 155040,
+          "source_offset_hex": "0x25DA0",
+          "end_offset_exclusive": 155094,
+          "raw_sha256": "954b0f107ed1422b015e0481fd2057351202afdcd4488628a2f798958e1c9b03",
+          "control_signature": [
+            "FD 00 20",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 33 FF FF",
+            "F7 00 40",
+            "F8 03",
+            "F6",
+            "F6",
+            "FC 07 01",
+            "F6",
+            "F6",
+            "FE 01"
+          ],
+          "status": "approved",
+          "entry_index": 21,
+          "category": "phase_end_confirmation",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
+          "translation_target": true,
+          "replacements": [
+            {
+              "relative_start": 19,
+              "relative_end": 31,
+              "source_sha256": "53b59304b4dff74d7479bd8e7889d56deb1d53b0046827c44621092fbefbcdd3",
+              "korean_text": "페이즈를 종료합니다"
+            },
+            {
+              "relative_start": 32,
+              "relative_end": 40,
+              "source_sha256": "08e02fb6c308dff454af415bdbb503d90a818a5b9be207f1e02bacc6e0f17883",
+              "korean_text": "진행하시겠습니까?"
+            },
+            {
+              "relative_start": 44,
+              "relative_end": 46,
+              "source_sha256": "6443d52d95ed14614ce04c14dfcf90a729744248a18348f2c2f89fabc22c7f59",
+              "korean_text": "예"
+            },
+            {
+              "relative_start": 47,
+              "relative_end": 50,
+              "source_sha256": "9b8a462be3aa64e5338cc45fc73c450b90c7cff4f7382cd7765f7a3ddc114c9b",
+              "korean_text": "아니요"
+            }
+          ]
+        },
+        {
+          "asset_id": "second_ui_script_master",
+          "scope": "SECOND_only",
+          "exe": "SECOND/SECOND.WAR",
           "pointer_field": 148352,
           "source_offset": 155151,
           "source_offset_hex": "0x25E0F",
@@ -8809,20 +9105,27 @@
           "raw_sha256": "fe801e6490e1ca3fdec56710f1f9442b4d7c188ea96da4069769fa57b94aca7d",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
             "F8 03",
+            "F2 08 08 00",
             "F6",
             "F9 02",
+            "F2 08 0C 00",
             "F6",
             "FA",
+            "F2 08 45 00",
             "F6",
             "F8 03",
+            "F2 03 08 00",
             "F6",
             "F9 04",
+            "F2 03 0C 00",
             "F6",
             "FA",
+            "F2 03 45 00",
             "F6",
-            "F7",
+            "F7 00 40",
             "F8 03",
             "F8 04",
             "F6",
@@ -8837,7 +9140,7 @@
           "status": "approved",
           "entry_index": 23,
           "category": "sortie_and_confirmation",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -8871,7 +9174,9 @@
           "raw_sha256": "15621240ae5e19b7f80a78c7676f1822796b4e4d2ded5ba0de9839b23728ced8",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 0C 00 08",
             "F8 03",
             "FC 10 0C",
             "FC 01 00",
@@ -8894,7 +9199,7 @@
             "F8 02",
             "F6",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC E8 F8",
             "FB FF FF",
             "F8 01",
@@ -8934,10 +9239,10 @@
             "F8 01",
             "FC 00 FE",
             "FA",
-            "F7",
+            "F7 00 00",
             "F8 00",
             "FD 07 01",
-            "F7",
+            "F7 00 40",
             "F8 00",
             "F6",
             "F8 00",
@@ -8950,7 +9255,7 @@
           "status": "approved",
           "entry_index": 24,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9002,7 +9307,9 @@
           "raw_sha256": "d8fa93ef52799448703afea706deb53d262f39dcac6c07fe4f345668555f05b1",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 34 00 08",
             "F8 03",
             "FC 10 0C",
             "FC 01 00",
@@ -9020,7 +9327,7 @@
             "F6",
             "FC 03 FF",
             "F8 04",
-            "F7",
+            "F7 00 40",
             "FC E9 FB",
             "FB FF FF",
             "F8 01",
@@ -9033,10 +9340,10 @@
             "FC 01 FC",
             "FB FF FF",
             "F8 01",
-            "F7",
+            "F7 00 00",
             "F8 00",
             "FD 07 01",
-            "F7",
+            "F7 00 40",
             "F8 00",
             "F6",
             "F8 00",
@@ -9049,7 +9356,7 @@
           "status": "approved",
           "entry_index": 25,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9077,17 +9384,21 @@
           "raw_sha256": "ec013d68c82c0cdac2915892df502a50118ce27f305db2ea279d7040055557d3",
           "control_signature": [
             "F8 03",
-            "F7",
+            "F7 00 00",
             "F8 04",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "F8 03",
+            "F5 10 01 00",
             "F8 03",
-            "F7",
+            "F7 00 40",
             "FC 02 01",
             "F8 00",
             "F8 00",
@@ -9106,7 +9417,7 @@
             "F6",
             "FC E2 02",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 03",
             "F8 01",
             "FC FF 01",
@@ -9119,7 +9430,7 @@
             "FC FF 01",
             "F8 01",
             "FC 02 FF",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FC 11 FE",
@@ -9136,7 +9447,7 @@
           "status": "approved",
           "entry_index": 26,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9158,17 +9469,21 @@
           "raw_sha256": "db33f703c3566c621c473cdec3e163afadb34e581bc51263c6be39a444da1367",
           "control_signature": [
             "F8 03",
-            "F7",
+            "F7 00 00",
             "F8 04",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "F8 03",
+            "F5 10 01 00",
             "F8 03",
-            "F7",
+            "F7 00 40",
             "FC 02 01",
             "F8 00",
             "F8 00",
@@ -9187,7 +9502,7 @@
             "F6",
             "FC E2 02",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 03",
             "F8 01",
             "FC FF 01",
@@ -9200,11 +9515,11 @@
             "FC FF 01",
             "F8 01",
             "FC 02 FF",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FC 12 FE",
-            "F7",
+            "F7 00 00",
             "FC 01 00",
             "F8 85",
             "F8 00",
@@ -9217,7 +9532,7 @@
           "status": "approved",
           "entry_index": 27,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9239,8 +9554,10 @@
           "raw_sha256": "66fba7d701d401fc9d19b31adf1e08b611dd192c9d277648bdad92b1a0fb939c",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 16 00 00",
+            "F7 00 40",
             "FC 02 02",
             "F8 00",
             "F6",
@@ -9254,24 +9571,24 @@
             "F6",
             "FC EF 02",
             "F9 02",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FC 05 FE",
             "F8 83",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC 03 00",
             "FB FF FF",
             "F8 01",
             "FC 05 FE",
             "F8 83",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC 03 00",
             "FB FF FF",
             "F8 01",
@@ -9284,7 +9601,7 @@
           "status": "approved",
           "entry_index": 29,
           "category": "spirit_and_objectives",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9306,8 +9623,10 @@
           "raw_sha256": "3f78589843e38baf88e8c26c33bc6c1b96a8b604af93cb46cf01350585cc01d6",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 13 00 00",
+            "F7 00 40",
             "FC 11 01",
             "FC EB 05",
             "FC FA 03",
@@ -9321,7 +9640,7 @@
           "status": "approved",
           "entry_index": 30,
           "category": "spirit_and_objectives",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9355,8 +9674,10 @@
           "raw_sha256": "cbcc05e21f28275b1cfb2ccb7dbcb7a37c77e35bf3a48f99c56958dc95c3b53f",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 18 00 00",
+            "F7 00 40",
             "FC 0F 01",
             "FC EA 04",
             "F6",
@@ -9382,7 +9703,7 @@
           "status": "approved",
           "entry_index": 31,
           "category": "intermission",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9482,16 +9803,21 @@
           "raw_sha256": "852f887a7b622dc3e7a6daf7aa62372b1123a1c602817cfa8b01b7b4f8872dcd",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
+            "F5 11 01 00",
             "F8 03",
-            "F7",
+            "F7 00 40",
             "FC 02 01",
             "F8 00",
             "F8 00",
@@ -9520,7 +9846,7 @@
           "status": "approved",
           "entry_index": 32,
           "category": "counterattack_orders",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9554,16 +9880,21 @@
           "raw_sha256": "ada91a3945daf1955a64cca1b0e8e76e1e795cb8a65f95bfcdc70f972c4c5005",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
+            "F5 11 01 00",
             "F8 03",
-            "F7",
+            "F7 00 40",
             "FC 02 01",
             "F8 00",
             "F8 00",
@@ -9583,13 +9914,13 @@
             "FB FF FF",
             "F8 01",
             "FC 0A FE",
-            "F7",
+            "F7 00 00",
             "FC 01 00",
             "F8 85",
             "F8 00",
             "F6",
             "F8 0B",
-            "F7",
+            "F7 00 40",
             "FC DD 01",
             "FA",
             "FE 00"
@@ -9597,7 +9928,7 @@
           "status": "approved",
           "entry_index": 33,
           "category": "counterattack_orders",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9631,16 +9962,21 @@
           "raw_sha256": "c539e74274ea30cb21817c2cdfec4c237cf28c1c99941903495e8ea2409ef337",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
+            "F5 11 01 00",
             "F8 03",
-            "F7",
+            "F7 00 40",
             "FC 02 01",
             "F8 00",
             "F8 00",
@@ -9671,7 +10007,7 @@
           "status": "approved",
           "entry_index": 34,
           "category": "counterattack_orders",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9717,8 +10053,10 @@
           "raw_sha256": "027019dbc69d8173ee92198e6396ba2e335dcb119e02c84b02246613cd94e5cb",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 12 00 00",
+            "F7 00 40",
             "FC 10 09",
             "F6",
             "F6",
@@ -9731,7 +10069,7 @@
           "status": "approved",
           "entry_index": 35,
           "category": "counterattack_orders",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9771,8 +10109,10 @@
           "raw_sha256": "b8da00e24fba93319b6e58168d516c6ace93816c77f73688f1b551ec3527d113",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 14 00 00",
+            "F7 00 40",
             "FC 02 13",
             "F8 00",
             "F6",
@@ -9780,9 +10120,9 @@
             "FC EE 04",
             "F9 05",
             "F9 06",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FB FF FF",
             "F8 01",
             "FA",
@@ -9793,7 +10133,7 @@
           "status": "approved",
           "entry_index": 36,
           "category": "spirit_and_objectives",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9815,16 +10155,21 @@
           "raw_sha256": "d5ff1ab87f79cecee19ec3c070239bf0b1550ed6f55575101d6971eedead2949",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
+            "F5 15 01 00",
             "F8 03",
-            "F7",
+            "F7 00 40",
             "FC 02 01",
             "F8 00",
             "F8 00",
@@ -9835,22 +10180,22 @@
             "F8 84",
             "FC E6 05",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 03",
             "F8 01",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC 00 FF",
             "FB FF FF",
             "F8 01",
             "FC 0A FE",
             "F8 83",
             "FC 06 01",
-            "F7",
+            "F7 00 00",
             "F8 03",
             "F8 01",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC 00 FF",
             "FB FF FF",
             "F8 01",
@@ -9863,7 +10208,7 @@
           "status": "approved",
           "entry_index": 37,
           "category": "spirit_and_objectives",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -9885,8 +10230,10 @@
           "raw_sha256": "beb210b76eb316f45474a36d2652f86629fcb65a30d6e5069e501bef038d6802",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 35 00 00",
+            "F7 00 40",
             "FC 01 01",
             "F8 00",
             "F8 00",
@@ -9971,7 +10318,7 @@
           "status": "approved",
           "entry_index": 38,
           "category": "status_and_combat_information",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -10113,8 +10460,10 @@
           "raw_sha256": "41245795336f514138d76dabaf34b6a85501fbe9a520e4aff4042ae2e571db4e",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 36 00 00",
+            "F7 00 40",
             "FC 07 01",
             "F6",
             "FC FC 02",
@@ -10168,7 +10517,7 @@
           "status": "approved",
           "entry_index": 39,
           "category": "system_settings",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -10298,8 +10647,10 @@
           "raw_sha256": "c5afb957811385912fecf3f37b803681080b13d2b9e93fe4dbcab738e6292da9",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 38 00 00",
+            "F7 00 40",
             "FC 0A 01",
             "F6",
             "F6",
@@ -10347,7 +10698,7 @@
           "status": "approved",
           "entry_index": 41,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -10441,8 +10792,10 @@
           "raw_sha256": "83c928bdc037e8516af130b950b2cfdb71778128c67d185f01f1487917931580",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 39 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 00",
             "F6",
@@ -10489,7 +10842,7 @@
           "status": "approved",
           "entry_index": 42,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -10577,8 +10930,10 @@
           "raw_sha256": "495f70f92b9293cf56ad785d94939a626d547dd18e6041e8a8541713c381876c",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 25 00 00",
+            "F7 00 40",
             "FC 10 01",
             "F6",
             "FC F5 02",
@@ -10626,7 +10981,7 @@
           "status": "approved",
           "entry_index": 43,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -10750,8 +11105,10 @@
           "raw_sha256": "061fc21c3de588b8f9f3b350693fa77f94ddb6ce825f5b6cc01fad27f5076854",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 3A 00 00",
+            "F7 00 40",
             "FC 02 02",
             "F6",
             "FC 00 0B",
@@ -10761,7 +11118,7 @@
           "status": "approved",
           "entry_index": 44,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -10789,8 +11146,10 @@
           "raw_sha256": "8ca50bf7ad757e9e4a79e821f54eb567312c6dd7d6d0bad2d254c39b19fa63a7",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 3B 00 00",
+            "F7 00 40",
             "FC 0B 05",
             "F6",
             "FC 07 FE",
@@ -10808,7 +11167,7 @@
           "status": "approved",
           "entry_index": 45,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -10914,8 +11273,10 @@
           "raw_sha256": "b15c3ec0d03138a3759c579b1c1dd4860fc92e723d359206cb0bc36b10c55b04",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F5 3C 00 00",
+            "F7 00 40",
             "FC 0B 05",
             "F6",
             "FC 07 FE",
@@ -10939,7 +11300,7 @@
           "status": "approved",
           "entry_index": 46,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -10973,8 +11334,10 @@
           "raw_sha256": "abff60479e4a8d5e36cd7d3a464b3eda77052fe04bd0150fd5f99082e5a837ae",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 26 00 00",
+            "F7 00 40",
             "FC 0C 01",
             "F6",
             "FC F9 06",
@@ -11005,7 +11368,7 @@
           "status": "approved",
           "entry_index": 47,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11051,8 +11414,10 @@
           "raw_sha256": "7e1ead9ce99599cef492d4a00016a603299393b4340c595fbe86f888e294640a",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 26 00 00",
+            "F7 00 40",
             "FC 0C 01",
             "F6",
             "FC F9 06",
@@ -11083,7 +11448,7 @@
           "status": "approved",
           "entry_index": 48,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11129,8 +11494,10 @@
           "raw_sha256": "2297d0f78340f27b32715fd98698f70114f6320b2cc4c927f7a0b05fde7c3af8",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 40 00 00",
+            "F7 00 40",
             "FC 01 0E",
             "F8 00",
             "F6",
@@ -11148,7 +11515,7 @@
           "status": "approved",
           "entry_index": 52,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11176,8 +11543,10 @@
           "raw_sha256": "4e1ec5b1a4bd0465156d24582620a397ff08bdd2050f517e34ffc07be7a12304",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 27 00 00",
+            "F7 00 40",
             "FC 05 01",
             "F6",
             "F6",
@@ -11203,7 +11572,7 @@
           "status": "approved",
           "entry_index": 53,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11237,8 +11606,10 @@
           "raw_sha256": "7d08099cf35068f67672d7a44ec9454577cda3894cc015d7244d8fac55582d24",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 27 00 00",
+            "F7 00 40",
             "FC 05 01",
             "F6",
             "F6",
@@ -11264,7 +11635,7 @@
           "status": "approved",
           "entry_index": 54,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11298,15 +11669,20 @@
           "raw_sha256": "25bbafd9515fc2f5bfd73e260f371e1bfb4c62a9f1aa32e435a1f07e1026ec15",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 42 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 08 02",
-            "F7",
+            "F7 00 40",
             "F6",
             "FC 11 FE",
             "F6",
@@ -11328,7 +11704,7 @@
           "status": "approved",
           "entry_index": 57,
           "category": "results_level_and_repair",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11368,17 +11744,19 @@
           "raw_sha256": "ac1ff8b71cacc1b37b5b72ace77e41df645be7a1e6d802fc42e9d96d332c9c3f",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 43 00 00",
+            "F7 00 40",
             "FC 0E 04",
             "F8 82",
             "FC F6 05",
             "FB FF FF",
             "F8 01",
             "FC F5 01",
-            "F7",
+            "F7 00 00",
             "F8 00",
-            "F7",
+            "F7 00 40",
             "FD 06 0E",
             "F8 00",
             "F8 00",
@@ -11388,7 +11766,7 @@
           "status": "approved",
           "entry_index": 58,
           "category": "results_level_and_repair",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11410,9 +11788,11 @@
           "raw_sha256": "47256208b1ee87b17b9997d49b17fca403d58c8a3e049a10a1ff3229bdca048b",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 28 00 00",
             "FC 0C 01",
-            "F7",
+            "F7 00 40",
             "F6",
             "FC 0F FE",
             "F8 88",
@@ -11429,7 +11809,7 @@
           "status": "approved",
           "entry_index": 59,
           "category": "results_level_and_repair",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11463,8 +11843,10 @@
           "raw_sha256": "263d345389213b7c15eb260f92eabf1159ccbaf30048e9e12b1c026d09545863",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 46 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -11487,7 +11869,7 @@
           "status": "approved",
           "entry_index": 60,
           "category": "unit_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11509,8 +11891,10 @@
           "raw_sha256": "b9db005e7aab0a1b23fa254100db9b9af2f124cbe3f7b6da0cd89398a86b8235",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 46 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -11534,7 +11918,7 @@
           "status": "approved",
           "entry_index": 61,
           "category": "unit_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11556,8 +11940,10 @@
           "raw_sha256": "01cdee4cc5c45ea48be1836d6f24077e39d00e04d74414ad67ae15bcbf7372e8",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 1A 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -11598,7 +11984,7 @@
           "status": "approved",
           "entry_index": 62,
           "category": "unit_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11644,12 +12030,17 @@
           "raw_sha256": "6b6ef2973931e381a2cff751d6e98f36d044d85e1fc7533a42fa959074465d24",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 1B 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
             "F8 03",
@@ -11694,7 +12085,7 @@
             "F8 01",
             "FC 00 FF",
             "FA",
-            "F7",
+            "F7 00 40",
             "FD 00 00",
             "FC 02 02",
             "FB FF FF",
@@ -11740,7 +12131,7 @@
           "status": "approved",
           "entry_index": 63,
           "category": "unit_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11804,8 +12195,10 @@
           "raw_sha256": "9b02cd754e78b7d1f379597c79a67062fa3e8c2f7b1a5d8eb827895443af4a55",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 1C 00 00",
+            "F7 00 40",
             "FC 0E 01",
             "FC E9 04",
             "F6",
@@ -11826,7 +12219,7 @@
           "status": "approved",
           "entry_index": 64,
           "category": "unit_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11902,22 +12295,29 @@
           "raw_sha256": "5ee16ae21d3e5b9d96e6dcb6fb42be49af7820f1196425b37114089f3b1498ac",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 20",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 20",
-            "F7",
+            "F7 00 40",
             "FD 00 20",
             "F8 03",
             "F8 00",
@@ -11929,7 +12329,7 @@
           "status": "approved",
           "entry_index": 65,
           "category": "unit_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -11957,15 +12357,19 @@
           "raw_sha256": "7b4eb90dcc27e72ed72c01da4d8060e9082f2652e2cd8e87ae79077146883c2c",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 20",
-            "F7",
+            "F7 00 40",
             "FD 12 2C",
             "F6",
             "F6",
@@ -11984,7 +12388,7 @@
           "status": "approved",
           "entry_index": 67,
           "category": "unit_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12024,23 +12428,30 @@
           "raw_sha256": "4dbc844a1132ab05fe460083ec62275fb53ef7805f73baec7098afe4ad34b51a",
           "control_signature": [
             "FD 00 20",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
+            "F7 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 20",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 20",
-            "F7",
+            "F7 00 40",
             "FD 00 20",
             "FC 0A 0E",
             "F8 00",
@@ -12055,7 +12466,7 @@
           "status": "approved",
           "entry_index": 68,
           "category": "unit_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12107,15 +12518,19 @@
           "raw_sha256": "5d901fe87b075b234b3629fc3446814a1de1aa1efa7a7eeb8e933688a57cc495",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
-            "F7",
+            "F7 00 40",
             "FD 10 08",
             "F6",
             "F6",
@@ -12125,7 +12540,7 @@
           "status": "approved",
           "entry_index": 69,
           "category": "title_and_save_load",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12165,21 +12580,28 @@
           "raw_sha256": "1966eb6796690ee35165a6a4a423da60001ee0d59030f50057314d6452cd841f",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
-            "F7",
+            "F7 00 40",
             "FD 0F 08",
             "F6",
             "FD 05 0E",
@@ -12189,7 +12611,7 @@
           "status": "approved",
           "entry_index": 70,
           "category": "title_and_save_load",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12217,8 +12639,10 @@
           "raw_sha256": "cd41f98d753ea8e42aa4ff99a5d0e5ac1dcf33fca0752174d06abbcd53b4daca",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 19 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -12228,9 +12652,9 @@
             "F8 00",
             "FD 02 05",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F8 00",
             "FC 02 00",
             "F8 00",
@@ -12243,8 +12667,9 @@
             "F6",
             "FC E5 00",
             "FA",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F4 01",
+            "F7 00 40",
             "F8 00",
             "FD 08 15",
             "F8 00",
@@ -12272,7 +12697,7 @@
           "status": "approved",
           "entry_index": 71,
           "category": "title_and_save_load",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12324,8 +12749,10 @@
           "raw_sha256": "5840489c98049afbec481ffaab63baf53b4b51256fb2d2ed08bd5424f8c19c6e",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 19 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -12339,7 +12766,7 @@
           "status": "approved",
           "entry_index": 72,
           "category": "title_and_save_load",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12361,8 +12788,10 @@
           "raw_sha256": "fda0c49caf1f50da2a62e3cb5d1a66d92c1864ec503c6ea4ba9899a548f51971",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 19 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -12372,9 +12801,9 @@
             "F8 00",
             "FD 02 05",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F8 00",
             "FC 02 00",
             "F8 00",
@@ -12387,15 +12816,16 @@
             "F6",
             "FC E5 00",
             "FA",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F4 01",
+            "F7 00 40",
             "F8 00",
             "FE 00"
           ],
           "status": "approved",
           "entry_index": 73,
           "category": "title_and_save_load",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12417,8 +12847,10 @@
           "raw_sha256": "74f74fd37d7fcd2f9de292952ca336883716265520783e234d8f215f9e7c0c2c",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 20 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -12447,7 +12879,7 @@
           "status": "approved",
           "entry_index": 74,
           "category": "pilot_transfer",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12475,8 +12907,10 @@
           "raw_sha256": "58a8939f1cf8c183a7dc4070155ac5765b89e8d9f1ba791e97e50889e2301f57",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 20 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -12512,7 +12946,7 @@
           "status": "approved",
           "entry_index": 75,
           "category": "pilot_transfer",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12552,8 +12986,10 @@
           "raw_sha256": "e5da3c98da9f1b99492313055cc43d86884ddfa91d6b87bdae3630877101ab7f",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 21 00 00",
+            "F7 00 40",
             "FC 08 01",
             "FB FF FF",
             "F8 01",
@@ -12571,36 +13007,36 @@
             "FC 05 FE",
             "F8 83",
             "FC F8 02",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F6",
             "FC 05 FE",
             "F8 83",
             "F8 00",
             "F6",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC 08 FE",
             "F8 83",
             "FC EE 02",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F6",
             "FC 05 FE",
             "F8 83",
             "F8 00",
             "F6",
             "FC 08 FE",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F8 83",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FC EE 03",
             "F6",
             "FC 14 F8",
@@ -12626,7 +13062,7 @@
           "status": "approved",
           "entry_index": 76,
           "category": "pilot_transfer",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12720,22 +13156,29 @@
           "raw_sha256": "4c0505a03bc52c350fd1a7d95cc6c9a902342f0f5219838290fd76e0f10e477d",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 20",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 20",
-            "F7",
+            "F7 00 40",
             "FD 00 20",
             "F8 03",
             "FD 00 20",
@@ -12746,7 +13189,7 @@
           "status": "approved",
           "entry_index": 77,
           "category": "pilot_transfer",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12780,12 +13223,17 @@
           "raw_sha256": "549eaf75af84ef1a1aa17767bb918420289bdc27f8b4ac6b4748fa1051b85db1",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 1D 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
             "F8 03",
@@ -12800,7 +13248,7 @@
             "F8 01",
             "FC 00 FF",
             "FA",
-            "F7",
+            "F7 00 40",
             "FD 00 00",
             "FC 02 06",
             "F8 00",
@@ -12826,7 +13274,7 @@
           "status": "approved",
           "entry_index": 78,
           "category": "weapon_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -12872,8 +13320,10 @@
           "raw_sha256": "3eb77143b35841674009993abad5aec8ad94098aad69c80be504a3d27a1fa720",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 1E 00 00",
+            "F7 00 40",
             "FC 02 05",
             "F6",
             "F8 00",
@@ -12940,7 +13390,7 @@
           "status": "approved",
           "entry_index": 79,
           "category": "weapon_upgrade",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13046,8 +13496,10 @@
           "raw_sha256": "16b2a377397a1c632a02e2ef89789278291f584dc6f9ace7480f08615faf8701",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 22 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -13096,7 +13548,7 @@
           "status": "approved",
           "entry_index": 80,
           "category": "parts",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13130,14 +13582,16 @@
           "raw_sha256": "3a584b61b4a282404e945f9862bf22e0437f0539783d658659b5023226d57827",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 23 00 00",
             "F8 03",
             "FC 0B 0F",
             "F9 06",
             "FC FE 01",
             "FC FE 01",
             "FA",
-            "F7",
+            "F7 00 40",
             "FD 06 01",
             "FC 01 00",
             "FC 01 00",
@@ -13179,7 +13633,7 @@
           "status": "approved",
           "entry_index": 81,
           "category": "parts",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13225,13 +13679,14 @@
           "raw_sha256": "612eda4e3997a385c2d73d090b38f78555980945af8a7c040450c81c7ff2b07f",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
             "F8 03",
             "FC 14 05",
             "F8 01",
             "FC 10 00",
             "F8 01",
-            "F7",
+            "F7 00 40",
             "FD 00 20",
             "FC 02 01",
             "F8 81",
@@ -13249,15 +13704,15 @@
             "FA",
             "FD 0D 2F",
             "F9 06",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F8 85",
             "F6",
             "FA",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "FD 14 35",
             "F8 00",
             "FE 01"
@@ -13265,7 +13720,7 @@
           "status": "approved",
           "entry_index": 82,
           "category": "parts",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13287,8 +13742,10 @@
           "raw_sha256": "3081943ce1ea693e0696f37bdaccf743f00eb17bbb2bdffa7825cfedd9f337a0",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 24 00 00",
+            "F7 00 40",
             "FC 02 01",
             "FC 01 00",
             "FC 01 00",
@@ -13335,7 +13792,7 @@
           "status": "approved",
           "entry_index": 83,
           "category": "parts",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13357,22 +13814,29 @@
           "raw_sha256": "e02e98090824663e4cfda6b5a63ce9bba566c7243425805d752193dd0908b173",
           "control_signature": [
             "FD 00 00",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 00",
-            "F7",
+            "F7 00 40",
             "FD 10 03",
             "FC F7 04",
             "FC 02 00",
@@ -13387,7 +13851,7 @@
           "status": "approved",
           "entry_index": 84,
           "category": "options_encyclopedia_demo",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13445,15 +13909,19 @@
           "raw_sha256": "c3d53fcc2a324bcf8ef8fb31ec8276113a4568662ce4c75a3d709d2452eb2a8a",
           "control_signature": [
             "FD 00 20",
-            "F7",
+            "F7 00 00",
+            "F0 01 00 00",
             "F8 03",
+            "F2 00 08 00",
             "F6",
             "F9 00",
+            "F2 00 0C 00",
             "F6",
             "FA",
+            "F2 00 45 00",
             "F6",
             "FD 00 20",
-            "F7",
+            "F7 00 40",
             "FD 1B 27",
             "F6",
             "FE 01"
@@ -13461,7 +13929,7 @@
           "status": "approved",
           "entry_index": 85,
           "category": "options_encyclopedia_demo",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13489,8 +13957,10 @@
           "raw_sha256": "7ac3fcbd0c8248a27c42304891b4f5b3b6916ed7d5e61805e8100af221054d60",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 2A 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -13515,7 +13985,7 @@
           "status": "approved",
           "entry_index": 86,
           "category": "options_encyclopedia_demo",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13537,8 +14007,10 @@
           "raw_sha256": "23ea27293edd9a17329c51d3756f0d84b5771eec14bdb5dcd626e18950e94468",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 2B 00 00",
+            "F7 00 40",
             "FC 08 01",
             "FB FF FF",
             "F8 01",
@@ -13557,7 +14029,7 @@
           "status": "approved",
           "entry_index": 87,
           "category": "options_encyclopedia_demo",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13591,8 +14063,10 @@
           "raw_sha256": "b38506c9839f2188f07204f1a1da893b6e457aa88feffdc381163b21e2bf1224",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 2C 00 00",
+            "F7 00 40",
             "FC 02 01",
             "FB FF FF",
             "F8 01",
@@ -13610,7 +14084,7 @@
           "status": "approved",
           "entry_index": 89,
           "category": "options_encyclopedia_demo",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13644,8 +14118,10 @@
           "raw_sha256": "0024f38df086d02ee6b350c14889ba50ed9178e107e2f2912bad7aeb9f7ecd38",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 19 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -13655,9 +14131,9 @@
             "F8 00",
             "FD 02 05",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F8 00",
             "FC 02 00",
             "F8 00",
@@ -13670,8 +14146,9 @@
             "F6",
             "FC E5 00",
             "FA",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F4 01",
+            "F7 00 40",
             "F8 00",
             "FD 08 15",
             "FE 00"
@@ -13679,7 +14156,7 @@
           "status": "approved",
           "entry_index": 91,
           "category": "title_and_save_load",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13707,8 +14184,10 @@
           "raw_sha256": "7fa72957418eabcb281526d44a02b5e12d1ba2e02ef921929c1777bec69d751c",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 19 00 00",
+            "F7 00 40",
             "FC 02 01",
             "F8 82",
             "F8 82",
@@ -13718,9 +14197,9 @@
             "F8 00",
             "FD 02 05",
             "F9 00",
-            "F7",
+            "F7 00 00",
             "F8 02",
-            "F7",
+            "F7 00 40",
             "F8 00",
             "FC 02 00",
             "F8 00",
@@ -13733,8 +14212,9 @@
             "F6",
             "FC E5 00",
             "FA",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F4 01",
+            "F7 00 40",
             "F8 00",
             "FD 08 15",
             "F8 00",
@@ -13761,7 +14241,7 @@
           "status": "approved",
           "entry_index": 93,
           "category": "title_and_save_load",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13813,8 +14293,10 @@
           "raw_sha256": "8b0a85b22f2fb342af518820ad016120ef2c652d88508b6bafd00eb4bcb1dd86",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 2D 00 00",
+            "F7 00 40",
             "FC 08 01",
             "F8 81",
             "F8 81",
@@ -13830,7 +14312,7 @@
           "status": "approved",
           "entry_index": 100,
           "category": "options_encyclopedia_demo",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13852,8 +14334,10 @@
           "raw_sha256": "fee8d166a68cd53cefe663f7c5bb9d003b34f5b1f0b7040a9d2179e8950b8611",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 2D 00 00",
+            "F7 00 40",
             "FC 08 01",
             "F8 81",
             "F8 81",
@@ -13869,7 +14353,7 @@
           "status": "approved",
           "entry_index": 101,
           "category": "options_encyclopedia_demo",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {
@@ -13890,7 +14374,7 @@
           "end_offset_exclusive": 152822,
           "raw_sha256": "40173f8c41a52b3efd012109f0d76242ba25ae0db91972adcd802f6a71c81857",
           "control_signature": [
-            "F7",
+            "F7 00 40",
             "FD 02 36",
             "F8 00",
             "FD 09 36",
@@ -13900,7 +14384,7 @@
           "status": "verified_no_japanese_label",
           "entry_index": 103,
           "category": "options_encyclopedia_demo",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": []
         },
@@ -13915,8 +14399,10 @@
           "raw_sha256": "2db9082a5f3d92d57563c8f7c56a9503e9ed8c343f491c930ad70393989272bf",
           "control_signature": [
             "FD 00 00",
-            "F7",
-            "F7",
+            "F7 00 00",
+            "F0 00 00 00",
+            "F5 44 00 00",
+            "F7 00 40",
             "FC 01 0E",
             "F8 00",
             "F6",
@@ -13934,7 +14420,7 @@
           "status": "approved",
           "entry_index": 106,
           "category": "protagonist_and_name_entry",
-          "relocation_group": "second_ui_script_master_73_pointer_records",
+          "relocation_group": "second_ui_script_master_77_pointer_records",
           "translation_target": true,
           "replacements": [
             {

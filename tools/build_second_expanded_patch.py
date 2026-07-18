@@ -57,7 +57,6 @@ from relocate_expanded_iso_files import (  # noqa: E402
     relocate_files,
 )
 from patch_second_exe_ui import (  # noqa: E402
-    UI_ARENA_FILE_OFFSET,
     collect_korean_ui_texts,
     patch_second_executable_ui,
 )
@@ -88,7 +87,7 @@ UI_SCRIPT_OVERLAY = ROOT / "translation" / "second_ui_scripts_overlay.json"
 UI_TABLE_OVERLAY = ROOT / "translation" / "second_ui_tables_overlay.json"
 UI_NAME_OVERLAY = ROOT / "translation" / "second_ui_names_overlay.json"
 UI_COMMON_OVERLAY = ROOT / "translation" / "second_ui_common_master_overlay.json"
-DEFAULT_OUTPUT = ROOT / "test_build" / "second_korean_v0.2.0-pre"
+DEFAULT_OUTPUT = ROOT / "test_build" / "second_korean_v0.2.1-pre-menu-fix"
 XDELTA = ROOT / "xdelta.exe"
 
 SOURCE_SCE = EXTRACTED / "SECOND" / "2_SCE.BIN"
@@ -387,9 +386,9 @@ def patch_second_battle_scratch(
 
     The retail evaluator uses 0x100 bytes per mode and has no bounds check.
     The first translated BMESS path needs 358 bytes, so it would overwrite the
-    following mode.  Clear and reserve 0x8015BE70..0x8015C66F.  If the menu
-    patcher extended the loaded image, preserve its initialised arena above
-    0x8015C670 and start the BIOS heap after the aligned loaded-image end.
+    following mode.  Clear and reserve 0x8015BE70..0x8015C66F.  The menu
+    patcher keeps the retail loaded-image boundary, so the BIOS heap starts
+    immediately after this guarded scratch reservation.
     """
 
     executable_path = executable_root / SECOND_BATTLE_EXECUTABLE
@@ -443,16 +442,10 @@ def patch_second_battle_scratch(
     if len(executable) != text_size + 0x800:
         raise ValueError("SECOND PS-X EXE t_size/file size mismatch")
     loaded_end = text_address + text_size
-    if len(executable) > 0x12B000:
-        if UI_ARENA_FILE_OFFSET >= len(executable):
-            raise ValueError("extended SECOND executable has no loaded UI arena")
-        if loaded_end != PSX_EXE_FILE_TO_RAM_BIAS + len(executable):
-            raise ValueError("extended SECOND loaded-end mapping mismatch")
-        module_end = loaded_end
-        heap_pair_target = loaded_end
-    else:
-        module_end = SECOND_BSS_END_PATCH
-        heap_pair_target = SECOND_BSS_END_PATCH
+    if len(executable) != 0x12B000 or loaded_end != 0x8013A800:
+        raise ValueError("SECOND UI repack changed the retail loaded-image boundary")
+    module_end = SECOND_BSS_END_PATCH
+    heap_pair_target = SECOND_BSS_END_PATCH
     heap_start = heap_pair_target + 4
     heap_bytes = SECOND_HEAP_CEILING - heap_start
     if heap_bytes < SECOND_MINIMUM_HEAP_BYTES:
@@ -914,7 +907,7 @@ def main() -> int:
     }
 
     if not args.skip_track:
-        output_track = args.output_dir / "Super Robot Taisen Complete Box Second Korean v0.2.0-pre (Track 1).bin"
+        output_track = args.output_dir / "Super Robot Taisen Complete Box Second Korean v0.2.1-pre (Track 1).bin"
         relocation = relocate_files(
             args.safe_track,
             output_track,
@@ -951,7 +944,7 @@ def main() -> int:
         manifest["track"] = relocation
 
         if not args.skip_xdelta:
-            patch_path = args.output_dir / "srwcb-second-korean-v0.2.0-pre.xdelta"
+            patch_path = args.output_dir / "srwcb-second-korean-v0.2.1-pre.xdelta"
             manifest["xdelta"] = create_and_verify_xdelta(
                 args.original_track, output_track, args.xdelta, patch_path
             )

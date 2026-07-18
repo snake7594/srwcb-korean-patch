@@ -3,7 +3,7 @@
   "purpose": "Reviewed Korean text for SECOND.WAR menu/status tables; no binary modifications",
   "source": {
     "inventory_path": "translation/second_ui_inventory.json",
-    "inventory_sha256": "4341dc515648ff69fd96df69a918cfa6937b8ad81befe30c44ac5dafaf776396",
+    "inventory_sha256": "0af5aa68426ef35a5f788b5e390709cc876c3097c33c087368d904ca9ba0b824",
     "executable_path": "SECOND/SECOND.WAR",
     "executable_sha256": "a18915d940e69d7554631995c40f8de97b84c78fc164a90d667c8543c75acf3c",
     "approved_glossary_path": "translation/glossary_candidates.json",
