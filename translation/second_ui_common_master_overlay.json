@@ -13,6 +13,7 @@
       "pointer_field": 37376,
       "source_offset": 37528,
       "raw_sha256": "21410e5f8bd7ff776e8dc3d2903266c3aca29d91b1e4cefbc86a8e9656d51672",
+      "raw_hex": "ED 09 ED 72 FF",
       "korean_text": "끔켬",
       "status": "approved"
     },
@@ -22,6 +23,7 @@
       "pointer_field": 37384,
       "source_offset": 37575,
       "raw_sha256": "b2623b7260ab92336b1b49c6b5df379eac9fe35535cd7196a76b1e72cfe48b19",
+      "raw_hex": "EC 50 EC 51 EC 54 EC 55 EC C2 ED B3 EF 00 EF 01 EC F7 EC 74 EC BD EC 5D EC 80 EC 81 EE CD ED 71 C0 11 B3 00 EC 6F EC 70 EC B6 EC 58 EE 09 EC 58 EC 6F EC 58 EC 78 EC 06 EC 7D EC DF ED DE ED DF ED C1 EE 08 EC 79 EC 2C ED F3 EC E1 FF",
       "korean_text": "이동공격출격탑재합체분리변형절단파츠지상공중수중지중정신수리보급설득능력대기",
       "status": "approved"
     },
@@ -31,7 +33,8 @@
       "pointer_field": 37468,
       "source_offset": 38866,
       "raw_sha256": "d75e1da64734f1c66c811466bf289d1657d2079f206a04af8aaa291989c6ee8b",
-      "korean_text": "모노    스테레오",
+      "raw_hex": "D1 BD D8 DA A8 B5 DB 99 FF",
+      "korean_text": "모노입체",
       "status": "approved"
     },
     {
@@ -40,7 +43,8 @@
       "pointer_field": 37472,
       "source_offset": 38875,
       "raw_sha256": "528d016cb8c23ea869a01ea2dd186c357a74f8a47820f231726abaefb98ee39b",
-      "korean_text": "전환식고정식",
+      "raw_hex": "EE CD 89 F0 88 47 00 00 F0 A9 ED 06 FF",
+      "korean_text": "전환    고정",
       "status": "approved"
     },
     {
@@ -49,21 +53,50 @@
       "pointer_field": 37476,
       "source_offset": 38888,
       "raw_sha256": "44ba82976065b0670fb21b70368b57190974525c343f7bb0ba81c37eecd1af85",
+      "raw_hex": "69 56 00 00 F3 F8 00 00 F3 F9 00 00 F3 FA 00 00 F3 FB 00 00 21 31 00 00 27 31 00 00 21 32 00 00 27 32 00 00 A8 AE 11 B7 AA DB 9E B7 FF",
       "status": "approved",
+      "preserve_display_bytes": true,
       "replacements": [
         {
           "relative_start": 0,
           "relative_end_exclusive": 4,
+          "source_hex": "69 56 00 00",
           "korean_text": "없음"
+        },
+        {
+          "relative_start": 4,
+          "relative_end_exclusive": 8,
+          "source_hex": "F3 F8 00 00",
+          "korean_text": "○"
+        },
+        {
+          "relative_start": 8,
+          "relative_end_exclusive": 12,
+          "source_hex": "F3 F9 00 00",
+          "korean_text": "×"
+        },
+        {
+          "relative_start": 12,
+          "relative_end_exclusive": 16,
+          "source_hex": "F3 FA 00 00",
+          "korean_text": "△"
+        },
+        {
+          "relative_start": 16,
+          "relative_end_exclusive": 20,
+          "source_hex": "F3 FB 00 00",
+          "korean_text": "□"
         },
         {
           "relative_start": 36,
           "relative_end_exclusive": 40,
+          "source_hex": "A8 AE 11 B7",
           "korean_text": "시작"
         },
         {
           "relative_start": 40,
           "relative_end_exclusive": 44,
+          "source_hex": "AA DB 9E B7",
           "korean_text": "선택"
         }
       ]

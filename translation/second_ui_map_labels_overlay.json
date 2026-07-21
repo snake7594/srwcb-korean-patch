@@ -1,0 +1,2505 @@
+{
+ "schema": "srwcb-second-map-label-overlay-v1",
+ "purpose": "Byte-exact in-place Korean for the sequential map-UI label/message heap (0x9D34..0xA4FF) whose reference mechanism is index-based; record sizes and FF terminators are preserved exactly. | Extended to cover the second sequential message/terrain heap (0xA500-0xAFAF); only in-place-fitting records are included.",
+ "records": [
+  {
+   "offset": 40244,
+   "budget_bytes": 6,
+   "source_hex": "EC 80 ED 1F 69 56",
+   "japanese_text": "変化なし",
+   "korean_text": "없음"
+  },
+  {
+   "offset": 40251,
+   "budget_bytes": 3,
+   "source_hex": "91 B2 C6",
+   "japanese_text": "アップ",
+   "korean_text": "↑"
+  },
+  {
+   "offset": 40255,
+   "budget_bytes": 3,
+   "source_hex": "AF 95 DF",
+   "japanese_text": "ダウン",
+   "korean_text": "↓"
+  },
+  {
+   "offset": 40259,
+   "budget_bytes": 4,
+   "source_hex": "EC 71 EE 59",
+   "japanese_text": "回復",
+   "korean_text": "회복"
+  },
+  {
+   "offset": 40264,
+   "budget_bytes": 2,
+   "source_hex": "1D 25",
+   "japanese_text": "HP",
+   "korean_text": "HP"
+  },
+  {
+   "offset": 40267,
+   "budget_bytes": 2,
+   "source_hex": "1A 23",
+   "japanese_text": "EN",
+   "korean_text": "EN"
+  },
+  {
+   "offset": 40270,
+   "budget_bytes": 2,
+   "source_hex": "6E 43",
+   "japanese_text": "はい",
+   "korean_text": "○"
+  },
+  {
+   "offset": 40273,
+   "budget_bytes": 3,
+   "source_hex": "43 43 47",
+   "japanese_text": "いいえ",
+   "korean_text": "×"
+  },
+  {
+   "offset": 40277,
+   "budget_bytes": 4,
+   "source_hex": "EC BD EC 5D",
+   "japanese_text": "分離",
+   "korean_text": "분리"
+  },
+  {
+   "offset": 40282,
+   "budget_bytes": 4,
+   "source_hex": "EE CD ED 71",
+   "japanese_text": "切断",
+   "korean_text": "절단"
+  },
+  {
+   "offset": 40287,
+   "budget_bytes": 8,
+   "source_hex": "EC 65 EC 55 EE 02 ED 36",
+   "japanese_text": "反撃開始",
+   "korean_text": "반격개시"
+  },
+  {
+   "offset": 40296,
+   "budget_bytes": 4,
+   "source_hex": "EC 0A EC 56",
+   "japanese_text": "武器",
+   "korean_text": "무기"
+  },
+  {
+   "offset": 40301,
+   "budget_bytes": 4,
+   "source_hex": "EC 71 EC 72",
+   "japanese_text": "回避",
+   "korean_text": "회피"
+  },
+  {
+   "offset": 40306,
+   "budget_bytes": 4,
+   "source_hex": "EC 7B EC 7C",
+   "japanese_text": "防御",
+   "korean_text": "방어"
+  },
+  {
+   "offset": 40311,
+   "budget_bytes": 8,
+   "source_hex": "EC 65 EC 55 ED 51 EC 79",
+   "japanese_text": "反撃不能",
+   "korean_text": "반격불능"
+  },
+  {
+   "offset": 40320,
+   "budget_bytes": 4,
+   "source_hex": "EC 75 EC 2C",
+   "japanese_text": "気力",
+   "korean_text": "기력"
+  },
+  {
+   "offset": 40325,
+   "budget_bytes": 3,
+   "source_hex": "DB C8 DA",
+   "japanese_text": "レベル",
+   "korean_text": "LV"
+  },
+  {
+   "offset": 40329,
+   "budget_bytes": 5,
+   "source_hex": "C0 93 DC B2 B7",
+   "japanese_text": "パイロット",
+   "korean_text": "PILOT"
+  },
+  {
+   "offset": 40335,
+   "budget_bytes": 2,
+   "source_hex": "1D 25",
+   "japanese_text": "HP",
+   "korean_text": "HP"
+  },
+  {
+   "offset": 40338,
+   "budget_bytes": 10,
+   "source_hex": "EC EF EC A8 EC E6 EC E7 EC E8",
+   "japanese_text": "味方部隊表",
+   "korean_text": "아군부대표"
+  },
+  {
+   "offset": 40349,
+   "budget_bytes": 10,
+   "source_hex": "EC 93 EC A8 EC E6 EC E7 EC E8",
+   "japanese_text": "敵方部隊表",
+   "korean_text": "적군부대표"
+  },
+  {
+   "offset": 40360,
+   "budget_bytes": 6,
+   "source_hex": "EC C2 ED B3 EC E8",
+   "japanese_text": "発進表",
+   "korean_text": "발진표"
+  },
+  {
+   "offset": 40367,
+   "budget_bytes": 4,
+   "source_hex": "D5 BA B2 B7",
+   "japanese_text": "ユニット",
+   "korean_text": "유닛"
+  },
+  {
+   "offset": 40372,
+   "budget_bytes": 6,
+   "source_hex": "EE 59 EE 39 EC E8",
+   "japanese_text": "復活表",
+   "korean_text": "부활표"
+  },
+  {
+   "offset": 40379,
+   "budget_bytes": 5,
+   "source_hex": "DB C8 DA EE 8E",
+   "japanese_text": "レベル順",
+   "korean_text": "LV순"
+  },
+  {
+   "offset": 40385,
+   "budget_bytes": 4,
+   "source_hex": "1D 25 EE 8E",
+   "japanese_text": "HP順",
+   "korean_text": "HP순"
+  },
+  {
+   "offset": 40390,
+   "budget_bytes": 6,
+   "source_hex": "EC 75 EC 2C EE 8E",
+   "japanese_text": "気力順",
+   "korean_text": "기력순"
+  },
+  {
+   "offset": 40397,
+   "budget_bytes": 19,
+   "source_hex": "ED 22 EC 55 EC 52 EC 96 8E ED 23 ED 24 56 65 4E 5F 54 43",
+   "japanese_text": "出撃戦艦を選択してください",
+   "korean_text": "출격 전함 선택"
+  },
+  {
+   "offset": 40417,
+   "budget_bytes": 19,
+   "source_hex": "ED 22 EC 55 D5 BA B2 B7 8E ED 23 ED 24 56 65 4E 5F 54 43",
+   "japanese_text": "出撃ユニットを選択してください",
+   "korean_text": "출격 유닛 선택"
+  },
+  {
+   "offset": 40437,
+   "budget_bytes": 21,
+   "source_hex": "5C 6D D5 BA B2 B7 6E 52 52 66 6E ED 22 EC 55 66 4C 7D 5A 8F 15",
+   "japanese_text": "そのユニットはここでは出撃できません!",
+   "korean_text": "여기선 출격 불가!"
+  },
+  {
+   "offset": 40459,
+   "budget_bytes": 12,
+   "source_hex": "52 8B 66 00 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "これで␣よろしいですか?",
+   "korean_text": "좋습니까?"
+  },
+  {
+   "offset": 40472,
+   "budget_bytes": 10,
+   "source_hex": "DB C8 DA 91 B2 C6 00 DB C8 DA",
+   "japanese_text": "レベルアップ␣レベル",
+   "korean_text": "레벨업 LV"
+  },
+  {
+   "offset": 40483,
+   "budget_bytes": 9,
+   "source_hex": "EC 78 EC 06 A2 CD DF B8 3E",
+   "japanese_text": "精神コマンド「",
+   "korean_text": "정신기「"
+  },
+  {
+   "offset": 40493,
+   "budget_bytes": 7,
+   "source_hex": "3F 8E 49 7B 47 5E E4",
+   "japanese_text": "」をおぼえた。",
+   "korean_text": "」습득!"
+  },
+  {
+   "offset": 40501,
+   "budget_bytes": 9,
+   "source_hex": "ED 67 EF 9A EE DB EC 79 3E",
+   "japanese_text": "特殊技能「",
+   "korean_text": "특수기능「"
+  },
+  {
+   "offset": 40511,
+   "budget_bytes": 1,
+   "source_hex": "4B",
+   "japanese_text": "が",
+   "korean_text": " "
+  },
+  {
+   "offset": 40513,
+   "budget_bytes": 7,
+   "source_hex": "6A DB C8 DA 91 B2 C6",
+   "japanese_text": "にレベルアップ",
+   "korean_text": "레벨업!"
+  },
+  {
+   "offset": 40521,
+   "budget_bytes": 8,
+   "source_hex": "ED 7A ED 1F C0 11 B3 3E",
+   "japanese_text": "強化パ-ツ「",
+   "korean_text": "파츠「"
+  },
+  {
+   "offset": 40530,
+   "budget_bytes": 7,
+   "source_hex": "3F 8E ED A9 ED 08 E4",
+   "japanese_text": "」を入手。",
+   "korean_text": "」입수。"
+  },
+  {
+   "offset": 40538,
+   "budget_bytes": 12,
+   "source_hex": "ED 05 ED 06 E5 A4 C5 C0 93 DC B2 B7",
+   "japanese_text": "決定:サブパイロット",
+   "korean_text": "결정:보조"
+  },
+  {
+   "offset": 40551,
+   "budget_bytes": 12,
+   "source_hex": "21 0F 27 E5 EC 7E 6D C0 93 DC B2 B7",
+   "japanese_text": "L/R:次のパイロット",
+   "korean_text": "L/R:다음"
+  },
+  {
+   "offset": 40564,
+   "budget_bytes": 9,
+   "source_hex": "00 DB C8 DA 91 B2 C6 15 15",
+   "japanese_text": "␣レベルアップ!!",
+   "korean_text": " 레벨업!!"
+  },
+  {
+   "offset": 40614,
+   "budget_bytes": 24,
+   "source_hex": "EC B6 4C EF A0 EC 61 4B 31 39 38 69 43 6D 66 AA 11 C5 66 4C 7D 5A 8F 15",
+   "japanese_text": "空き容量が198ないのでセ-ブできません!",
+   "korean_text": "빈 용량 부족, 저장 불가!"
+  },
+  {
+   "offset": 40639,
+   "budget_bytes": 9,
+   "source_hex": "1C 16 22 1A 00 24 2B 1A 27",
+   "japanese_text": "GAME␣OVER",
+   "korean_text": "GAME OVER"
+  },
+  {
+   "offset": 40649,
+   "budget_bytes": 19,
+   "source_hex": "A2 DF B5 92 BA D4 11 B6 11 AE 4B EC B2 8B 65 43 7D 58 E4",
+   "japanese_text": "コンティニュ-デ-タが壊れています。",
+   "korean_text": "계속 데이터 손상!"
+  },
+  {
+   "offset": 40669,
+   "budget_bytes": 17,
+   "source_hex": "A2 DF B5 92 BA D4 11 B6 11 AE 4B 41 89 7D 5A 8F E4",
+   "japanese_text": "コンティニュ-デ-タがありません。",
+   "korean_text": "계속 데이터 없음!"
+  },
+  {
+   "offset": 40687,
+   "budget_bytes": 21,
+   "source_hex": "ED 7A ED 1F C0 11 B3 8E EF 81 EC EC ED A9 ED 08 56 7D 56 5E E4",
+   "japanese_text": "強化パ-ツを複数入手しました。",
+   "korean_text": "강화 파츠 복수 입수!"
+  },
+  {
+   "offset": 40709,
+   "budget_bytes": 17,
+   "source_hex": "52 6D EC DA EC F8 6E ED 04 EC 6E 66 4C 7D 5A 8F 15",
+   "japanese_text": "この名前は使用できません!",
+   "korean_text": "사용 불가한 이름!"
+  },
+  {
+   "offset": 40727,
+   "budget_bytes": 22,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 8E B0 96 B2 9E 56 65 43 7D 58 3B 3B 3B 00",
+   "japanese_text": "␣メモリ-カ-ドをチェックしています...␣",
+   "korean_text": " 메모리 카드 확인..."
+  },
+  {
+   "offset": 40750,
+   "budget_bytes": 28,
+   "source_hex": "00 A6 A8 B5 CF B6 11 AE 4B ED 76 63 4A 89 7D 5A 8F E4 EC 17 ED A2 56 7D 58 4A 14 00",
+   "japanese_text": "␣システムデ-タが見つかりません。作成しますか?␣",
+   "korean_text": " 시스템 데이터 없음. 생성? "
+  },
+  {
+   "offset": 40779,
+   "budget_bytes": 34,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 4B EE C8 ED 84 ED 1F 54 8B 65 7D 5A 8F E4 EE C8 ED 84 ED 1F 56 7D 58 4A 14 00",
+   "japanese_text": "␣メモリ-カ-ドが初期化されてません。初期化しますか?␣",
+   "korean_text": " 메모리 카드 미초기화. 초기화? "
+  },
+  {
+   "offset": 40814,
+   "budget_bytes": 48,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 4B ED 63 56 F1 A0 7D 8B 65 43 7D 5A 8F F6 00 3C A8 DC B2 B7 31 6A D0 D1 D9 11 9A 11 B8 8E AA B2 B7 56 65 4E 5F 54 43 3D",
+   "japanese_text": "␣メモリ-カ-ドが差し込まれていません[F6]␣(スロット1にメモリ-カ-ドをセットしてください)",
+   "korean_text": " 메모리 카드 없음[F6] (슬롯1에 넣으세요)"
+  },
+  {
+   "offset": 40863,
+   "budget_bytes": 40,
+   "source_hex": "00 B6 11 AE 6D EE 72 7E F1 A0 7E 6A ED 2D EC ED 56 7D 56 5E E4 F6 00 81 45 ED 4E EC 68 3A EE 72 7E F1 A0 7E 7D 58 4A 14",
+   "japanese_text": "␣デ-タの読み込みに失敗しました。[F6]␣もう一度,読み込みますか?",
+   "korean_text": " 데이터 읽기 실패.[F6] 다시 읽을까요?"
+  },
+  {
+   "offset": 40904,
+   "budget_bytes": 40,
+   "source_hex": "00 B6 11 AE 6D EE 47 4C F1 A0 7E 6A ED 2D EC ED 56 7D 56 5E E4 F6 00 81 45 ED 4E EC 68 3A EE 47 4C F1 A0 7E 7D 58 4A 14",
+   "japanese_text": "␣デ-タの書き込みに失敗しました。[F6]␣もう一度,書き込みますか?",
+   "korean_text": " 데이터 쓰기 실패.[F6] 다시 쓸까요?"
+  },
+  {
+   "offset": 40945,
+   "budget_bytes": 41,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 67 ED 19 ED 9A 66 4C 7D 5A 8F F6 00 00 3C D0 D1 D9 11 9A 11 B8 8E ED 39 EE 58 56 65 4E 5F 54 43 3D",
+   "japanese_text": "␣メモリ-カ-ドと通信できません[F6]␣␣(メモリ-カ-ドを確認してください)",
+   "korean_text": " 카드 통신 불가[F6]  (카드를 확인하세요)"
+  },
+  {
+   "offset": 40987,
+   "budget_bytes": 45,
+   "source_hex": "00 B6 11 AE 8E EE 72 7E F1 A0 8F 66 43 7D 58 3B 3B 3B F6 00 00 3C D0 D1 D9 11 9A 11 B8 8E ED B9 4C ED 63 56 56 69 43 66 4E 5F 54 43 3D",
+   "japanese_text": "␣デ-タを読み込んでいます...[F6]␣␣(メモリ-カ-ドを抜き差ししないでください)",
+   "korean_text": " 읽는 중...[F6]  (카드를 빼지 마세요)"
+  },
+  {
+   "offset": 41033,
+   "budget_bytes": 72,
+   "source_hex": "00 EC B6 4C C5 DC B2 9E 4B ED 52 89 7D 5A 8F E4 ED 07 6D D0 D1 D9 11 9A 11 B8 8E F6 00 AA B2 B7 58 8A 4A 3A D0 D1 D9 11 9A 11 B8 EC 6D EC DF EE 76 ED 1A 66 F6 00 ED 51 EC 91 69 B6 11 AE 8E EC C8 56 65 4E 5F 54 43 E4",
+   "japanese_text": "␣空きブロックが足りません。別のメモリ-カ-ドを[F6]␣セットするか,メモリ-カ-ド管理画面で[F6]␣不要なデ-タを消してください。",
+   "korean_text": " 빈 블록 부족.[F6] 카드 관리 화면에서[F6] 불필요한 데이터를 지우세요."
+  },
+  {
+   "offset": 41106,
+   "budget_bytes": 45,
+   "source_hex": "00 B6 11 AE 8E EE 47 4C F1 A0 8F 66 43 7D 58 3B 3B 3B F6 00 00 3C D0 D1 D9 11 9A 11 B8 8E ED B9 4C ED 63 56 56 69 43 66 4E 5F 54 43 3D",
+   "japanese_text": "␣デ-タを書き込んでいます...[F6]␣␣(メモリ-カ-ドを抜き差ししないでください)",
+   "korean_text": " 쓰는 중...[F6]  (카드를 빼지 마세요)"
+  },
+  {
+   "offset": 41152,
+   "budget_bytes": 50,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 8E EE C8 ED 84 ED 1F 56 65 43 7D 58 3B 3B 3B F6 00 00 3C D0 D1 D9 11 9A 11 B8 8E ED B9 4C ED 63 56 56 69 43 66 4E 5F 54 43 3D",
+   "japanese_text": "␣メモリ-カ-ドを初期化しています...[F6]␣␣(メモリ-カ-ドを抜き差ししないでください)",
+   "korean_text": " 초기화 중...[F6]  (카드를 빼지 마세요)"
+  },
+  {
+   "offset": 41203,
+   "budget_bytes": 45,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 6D EE C8 ED 84 ED 1F 6A ED 2D EC ED 56 7D 56 5E E4 F6 00 81 45 ED 4E EC 68 3A EE C8 ED 84 ED 1F 56 7D 58 4A 14",
+   "japanese_text": "␣メモリ-カ-ドの初期化に失敗しました。[F6]␣もう一度,初期化しますか?",
+   "korean_text": " 메모리 카드 초기화 실패.[F6] 다시 초기화할까요?"
+  },
+  {
+   "offset": 41249,
+   "budget_bytes": 31,
+   "source_hex": "00 A6 A8 B5 CF B6 11 AE 4B EC B2 8B 65 43 7D 58 E4 EE 10 56 4E EC 17 ED A2 56 7D 58 4A 14 00",
+   "japanese_text": "␣システムデ-タが壊れています。新しく作成しますか?␣",
+   "korean_text": " 시스템 데이터 손상. 재생성? "
+  },
+  {
+   "offset": 41281,
+   "budget_bytes": 37,
+   "source_hex": "00 CD B2 C6 EC 70 66 ED 4E EC 68 81 AA 11 C5 56 65 43 69 43 6D 66 F6 00 A2 DF B5 92 BA D4 11 66 4C 7D 5A 8F E4",
+   "japanese_text": "␣マップ上で一度もセ-ブしていないので[F6]␣コンティニュ-できません。",
+   "korean_text": " 맵 저장 기록 없음[F6] 이어하기 불가."
+  },
+  {
+   "offset": 41319,
+   "budget_bytes": 36,
+   "source_hex": "00 A6 A8 B5 CF B6 11 AE 6D ED 89 EF A0 4B ED 61 43 7D 58 E4 EC 70 EE 47 4C 56 65 87 8C 56 43 66 58 4A 14 00",
+   "japanese_text": "␣システムデ-タの内容が違います。上書きしてよろしいですか?␣",
+   "korean_text": " 시스템 데이터 상이. 덮어쓰기? "
+  },
+  {
+   "offset": 41356,
+   "budget_bytes": 75,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 6D EC B6 4C C5 DC B2 9E 4B ED 52 89 7D 5A 8F E4 F6 00 52 6D A1 11 CF 8E AA 11 C5 58 8A 6A 6E 3A D0 D1 D9 11 9A 11 B8 6D F6 00 EC B6 4C C5 DC B2 9E 4B EC 5E EE AD 32 C5 DC B2 9E EC 89 EC 91 66 58 E4 00",
+   "japanese_text": "␣メモリ-カ-ドの空きブロックが足りません。[F6]␣このゲ-ムをセ-ブするには,メモリ-カ-ドの[F6]␣空きブロックが最低2ブロック必要です。␣",
+   "korean_text": " 빈 블록 부족.[F6] 저장에는 빈 블록[F6] 2개가 필요합니다. "
+  },
+  {
+   "offset": 41432,
+   "budget_bytes": 70,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 67 ED 19 ED 9A 66 4C 7D 5A 8F E4 F6 00 52 6D A1 11 CF 8E AA 11 C5 58 8A 6A 6E 3A D0 D1 D9 11 9A 11 B8 6D F6 00 EC B6 4C C5 DC B2 9E 4B EC 5E EE AD 32 C5 DC B2 9E EC 89 EC 91 66 58 E4 00",
+   "japanese_text": "␣メモリ-カ-ドと通信できません。[F6]␣このゲ-ムをセ-ブするには,メモリ-カ-ドの[F6]␣空きブロックが最低2ブロック必要です。␣",
+   "korean_text": " 카드 통신 불가.[F6] 저장에는 빈 블록[F6] 2개가 필요합니다. "
+  },
+  {
+   "offset": 41503,
+   "budget_bytes": 73,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 4B ED 63 56 F1 A0 7D 8B 65 43 7D 5A 8F E4 F6 00 52 6D A1 11 CF 8E AA 11 C5 58 8A 6A 6E 3A D0 D1 D9 11 9A 11 B8 6D F6 00 EC B6 4C C5 DC B2 9E 4B EC 5E EE AD 32 C5 DC B2 9E EC 89 EC 91 66 58 E4 00",
+   "japanese_text": "␣メモリ-カ-ドが差し込まれていません。[F6]␣このゲ-ムをセ-ブするには,メモリ-カ-ドの[F6]␣空きブロックが最低2ブロック必要です。␣",
+   "korean_text": " 카드 없음.[F6] 저장에는 빈 블록[F6] 2개가 필요합니다. "
+  },
+  {
+   "offset": 41577,
+   "budget_bytes": 73,
+   "source_hex": "00 D0 D1 D9 11 9A 11 B8 4B EE C8 ED 84 ED 1F 54 8B 65 7D 5A 8F E4 F6 00 52 6D A1 11 CF 8E AA 11 C5 58 8A 6A 6E 3A D0 D1 D9 11 9A 11 B8 6D F6 00 EC B6 4C C5 DC B2 9E 4B EC 5E EE AD 32 C5 DC B2 9E EC 89 EC 91 66 58 E4 00",
+   "japanese_text": "␣メモリ-カ-ドが初期化されてません。[F6]␣このゲ-ムをセ-ブするには,メモリ-カ-ドの[F6]␣空きブロックが最低2ブロック必要です。␣",
+   "korean_text": " 카드 미초기화.[F6] 저장에는 빈 블록[F6] 2개가 필요합니다. "
+  },
+  {
+   "offset": 41651,
+   "budget_bytes": 28,
+   "source_hex": "00 ED 0D EC F8 6D B6 11 AE 6E 4C 47 65 56 7D 43 7D 58 E4 87 8C 56 43 66 58 4A 14 00",
+   "japanese_text": "␣以前のデ-タはきえてしまいます。よろしいですか?␣",
+   "korean_text": " 이전 데이터 삭제. 계속? "
+  },
+  {
+   "offset": 41680,
+   "budget_bytes": 39,
+   "source_hex": "00 52 6D B6 11 AE 6E DC 11 B8 66 4C 7D 5A 8F E4 F6 00 3C B6 11 AE 6D EE 72 7E F1 A0 7E 6A ED 2D EC ED 56 7D 56 5E 3D",
+   "japanese_text": "␣このデ-タはロ-ドできません。[F6]␣(デ-タの読み込みに失敗しました)",
+   "korean_text": " 이 데이터는 로드 불가.[F6] (읽기 실패)"
+  },
+  {
+   "offset": 41720,
+   "budget_bytes": 36,
+   "source_hex": "00 B6 11 AE 4B EC B2 8B 65 43 7D 58 E4 F6 00 3C B6 11 AE 6D EE 72 7E F1 A0 7E 6A ED 2D EC ED 56 7D 56 5E 3D",
+   "japanese_text": "␣デ-タが壊れています。[F6]␣(デ-タの読み込みに失敗しました)",
+   "korean_text": " 데이터 손상.[F6] (읽기 실패)"
+  },
+  {
+   "offset": 41757,
+   "budget_bytes": 37,
+   "source_hex": "00 B6 11 AE 4B ED 76 63 4A 89 7D 5A 8F E4 F6 00 3C B6 11 AE 6D EE 72 7E F1 A0 7E 6A ED 2D EC ED 56 7D 56 5E 3D",
+   "japanese_text": "␣デ-タが見つかりません。[F6]␣(デ-タの読み込みに失敗しました)",
+   "korean_text": " 데이터 없음.[F6] (읽기 실패)"
+  },
+  {
+   "offset": 41795,
+   "budget_bytes": 27,
+   "source_hex": "1E 28 28 EC 6E 6A 3A 52 6D EF A7 6D EC E4 EC E5 B6 11 AE 8E AA 11 C5 56 7D 58 E4",
+   "japanese_text": "ISS用に,この章の終了デ-タをセ-ブします。",
+   "korean_text": "ISS용 클리어 데이터 저장."
+  },
+  {
+   "offset": 41823,
+   "budget_bytes": 30,
+   "source_hex": "1E 28 28 6A EC E4 EC E5 B6 11 AE 4B ED 04 EC 6E 66 4C 7D 5A 8F E4 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "ISSに終了デ-タが使用できません。よろしいですか?",
+   "korean_text": "ISS 데이터 사용 불가. 계속?"
+  },
+  {
+   "offset": 41854,
+   "budget_bytes": 13,
+   "source_hex": "EC 0D EC A5 6D EC C9 EC EA 66 58 15 15",
+   "japanese_text": "青軍の勝利です!!",
+   "korean_text": "청군승리!!"
+  },
+  {
+   "offset": 41868,
+   "budget_bytes": 13,
+   "source_hex": "EE 55 EC A5 6D EC C9 EC EA 66 58 15 15",
+   "japanese_text": "赤軍の勝利です!!",
+   "korean_text": "홍군승리!!"
+  },
+  {
+   "offset": 41882,
+   "budget_bytes": 19,
+   "source_hex": "ED 22 EC 55 EE 03 EC E0 8E ED 23 ED 24 56 65 4E 5F 54 43",
+   "japanese_text": "出撃位置を選択してください",
+   "korean_text": "출격 위치 선택"
+  },
+  {
+   "offset": 41902,
+   "budget_bytes": 9,
+   "source_hex": "AE 11 DF EC 69 EE 3D ED 4B",
+   "japanese_text": "タ-ン経過後",
+   "korean_text": "턴경과후"
+  },
+  {
+   "offset": 41912,
+   "budget_bytes": 5,
+   "source_hex": "CD BA D4 91 DA",
+   "japanese_text": "マニュアル",
+   "korean_text": "수동"
+  },
+  {
+   "offset": 41918,
+   "budget_bytes": 8,
+   "source_hex": "ED 0A ED 0B ED 0C 6A 15",
+   "japanese_text": "積極的に!",
+   "korean_text": "적극!"
+  },
+  {
+   "offset": 41927,
+   "budget_bytes": 7,
+   "source_hex": "EC F5 EC 59 87 4E 15",
+   "japanese_text": "効率よく!",
+   "korean_text": "효율!"
+  },
+  {
+   "offset": 41935,
+   "budget_bytes": 8,
+   "source_hex": "EC 65 EC 55 58 8A 69 15",
+   "japanese_text": "反撃するな!",
+   "korean_text": "반격금지"
+  },
+  {
+   "offset": 41944,
+   "budget_bytes": 28,
+   "source_hex": "C6 DB 93 D3 11 4B EC 65 EC 55 00 EC 71 EC 72 00 EC 7B EC 7C 8E ED 23 ED 24 56 7D 58",
+   "japanese_text": "プレイヤ-が反撃␣回避␣防御を選択します",
+   "korean_text": "반격 회피 방어를 직접 선택"
+  },
+  {
+   "offset": 41973,
+   "budget_bytes": 51,
+   "source_hex": "EC 93 6D EC 54 EC 55 6A 87 62 65 1D 25 4B 30 6A 69 62 65 56 7D 45 ED 0F EC 79 ED 01 4B 41 8A F6 D5 BA B2 B7 ED 0D ED 10 6E EC 65 EC 55 8E EC 8C 43 7D 58",
+   "japanese_text": "敵の攻撃によってHPが0になってしまう可能性がある[F6]ユニット以外は反撃を行います",
+   "korean_text": "HP가 0이 될 유닛 외에는[F6]반격합니다"
+  },
+  {
+   "offset": 42025,
+   "budget_bytes": 47,
+   "source_hex": "EC 93 6D DB C8 DA 4B EE 36 EC BD 87 89 EE AD 43 EC 38 6E EC 71 EC 72 4A EC 7B EC 7C 56 F6 5C 8B ED 0D ED 10 6E EC 65 EC 55 8E EC 8C 43 7D 58",
+   "japanese_text": "敵のレベルが自分より低い時は回避か防御し[F6]それ以外は反撃を行います",
+   "korean_text": "적 레벨이 낮으면 회피/방어,[F6]그 외엔 반격"
+  },
+  {
+   "offset": 42073,
+   "budget_bytes": 16,
+   "source_hex": "EC 89 59 EC 71 EC 72 4A EC 7B EC 7C 8E 56 7D 58",
+   "japanese_text": "必ず回避か防御をします",
+   "korean_text": "항상 회피/방어"
+  },
+  {
+   "offset": 42090,
+   "budget_bytes": 4,
+   "source_hex": "EC 54 EC 55",
+   "japanese_text": "攻撃",
+   "korean_text": "공격"
+  },
+  {
+   "offset": 42095,
+   "budget_bytes": 4,
+   "source_hex": "EC 65 EC 55",
+   "japanese_text": "反撃",
+   "korean_text": "반격"
+  },
+  {
+   "offset": 42100,
+   "budget_bytes": 6,
+   "source_hex": "EF 93 4A 88 ED 8A",
+   "japanese_text": "右から左",
+   "korean_text": "우→좌"
+  },
+  {
+   "offset": 42107,
+   "budget_bytes": 6,
+   "source_hex": "ED 8A 4A 88 EF 93",
+   "japanese_text": "左から右",
+   "korean_text": "좌→우"
+  },
+  {
+   "offset": 42114,
+   "budget_bytes": 2,
+   "source_hex": "69 56",
+   "japanese_text": "なし",
+   "korean_text": "무"
+  },
+  {
+   "offset": 42117,
+   "budget_bytes": 2,
+   "source_hex": "41 89",
+   "japanese_text": "あり",
+   "korean_text": "유"
+  },
+  {
+   "offset": 42120,
+   "budget_bytes": 4,
+   "source_hex": "ED E1 EE 16",
+   "japanese_text": "接続",
+   "korean_text": "접속"
+  },
+  {
+   "offset": 42125,
+   "budget_bytes": 4,
+   "source_hex": "EE CD ED 71",
+   "japanese_text": "切断",
+   "korean_text": "절단"
+  },
+  {
+   "offset": 42130,
+   "budget_bytes": 3,
+   "source_hex": "6E 59 8B",
+   "japanese_text": "はずれ",
+   "korean_text": "X"
+  },
+  {
+   "offset": 42134,
+   "budget_bytes": 3,
+   "source_hex": "41 5E 89",
+   "japanese_text": "あたり",
+   "korean_text": "O"
+  },
+  {
+   "offset": 42138,
+   "budget_bytes": 7,
+   "source_hex": "EC 1C EC B2 56 69 43",
+   "japanese_text": "破壊しない",
+   "korean_text": "안부숨"
+  },
+  {
+   "offset": 42146,
+   "budget_bytes": 6,
+   "source_hex": "EC 1C EC B2 58 8A",
+   "japanese_text": "破壊する",
+   "korean_text": "부숨"
+  },
+  {
+   "offset": 42153,
+   "budget_bytes": 7,
+   "source_hex": "99 11 DA B8 AE 93 C6",
+   "japanese_text": "オ-ルドタイプ",
+   "korean_text": "구타입"
+  },
+  {
+   "offset": 42161,
+   "budget_bytes": 6,
+   "source_hex": "BA D4 11 AE 93 C6",
+   "japanese_text": "ニュ-タイプ",
+   "korean_text": "뉴타입"
+  },
+  {
+   "offset": 42168,
+   "budget_bytes": 6,
+   "source_hex": "EC 65 EC 55 24 20",
+   "japanese_text": "反撃OK",
+   "korean_text": "반격OK"
+  },
+  {
+   "offset": 42175,
+   "budget_bytes": 10,
+   "source_hex": "EC 65 EC 55 23 1C EC 60 EC A3",
+   "japanese_text": "反撃NG残弾",
+   "korean_text": "반격NG탄"
+  },
+  {
+   "offset": 42186,
+   "budget_bytes": 8,
+   "source_hex": "EC 65 EC 55 23 1C 97 BC",
+   "japanese_text": "反撃NGエネ",
+   "korean_text": "반격NGEN"
+  },
+  {
+   "offset": 42195,
+   "budget_bytes": 10,
+   "source_hex": "EC 65 EC 55 23 1C EC 5A EC 5B",
+   "japanese_text": "反撃NG射程",
+   "korean_text": "반격NG사정"
+  },
+  {
+   "offset": 42206,
+   "budget_bytes": 4,
+   "source_hex": "EC 7B EC 7C",
+   "japanese_text": "防御",
+   "korean_text": "방어"
+  },
+  {
+   "offset": 42211,
+   "budget_bytes": 4,
+   "source_hex": "EC 71 EC 72",
+   "japanese_text": "回避",
+   "korean_text": "회피"
+  },
+  {
+   "offset": 42216,
+   "budget_bytes": 4,
+   "source_hex": "F0 5F ED 68",
+   "japanese_text": "停止",
+   "korean_text": "정지"
+  },
+  {
+   "offset": 42221,
+   "budget_bytes": 5,
+   "source_hex": "BF D9 91 69 56",
+   "japanese_text": "バリアなし",
+   "korean_text": "없음"
+  },
+  {
+   "offset": 42227,
+   "budget_bytes": 6,
+   "source_hex": "C2 11 CF A2 11 B7",
+   "japanese_text": "ビ-ムコ-ト",
+   "korean_text": "빔코트"
+  },
+  {
+   "offset": 42234,
+   "budget_bytes": 6,
+   "source_hex": "1E C4 92 11 DA B8",
+   "japanese_text": "Iフィ-ルド",
+   "korean_text": "I필드"
+  },
+  {
+   "offset": 42241,
+   "budget_bytes": 6,
+   "source_hex": "99 11 D8 BF D9 91",
+   "japanese_text": "オ-ラバリア",
+   "korean_text": "오라막"
+  },
+  {
+   "offset": 42248,
+   "budget_bytes": 6,
+   "source_hex": "C2 11 CF BF D9 91",
+   "japanese_text": "ビ-ムバリア",
+   "korean_text": "빔막"
+  },
+  {
+   "offset": 42255,
+   "budget_bytes": 7,
+   "source_hex": "16 29 C4 92 11 DA B8",
+   "japanese_text": "ATフィ-ルド",
+   "korean_text": "AT필드"
+  },
+  {
+   "offset": 42263,
+   "budget_bytes": 5,
+   "source_hex": "93 B6 BF D9 91",
+   "japanese_text": "イデバリア",
+   "korean_text": "이데"
+  },
+  {
+   "offset": 42276,
+   "budget_bytes": 9,
+   "source_hex": "BF D9 91 ED BA EF A0 ED 89",
+   "japanese_text": "バリア許容内",
+   "korean_text": "배리어내"
+  },
+  {
+   "offset": 42286,
+   "budget_bytes": 7,
+   "source_hex": "BF D9 91 EC 1C EC B2",
+   "japanese_text": "バリア破壊",
+   "korean_text": "막파괴"
+  },
+  {
+   "offset": 42294,
+   "budget_bytes": 2,
+   "source_hex": "EC B6",
+   "japanese_text": "空",
+   "korean_text": "공"
+  },
+  {
+   "offset": 42297,
+   "budget_bytes": 4,
+   "source_hex": "ED 11 EC 13",
+   "japanese_text": "平原",
+   "korean_text": "평원"
+  },
+  {
+   "offset": 42302,
+   "budget_bytes": 4,
+   "source_hex": "EE EA EC 6F",
+   "japanese_text": "荒地",
+   "korean_text": "황야"
+  },
+  {
+   "offset": 42307,
+   "budget_bytes": 2,
+   "source_hex": "ED 13",
+   "japanese_text": "森",
+   "korean_text": "숲"
+  },
+  {
+   "offset": 42310,
+   "budget_bytes": 2,
+   "source_hex": "EF 42",
+   "japanese_text": "林",
+   "korean_text": "림"
+  },
+  {
+   "offset": 42313,
+   "budget_bytes": 3,
+   "source_hex": "F0 EA 5A",
+   "japanese_text": "浅せ",
+   "korean_text": "얕"
+  },
+  {
+   "offset": 42317,
+   "budget_bytes": 4,
+   "source_hex": "ED 12 EC 4F",
+   "japanese_text": "深海",
+   "korean_text": "심해"
+  },
+  {
+   "offset": 42322,
+   "budget_bytes": 2,
+   "source_hex": "EC 15",
+   "japanese_text": "川",
+   "korean_text": "강"
+  },
+  {
+   "offset": 42325,
+   "budget_bytes": 2,
+   "source_hex": "EC C1",
+   "japanese_text": "山",
+   "korean_text": "산"
+  },
+  {
+   "offset": 42328,
+   "budget_bytes": 4,
+   "source_hex": "ED 14 EF 0A",
+   "japanese_text": "砂漠",
+   "korean_text": "사막"
+  },
+  {
+   "offset": 42333,
+   "budget_bytes": 5,
+   "source_hex": "ED 11 EC 6F 1C",
+   "japanese_text": "平地G",
+   "korean_text": "평지G"
+  },
+  {
+   "offset": 42339,
+   "budget_bytes": 3,
+   "source_hex": "EF 09 1C",
+   "japanese_text": "草G",
+   "korean_text": "풀G"
+  },
+  {
+   "offset": 42343,
+   "budget_bytes": 3,
+   "source_hex": "EF 47 1C",
+   "japanese_text": "岩G",
+   "korean_text": "암G"
+  },
+  {
+   "offset": 42347,
+   "budget_bytes": 7,
+   "source_hex": "9D 91 B9 3C EF 09 3D",
+   "japanese_text": "ギアナ(草)",
+   "korean_text": "기아나"
+  },
+  {
+   "offset": 42355,
+   "budget_bytes": 6,
+   "source_hex": "ED 17 ED 18 ED 13",
+   "japanese_text": "道路森",
+   "korean_text": "도로숲"
+  },
+  {
+   "offset": 42362,
+   "budget_bytes": 3,
+   "source_hex": "EC C1 1C",
+   "japanese_text": "山G",
+   "korean_text": "산G"
+  },
+  {
+   "offset": 42366,
+   "budget_bytes": 6,
+   "source_hex": "EC C1 6D EF 09 1C",
+   "japanese_text": "山の草G",
+   "korean_text": "산풀G"
+  },
+  {
+   "offset": 42373,
+   "budget_bytes": 6,
+   "source_hex": "EC C1 6D EF 47 1C",
+   "japanese_text": "山の岩G",
+   "korean_text": "산암G"
+  },
+  {
+   "offset": 42380,
+   "budget_bytes": 4,
+   "source_hex": "ED 17 ED 18",
+   "japanese_text": "道路",
+   "korean_text": "도로"
+  },
+  {
+   "offset": 42385,
+   "budget_bytes": 5,
+   "source_hex": "ED 17 ED 18 1C",
+   "japanese_text": "道路G",
+   "korean_text": "도로G"
+  },
+  {
+   "offset": 42391,
+   "budget_bytes": 2,
+   "source_hex": "F1 60",
+   "japanese_text": "橋",
+   "korean_text": "교"
+  },
+  {
+   "offset": 42394,
+   "budget_bytes": 3,
+   "source_hex": "F1 60 1C",
+   "japanese_text": "橋G",
+   "korean_text": "교G"
+  },
+  {
+   "offset": 42398,
+   "budget_bytes": 6,
+   "source_hex": "ED 15 ED 16 EC 6F",
+   "japanese_text": "市街地",
+   "korean_text": "시가지"
+  },
+  {
+   "offset": 42405,
+   "budget_bytes": 8,
+   "source_hex": "EC A5 EC A6 EC BE EC 6F",
+   "japanese_text": "軍事基地",
+   "korean_text": "군사기지"
+  },
+  {
+   "offset": 42414,
+   "budget_bytes": 8,
+   "source_hex": "EC 83 EC 84 EC 2C EC 97",
+   "japanese_text": "光子力研",
+   "korean_text": "광자력연"
+  },
+  {
+   "offset": 42423,
+   "budget_bytes": 8,
+   "source_hex": "EC 27 EC 28 EC 29 EC 97",
+   "japanese_text": "早乙女研",
+   "korean_text": "오토메연"
+  },
+  {
+   "offset": 42432,
+   "budget_bytes": 7,
+   "source_hex": "EC 12 EC 13 A2 BC 9E",
+   "japanese_text": "南原コネク",
+   "korean_text": "난바라"
+  },
+  {
+   "offset": 42440,
+   "budget_bytes": 4,
+   "source_hex": "EE 84 EE D2",
+   "japanese_text": "土星",
+   "korean_text": "토성"
+  },
+  {
+   "offset": 42445,
+   "budget_bytes": 5,
+   "source_hex": "ED 11 EC 6F 18",
+   "japanese_text": "平地C",
+   "korean_text": "평지C"
+  },
+  {
+   "offset": 42451,
+   "budget_bytes": 5,
+   "source_hex": "EE EA EC 6F 18",
+   "japanese_text": "荒地C",
+   "korean_text": "황야C"
+  },
+  {
+   "offset": 42457,
+   "budget_bytes": 3,
+   "source_hex": "ED 13 18",
+   "japanese_text": "森C",
+   "korean_text": "숲C"
+  },
+  {
+   "offset": 42461,
+   "budget_bytes": 3,
+   "source_hex": "EF 42 18",
+   "japanese_text": "林C",
+   "korean_text": "림C"
+  },
+  {
+   "offset": 42465,
+   "budget_bytes": 3,
+   "source_hex": "F1 61 18",
+   "japanese_text": "丘C",
+   "korean_text": "구C"
+  },
+  {
+   "offset": 42469,
+   "budget_bytes": 6,
+   "source_hex": "F1 61 6D EF 42 18",
+   "japanese_text": "丘の林C",
+   "korean_text": "구림C"
+  },
+  {
+   "offset": 42476,
+   "budget_bytes": 3,
+   "source_hex": "F1 60 18",
+   "japanese_text": "橋C",
+   "korean_text": "교C"
+  },
+  {
+   "offset": 42480,
+   "budget_bytes": 5,
+   "source_hex": "ED 17 ED 18 18",
+   "japanese_text": "道路C",
+   "korean_text": "도로C"
+  },
+  {
+   "offset": 42486,
+   "budget_bytes": 4,
+   "source_hex": "F0 0D F0 0E",
+   "japanese_text": "宇宙",
+   "korean_text": "우주"
+  },
+  {
+   "offset": 42491,
+   "budget_bytes": 4,
+   "source_hex": "EC A0 ED 1D",
+   "japanese_text": "暗礁",
+   "korean_text": "암초"
+  },
+  {
+   "offset": 42496,
+   "budget_bytes": 4,
+   "source_hex": "EC 60 F5 71",
+   "japanese_text": "残骸",
+   "korean_text": "잔해"
+  },
+  {
+   "offset": 42501,
+   "budget_bytes": 8,
+   "source_hex": "A2 DC BA 11 EC 60 F5 71",
+   "japanese_text": "コロニ-残骸",
+   "korean_text": "콜잔해"
+  },
+  {
+   "offset": 42510,
+   "budget_bytes": 4,
+   "source_hex": "EC 6F ED CC",
+   "japanese_text": "地球",
+   "korean_text": "지구"
+  },
+  {
+   "offset": 42515,
+   "budget_bytes": 2,
+   "source_hex": "EC 95",
+   "japanese_text": "月",
+   "korean_text": "달"
+  },
+  {
+   "offset": 42518,
+   "budget_bytes": 4,
+   "source_hex": "EC DC EE D2",
+   "japanese_text": "火星",
+   "korean_text": "화성"
+  },
+  {
+   "offset": 42523,
+   "budget_bytes": 4,
+   "source_hex": "C4 98 CB A8",
+   "japanese_text": "フォボス",
+   "korean_text": "위성"
+  },
+  {
+   "offset": 42528,
+   "budget_bytes": 4,
+   "source_hex": "AF 93 D1 A8",
+   "japanese_text": "ダイモス",
+   "korean_text": "위성"
+  },
+  {
+   "offset": 42533,
+   "budget_bytes": 4,
+   "source_hex": "A2 DC BA 11",
+   "japanese_text": "コロニ-",
+   "korean_text": "콜로"
+  },
+  {
+   "offset": 42538,
+   "budget_bytes": 7,
+   "source_hex": "D8 C2 91 DF DC 11 A9",
+   "japanese_text": "ラビアンロ-ズ",
+   "korean_text": "라비앙"
+  },
+  {
+   "offset": 42546,
+   "budget_bytes": 5,
+   "source_hex": "AC 11 D8 DB 93",
+   "japanese_text": "ソ-ラレイ",
+   "korean_text": "솔라"
+  },
+  {
+   "offset": 42552,
+   "budget_bytes": 3,
+   "source_hex": "CE D8 11",
+   "japanese_text": "ミラ-",
+   "korean_text": "밀"
+  },
+  {
+   "offset": 42556,
+   "budget_bytes": 3,
+   "source_hex": "DA B9 32",
+   "japanese_text": "ルナ2",
+   "korean_text": "달2"
+  },
+  {
+   "offset": 42560,
+   "budget_bytes": 4,
+   "source_hex": "AC DC D1 DF",
+   "japanese_text": "ソロモン",
+   "korean_text": "요새"
+  },
+  {
+   "offset": 42565,
+   "budget_bytes": 6,
+   "source_hex": "91 BF 99 91 9E 11",
+   "japanese_text": "アバオアク-",
+   "korean_text": "아바오"
+  },
+  {
+   "offset": 42572,
+   "budget_bytes": 4,
+   "source_hex": "91 9E A6 A9",
+   "japanese_text": "アクシズ",
+   "korean_text": "악시"
+  },
+  {
+   "offset": 42577,
+   "budget_bytes": 6,
+   "source_hex": "ED 17 ED 18 EF 42",
+   "japanese_text": "道路林",
+   "korean_text": "도로림"
+  },
+  {
+   "offset": 42584,
+   "budget_bytes": 4,
+   "source_hex": "EC 95 ED 1A",
+   "japanese_text": "月面",
+   "korean_text": "월면"
+  },
+  {
+   "offset": 42589,
+   "budget_bytes": 5,
+   "source_hex": "9E DB 11 AE 11",
+   "japanese_text": "クレ-タ-",
+   "korean_text": "분지"
+  },
+  {
+   "offset": 42595,
+   "budget_bytes": 8,
+   "source_hex": "EC C1 3C EC 95 ED 1A 3D",
+   "japanese_text": "山(月面)",
+   "korean_text": "산(월면)"
+  },
+  {
+   "offset": 42604,
+   "budget_bytes": 8,
+   "source_hex": "EC 95 ED 1A ED 87 ED 15",
+   "japanese_text": "月面都市",
+   "korean_text": "월면도시"
+  },
+  {
+   "offset": 42613,
+   "budget_bytes": 10,
+   "source_hex": "EC 60 F5 71 3C EC 95 ED 1A 3D",
+   "japanese_text": "残骸(月面)",
+   "korean_text": "잔해(월면)"
+  },
+  {
+   "offset": 42624,
+   "budget_bytes": 4,
+   "source_hex": "EC B6 22 16",
+   "japanese_text": "空MA",
+   "korean_text": "공MA"
+  },
+  {
+   "offset": 42629,
+   "budget_bytes": 6,
+   "source_hex": "ED 11 EC 6F 22 16",
+   "japanese_text": "平地MA",
+   "korean_text": "평지MA"
+  },
+  {
+   "offset": 42636,
+   "budget_bytes": 4,
+   "source_hex": "EF 47 22 16",
+   "japanese_text": "岩MA",
+   "korean_text": "암MA"
+  },
+  {
+   "offset": 42641,
+   "budget_bytes": 4,
+   "source_hex": "EC C1 22 16",
+   "japanese_text": "山MA",
+   "korean_text": "산MA"
+  },
+  {
+   "offset": 42646,
+   "budget_bytes": 7,
+   "source_hex": "ED 17 ED 18 ED 13 18",
+   "japanese_text": "道路森C",
+   "korean_text": "도로숲C"
+  },
+  {
+   "offset": 42654,
+   "budget_bytes": 7,
+   "source_hex": "ED 17 ED 18 EF 42 18",
+   "japanese_text": "道路林C",
+   "korean_text": "도로림C"
+  },
+  {
+   "offset": 42662,
+   "budget_bytes": 7,
+   "source_hex": "ED 15 ED 16 EC 6F 32",
+   "japanese_text": "市街地2",
+   "korean_text": "시가지2"
+  },
+  {
+   "offset": 42670,
+   "budget_bytes": 8,
+   "source_hex": "EC DC EE D2 EC BE EC 6F",
+   "japanese_text": "火星基地",
+   "korean_text": "화성기지"
+  },
+  {
+   "offset": 42679,
+   "budget_bytes": 10,
+   "source_hex": "EC BE EC 6F ED 89 3C EF 48 3D",
+   "japanese_text": "基地内(床)",
+   "korean_text": "기지(바닥)"
+  },
+  {
+   "offset": 42690,
+   "budget_bytes": 10,
+   "source_hex": "EC BE EC 6F ED 89 3C EC 70 3D",
+   "japanese_text": "基地内(上)",
+   "korean_text": "기지(위)"
+  },
+  {
+   "offset": 42701,
+   "budget_bytes": 7,
+   "source_hex": "9D 91 B9 3C EF 47 3D",
+   "japanese_text": "ギアナ(岩)",
+   "korean_text": "기아나"
+  },
+  {
+   "offset": 42709,
+   "budget_bytes": 10,
+   "source_hex": "ED 17 ED 18 3C EE EA EC 6F 3D",
+   "japanese_text": "道路(荒地)",
+   "korean_text": "도로(황야)"
+  },
+  {
+   "offset": 42720,
+   "budget_bytes": 5,
+   "source_hex": "F0 1B 6D EC B6",
+   "japanese_text": "夕の空",
+   "korean_text": "노을"
+  },
+  {
+   "offset": 42726,
+   "budget_bytes": 7,
+   "source_hex": "F0 1B 6D EF 09 EC 13",
+   "japanese_text": "夕の草原",
+   "korean_text": "석초원"
+  },
+  {
+   "offset": 42734,
+   "budget_bytes": 7,
+   "source_hex": "F0 1B 6D EE EA EC 6F",
+   "japanese_text": "夕の荒地",
+   "korean_text": "석황야"
+  },
+  {
+   "offset": 42742,
+   "budget_bytes": 5,
+   "source_hex": "F0 1B 6D ED 13",
+   "japanese_text": "夕の森",
+   "korean_text": "석숲"
+  },
+  {
+   "offset": 42748,
+   "budget_bytes": 5,
+   "source_hex": "F0 1B 6D EF 42",
+   "japanese_text": "夕の林",
+   "korean_text": "석림"
+  },
+  {
+   "offset": 42754,
+   "budget_bytes": 7,
+   "source_hex": "F0 1B 6D F0 EA F5 39",
+   "japanese_text": "夕の浅瀬",
+   "korean_text": "석여울"
+  },
+  {
+   "offset": 42762,
+   "budget_bytes": 5,
+   "source_hex": "F0 1B 6D EC 15",
+   "japanese_text": "夕の川",
+   "korean_text": "석강"
+  },
+  {
+   "offset": 42768,
+   "budget_bytes": 5,
+   "source_hex": "F0 1B 6D EC C1",
+   "japanese_text": "夕の山",
+   "korean_text": "석산"
+  },
+  {
+   "offset": 42774,
+   "budget_bytes": 7,
+   "source_hex": "F0 1B 6D ED 14 EF 0A",
+   "japanese_text": "夕の砂漠",
+   "korean_text": "석사막"
+  },
+  {
+   "offset": 42782,
+   "budget_bytes": 8,
+   "source_hex": "F0 1B 6D ED 11 EC 6F 1C",
+   "japanese_text": "夕の平地G",
+   "korean_text": "석평지G"
+  },
+  {
+   "offset": 42791,
+   "budget_bytes": 6,
+   "source_hex": "F0 1B 6D EF 09 1C",
+   "japanese_text": "夕の草G",
+   "korean_text": "석풀G"
+  },
+  {
+   "offset": 42798,
+   "budget_bytes": 6,
+   "source_hex": "F0 1B 6D EF 47 1C",
+   "japanese_text": "夕の岩G",
+   "korean_text": "석암G"
+  },
+  {
+   "offset": 42805,
+   "budget_bytes": 6,
+   "source_hex": "F0 1B 6D EC C1 1C",
+   "japanese_text": "夕の山G",
+   "korean_text": "석산G"
+  },
+  {
+   "offset": 42812,
+   "budget_bytes": 9,
+   "source_hex": "F0 1B 6D EC C1 6D EF 09 1C",
+   "japanese_text": "夕の山の草G",
+   "korean_text": "석산풀G"
+  },
+  {
+   "offset": 42822,
+   "budget_bytes": 7,
+   "source_hex": "F0 1B 6D ED 17 ED 18",
+   "japanese_text": "夕の道路",
+   "korean_text": "석도로"
+  },
+  {
+   "offset": 42830,
+   "budget_bytes": 8,
+   "source_hex": "F0 1B 6D ED 17 ED 18 1C",
+   "japanese_text": "夕の道路G",
+   "korean_text": "석도로G"
+  },
+  {
+   "offset": 42839,
+   "budget_bytes": 5,
+   "source_hex": "F0 1B 6D F1 60",
+   "japanese_text": "夕の橋",
+   "korean_text": "석교"
+  },
+  {
+   "offset": 42845,
+   "budget_bytes": 6,
+   "source_hex": "F0 1B 6D F1 60 1C",
+   "japanese_text": "夕の橋G",
+   "korean_text": "석교G"
+  },
+  {
+   "offset": 42852,
+   "budget_bytes": 9,
+   "source_hex": "F0 1B 6D ED 15 ED 16 EC 6F",
+   "japanese_text": "夕の市街地",
+   "korean_text": "석시가지"
+  },
+  {
+   "offset": 42862,
+   "budget_bytes": 11,
+   "source_hex": "F0 1B 6D EC A5 EC A6 EC BE EC 6F",
+   "japanese_text": "夕の軍事基地",
+   "korean_text": "석군사기지"
+  },
+  {
+   "offset": 42874,
+   "budget_bytes": 9,
+   "source_hex": "F0 1B 6D EC 83 EC 84 EC 2C",
+   "japanese_text": "夕の光子力",
+   "korean_text": "석광자력"
+  },
+  {
+   "offset": 42884,
+   "budget_bytes": 11,
+   "source_hex": "F0 1B 6D EE 10 EC 27 EC 28 EC 29",
+   "japanese_text": "夕の新早乙女",
+   "korean_text": "석신오토메"
+  },
+  {
+   "offset": 42896,
+   "budget_bytes": 7,
+   "source_hex": "F0 1B 6D EC 12 EC 13",
+   "japanese_text": "夕の南原",
+   "korean_text": "석난바"
+  },
+  {
+   "offset": 42904,
+   "budget_bytes": 11,
+   "source_hex": "EC DC EE D2 6D EC C1 3C EF 47 3D",
+   "japanese_text": "火星の山(岩)",
+   "korean_text": "화성산(암)"
+  },
+  {
+   "offset": 42916,
+   "budget_bytes": 8,
+   "source_hex": "F0 1B 6D ED 11 EC 13 18",
+   "japanese_text": "夕の平原C",
+   "korean_text": "석평원C"
+  },
+  {
+   "offset": 42925,
+   "budget_bytes": 8,
+   "source_hex": "F0 1B 6D EE EA EC 6F 18",
+   "japanese_text": "夕の荒地C",
+   "korean_text": "석황야C"
+  },
+  {
+   "offset": 42934,
+   "budget_bytes": 6,
+   "source_hex": "F0 1B 6D ED 13 18",
+   "japanese_text": "夕の森C",
+   "korean_text": "석숲C"
+  },
+  {
+   "offset": 42941,
+   "budget_bytes": 6,
+   "source_hex": "F0 1B 6D EF 42 18",
+   "japanese_text": "夕の林C",
+   "korean_text": "석림C"
+  },
+  {
+   "offset": 42948,
+   "budget_bytes": 6,
+   "source_hex": "F0 1B 6D F1 61 18",
+   "japanese_text": "夕の丘C",
+   "korean_text": "석구C"
+  },
+  {
+   "offset": 42955,
+   "budget_bytes": 9,
+   "source_hex": "F0 1B 6D F1 61 6D EF 42 18",
+   "japanese_text": "夕の丘の林C",
+   "korean_text": "석구림C"
+  },
+  {
+   "offset": 42965,
+   "budget_bytes": 8,
+   "source_hex": "F0 1B 6D ED 17 ED 18 18",
+   "japanese_text": "夕の道路C",
+   "korean_text": "석도로C"
+  },
+  {
+   "offset": 42974,
+   "budget_bytes": 6,
+   "source_hex": "F0 1B 6D F1 60 18",
+   "japanese_text": "夕の橋C",
+   "korean_text": "석교C"
+  },
+  {
+   "offset": 42981,
+   "budget_bytes": 5,
+   "source_hex": "ED 55 6D EC B6",
+   "japanese_text": "夜の空",
+   "korean_text": "밤"
+  },
+  {
+   "offset": 42987,
+   "budget_bytes": 7,
+   "source_hex": "ED 55 6D EF 09 EC 13",
+   "japanese_text": "夜の草原",
+   "korean_text": "밤초원"
+  },
+  {
+   "offset": 42995,
+   "budget_bytes": 7,
+   "source_hex": "ED 55 6D EE EA EC 6F",
+   "japanese_text": "夜の荒地",
+   "korean_text": "밤황야"
+  },
+  {
+   "offset": 43003,
+   "budget_bytes": 5,
+   "source_hex": "ED 55 6D ED 13",
+   "japanese_text": "夜の森",
+   "korean_text": "밤숲"
+  },
+  {
+   "offset": 43009,
+   "budget_bytes": 5,
+   "source_hex": "ED 55 6D EF 42",
+   "japanese_text": "夜の林",
+   "korean_text": "밤림"
+  },
+  {
+   "offset": 43015,
+   "budget_bytes": 7,
+   "source_hex": "ED 55 6D F0 EA F5 39",
+   "japanese_text": "夜の浅瀬",
+   "korean_text": "밤여울"
+  },
+  {
+   "offset": 43023,
+   "budget_bytes": 5,
+   "source_hex": "ED 55 6D EC 15",
+   "japanese_text": "夜の川",
+   "korean_text": "밤강"
+  },
+  {
+   "offset": 43029,
+   "budget_bytes": 5,
+   "source_hex": "ED 55 6D EC C1",
+   "japanese_text": "夜の山",
+   "korean_text": "밤산"
+  },
+  {
+   "offset": 43035,
+   "budget_bytes": 7,
+   "source_hex": "ED 55 6D ED 14 EF 0A",
+   "japanese_text": "夜の砂漠",
+   "korean_text": "밤사막"
+  },
+  {
+   "offset": 43043,
+   "budget_bytes": 8,
+   "source_hex": "ED 55 6D ED 11 EC 6F 1C",
+   "japanese_text": "夜の平地G",
+   "korean_text": "밤평지G"
+  },
+  {
+   "offset": 43052,
+   "budget_bytes": 6,
+   "source_hex": "ED 55 6D EF 09 1C",
+   "japanese_text": "夜の草G",
+   "korean_text": "밤풀G"
+  },
+  {
+   "offset": 43059,
+   "budget_bytes": 6,
+   "source_hex": "ED 55 6D EF 47 1C",
+   "japanese_text": "夜の岩G",
+   "korean_text": "밤암G"
+  },
+  {
+   "offset": 43066,
+   "budget_bytes": 6,
+   "source_hex": "ED 55 6D EC C1 1C",
+   "japanese_text": "夜の山G",
+   "korean_text": "밤산G"
+  },
+  {
+   "offset": 43073,
+   "budget_bytes": 9,
+   "source_hex": "ED 55 6D EC C1 6D EF 09 1C",
+   "japanese_text": "夜の山の草G",
+   "korean_text": "밤산초원G"
+  },
+  {
+   "offset": 43083,
+   "budget_bytes": 7,
+   "source_hex": "ED 55 6D ED 17 ED 18",
+   "japanese_text": "夜の道路",
+   "korean_text": "밤도로"
+  },
+  {
+   "offset": 43091,
+   "budget_bytes": 8,
+   "source_hex": "ED 55 6D ED 17 ED 18 1C",
+   "japanese_text": "夜の道路G",
+   "korean_text": "밤도로G"
+  },
+  {
+   "offset": 43100,
+   "budget_bytes": 5,
+   "source_hex": "ED 55 6D F1 60",
+   "japanese_text": "夜の橋",
+   "korean_text": "밤교"
+  },
+  {
+   "offset": 43106,
+   "budget_bytes": 6,
+   "source_hex": "ED 55 6D F1 60 1C",
+   "japanese_text": "夜の橋G",
+   "korean_text": "밤교G"
+  },
+  {
+   "offset": 43113,
+   "budget_bytes": 9,
+   "source_hex": "ED 55 6D ED 15 ED 16 EC 6F",
+   "japanese_text": "夜の市街地",
+   "korean_text": "밤시가지"
+  },
+  {
+   "offset": 43123,
+   "budget_bytes": 11,
+   "source_hex": "ED 55 6D EC A5 EC A6 EC BE EC 6F",
+   "japanese_text": "夜の軍事基地",
+   "korean_text": "밤군사기지"
+  },
+  {
+   "offset": 43135,
+   "budget_bytes": 9,
+   "source_hex": "ED 55 6D EC 83 EC 84 EC 2C",
+   "japanese_text": "夜の光子力",
+   "korean_text": "밤광자력"
+  },
+  {
+   "offset": 43145,
+   "budget_bytes": 11,
+   "source_hex": "ED 55 6D EE 10 EC 27 EC 28 EC 29",
+   "japanese_text": "夜の新早乙女",
+   "korean_text": "밤신오토메"
+  },
+  {
+   "offset": 43157,
+   "budget_bytes": 7,
+   "source_hex": "ED 55 6D EC 12 EC 13",
+   "japanese_text": "夜の南原",
+   "korean_text": "밤난바"
+  },
+  {
+   "offset": 43165,
+   "budget_bytes": 9,
+   "source_hex": "ED 55 6D AF 93 D1 C2 B2 9E",
+   "japanese_text": "夜のダイモビック",
+   "korean_text": "다이모빅"
+  },
+  {
+   "offset": 43175,
+   "budget_bytes": 8,
+   "source_hex": "ED 55 6D ED 11 EC 13 18",
+   "japanese_text": "夜の平原C",
+   "korean_text": "밤평원C"
+  },
+  {
+   "offset": 43184,
+   "budget_bytes": 8,
+   "source_hex": "ED 55 6D EE EA EC 6F 18",
+   "japanese_text": "夜の荒地C",
+   "korean_text": "밤황야C"
+  },
+  {
+   "offset": 43193,
+   "budget_bytes": 6,
+   "source_hex": "ED 55 6D ED 13 18",
+   "japanese_text": "夜の森C",
+   "korean_text": "밤숲C"
+  },
+  {
+   "offset": 43200,
+   "budget_bytes": 6,
+   "source_hex": "ED 55 6D EF 42 18",
+   "japanese_text": "夜の林C",
+   "korean_text": "밤림C"
+  },
+  {
+   "offset": 43207,
+   "budget_bytes": 6,
+   "source_hex": "ED 55 6D F1 61 18",
+   "japanese_text": "夜の丘C",
+   "korean_text": "밤구C"
+  },
+  {
+   "offset": 43214,
+   "budget_bytes": 9,
+   "source_hex": "ED 55 6D F1 61 6D EF 42 18",
+   "japanese_text": "夜の丘の林C",
+   "korean_text": "밤구림C"
+  },
+  {
+   "offset": 43224,
+   "budget_bytes": 8,
+   "source_hex": "ED 55 6D ED 17 ED 18 18",
+   "japanese_text": "夜の道路C",
+   "korean_text": "밤도로C"
+  },
+  {
+   "offset": 43233,
+   "budget_bytes": 6,
+   "source_hex": "ED 55 6D F1 60 18",
+   "japanese_text": "夜の橋C",
+   "korean_text": "밤교C"
+  },
+  {
+   "offset": 43240,
+   "budget_bytes": 9,
+   "source_hex": "F0 1B 6D ED 17 ED 18 ED 13",
+   "japanese_text": "夕の道路森",
+   "korean_text": "석도로숲"
+  },
+  {
+   "offset": 43250,
+   "budget_bytes": 9,
+   "source_hex": "F0 1B 6D ED 17 ED 18 EF 42",
+   "japanese_text": "夕の道路林",
+   "korean_text": "석도로림"
+  },
+  {
+   "offset": 43260,
+   "budget_bytes": 10,
+   "source_hex": "F0 1B 6D ED 17 ED 18 ED 13 18",
+   "japanese_text": "夕の道路森C",
+   "korean_text": "석도로숲C"
+  },
+  {
+   "offset": 43271,
+   "budget_bytes": 10,
+   "source_hex": "F0 1B 6D ED 17 ED 18 EF 42 18",
+   "japanese_text": "夕の道路林C",
+   "korean_text": "석도로림C"
+  },
+  {
+   "offset": 43282,
+   "budget_bytes": 9,
+   "source_hex": "ED 55 6D ED 17 ED 18 ED 13",
+   "japanese_text": "夜の道路森",
+   "korean_text": "밤도로숲"
+  },
+  {
+   "offset": 43292,
+   "budget_bytes": 9,
+   "source_hex": "ED 55 6D ED 17 ED 18 EF 42",
+   "japanese_text": "夜の道路林",
+   "korean_text": "밤도로림"
+  },
+  {
+   "offset": 43302,
+   "budget_bytes": 10,
+   "source_hex": "ED 55 6D ED 17 ED 18 ED 13 18",
+   "japanese_text": "夜の道路森C",
+   "korean_text": "밤도로숲C"
+  },
+  {
+   "offset": 43313,
+   "budget_bytes": 10,
+   "source_hex": "ED 55 6D ED 17 ED 18 EF 42 18",
+   "japanese_text": "夜の道路林C",
+   "korean_text": "밤도로림C"
+  },
+  {
+   "offset": 43324,
+   "budget_bytes": 11,
+   "source_hex": "F0 1B 6D ED 17 ED 18 EE EA EC 6F",
+   "japanese_text": "夕の道路荒地",
+   "korean_text": "석도로황야"
+  },
+  {
+   "offset": 43336,
+   "budget_bytes": 11,
+   "source_hex": "ED 55 6D ED 17 ED 18 EE EA EC 6F",
+   "japanese_text": "夜の道路荒地",
+   "korean_text": "밤도로황야"
+  },
+  {
+   "offset": 43348,
+   "budget_bytes": 6,
+   "source_hex": "B7 DB 11 A9 EF B4",
+   "japanese_text": "トレ-ズ城",
+   "korean_text": "트레즈"
+  },
+  {
+   "offset": 43355,
+   "budget_bytes": 7,
+   "source_hex": "F1 59 50 EC 32 EC 13",
+   "japanese_text": "焼け野原",
+   "korean_text": "불탄들"
+  },
+  {
+   "offset": 43363,
+   "budget_bytes": 10,
+   "source_hex": "ED 55 6D F1 59 50 EC 32 EC 13",
+   "japanese_text": "夜の焼け野原",
+   "korean_text": "밤불탄들"
+  },
+  {
+   "offset": 43374,
+   "budget_bytes": 16,
+   "source_hex": "EC A5 EC A6 EC BE EC 6F 3C EC E3 EC 1C ED 4B 3D",
+   "japanese_text": "軍事基地(爆破後)",
+   "korean_text": "군사기지(폭파후)"
+  },
+  {
+   "offset": 43391,
+   "budget_bytes": 13,
+   "source_hex": "EF 39 EC 84 6D EC 47 3C EE 2D EC 6F 3D",
+   "japanese_text": "胞子の谷(台地)",
+   "korean_text": "포자곡(대지)"
+  },
+  {
+   "offset": 43405,
+   "budget_bytes": 11,
+   "source_hex": "EF 39 EC 84 6D EC 47 3C EC 58 3D",
+   "japanese_text": "胞子の谷(中)",
+   "korean_text": "포자곡(중)"
+  },
+  {
+   "offset": 43417,
+   "budget_bytes": 13,
+   "source_hex": "EF 39 EC 84 6D EC 47 3C ED 11 EC 32 3D",
+   "japanese_text": "胞子の谷(平野)",
+   "korean_text": "포자곡(평야)"
+  },
+  {
+   "offset": 43431,
+   "budget_bytes": 11,
+   "source_hex": "56 86 45 F4 8B EF 2F 3C EC 70 3D",
+   "japanese_text": "しょう乳洞(上)",
+   "korean_text": "종유동(위)"
+  },
+  {
+   "offset": 43443,
+   "budget_bytes": 11,
+   "source_hex": "56 86 45 F4 8B EF 2F 3C ED 0E 3D",
+   "japanese_text": "しょう乳洞(下)",
+   "korean_text": "종유동(밑)"
+  },
+  {
+   "offset": 43455,
+   "budget_bytes": 10,
+   "source_hex": "EC 06 EE 26 ED 89 3C EC 70 3D",
+   "japanese_text": "神殿内(上)",
+   "korean_text": "신전(위)"
+  },
+  {
+   "offset": 43466,
+   "budget_bytes": 10,
+   "source_hex": "EC 06 EE 26 ED 89 3C ED 0E 3D",
+   "japanese_text": "神殿内(下)",
+   "korean_text": "신전(밑)"
+  },
+  {
+   "offset": 43477,
+   "budget_bytes": 6,
+   "source_hex": "EC 06 EE 26 ED 10",
+   "japanese_text": "神殿外",
+   "korean_text": "신전밖"
+  },
+  {
+   "offset": 43484,
+   "budget_bytes": 8,
+   "source_hex": "D8 9D 91 A8 EF 09 EC 13",
+   "japanese_text": "ラギアス草原",
+   "korean_text": "라기초원"
+  },
+  {
+   "offset": 43493,
+   "budget_bytes": 8,
+   "source_hex": "D8 9D 91 A8 EE EA EC 32",
+   "japanese_text": "ラギアス荒野",
+   "korean_text": "라기황야"
+  },
+  {
+   "offset": 43502,
+   "budget_bytes": 6,
+   "source_hex": "D8 9D 91 A8 EC C1",
+   "japanese_text": "ラギアス山",
+   "korean_text": "라기산"
+  },
+  {
+   "offset": 43509,
+   "budget_bytes": 6,
+   "source_hex": "D8 9D 91 A8 ED 13",
+   "japanese_text": "ラギアス森",
+   "korean_text": "라기숲"
+  },
+  {
+   "offset": 43516,
+   "budget_bytes": 6,
+   "source_hex": "D8 9D 91 A8 EF 42",
+   "japanese_text": "ラギアス林",
+   "korean_text": "라기림"
+  },
+  {
+   "offset": 43523,
+   "budget_bytes": 6,
+   "source_hex": "D8 9D 91 A8 ED 16",
+   "japanese_text": "ラギアス街",
+   "korean_text": "라기시"
+  },
+  {
+   "offset": 43530,
+   "budget_bytes": 11,
+   "source_hex": "EC 06 EE 26 ED 89 32 3C EC 70 3D",
+   "japanese_text": "神殿内2(上)",
+   "korean_text": "신전2(위)"
+  },
+  {
+   "offset": 43542,
+   "budget_bytes": 11,
+   "source_hex": "EC 06 EE 26 ED 89 32 3C ED 0E 3D",
+   "japanese_text": "神殿内2(下)",
+   "korean_text": "신전2(밑)"
+  },
+  {
+   "offset": 43554,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43561,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43568,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43575,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43582,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43589,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43596,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43603,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43610,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43617,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43624,
+   "budget_bytes": 6,
+   "source_hex": "ED C5 ED 04 EC 6E",
+   "japanese_text": "未使用",
+   "korean_text": "미사용"
+  },
+  {
+   "offset": 43631,
+   "budget_bytes": 2,
+   "source_hex": "69 56",
+   "japanese_text": "なし",
+   "korean_text": "무"
+  },
+  {
+   "offset": 43634,
+   "budget_bytes": 4,
+   "source_hex": "ED E1 EE 16",
+   "japanese_text": "接続",
+   "korean_text": "접속"
+  },
+  {
+   "offset": 43639,
+   "budget_bytes": 4,
+   "source_hex": "EE CD ED 71",
+   "japanese_text": "切断",
+   "korean_text": "절단"
+  },
+  {
+   "offset": 43644,
+   "budget_bytes": 6,
+   "source_hex": "A6 DF 9E DC EC 59",
+   "japanese_text": "シンクロ率",
+   "korean_text": "동조율"
+  },
+  {
+   "offset": 43651,
+   "budget_bytes": 5,
+   "source_hex": "A8 DC B2 B7 31",
+   "japanese_text": "スロット1",
+   "korean_text": "슬롯1"
+  },
+  {
+   "offset": 43657,
+   "budget_bytes": 5,
+   "source_hex": "A8 DC B2 B7 32",
+   "japanese_text": "スロット2",
+   "korean_text": "슬롯2"
+  },
+  {
+   "offset": 43663,
+   "budget_bytes": 19,
+   "source_hex": "00 00 00 00 00 00 00 00 00 00 00 00 EE 10 ED 33 B6 11 AE",
+   "japanese_text": "␣␣␣␣␣␣␣␣␣␣␣␣新規デ-タ",
+   "korean_text": "새 데이터"
+  },
+  {
+   "offset": 43683,
+   "budget_bytes": 6,
+   "source_hex": "AA 11 C5 B6 11 AE",
+   "japanese_text": "セ-ブデ-タ",
+   "korean_text": "세이브"
+  },
+  {
+   "offset": 43690,
+   "budget_bytes": 6,
+   "source_hex": "DC 11 B8 B6 11 AE",
+   "japanese_text": "ロ-ドデ-タ",
+   "korean_text": "로드"
+  },
+  {
+   "offset": 43697,
+   "budget_bytes": 124,
+   "source_hex": "00 3E A8 11 C0 11 DC CB B2 B7 EC 16 EC 52 1B 3F 6D EC 5E EC E4 ED 4A 8E 9E D9 91 F6 56 5E A1 11 CF B6 11 AE 8E D0 D1 D9 11 9A 11 B8 6A AA 11 C5 56 3A ED EB EC 6D F6 56 65 49 50 6F ED 4B EF BF 6D 3E A8 11 C0 11 DC CB B2 B7 EC 16 EC 52 1B 00 EE D8 F6 ED 3D EF BF 3F 3C ED 91 EC 34 EC C2 EF 0D ED 88 ED 06 3D 66 ED 82 4C EE 16 4C ED 04 EC 6E 58 F6 8A 52 67 4B 66 4C 7D 58 E4",
+   "japanese_text": "␣「ス-パ-ロボット大戦F」の最終話をクリア[F6]したゲ-ムデ-タをメモリ-カ-ドにセ-ブし,保管[F6]しておけば後編の「ス-パ-ロボット大戦F␣完[F6]結編」(近日発売予定)で引き続き使用す[F6]ることができます。",
+   "korean_text": " 「슈퍼로봇대전F」 최종화를 클리어한[F6]게임 데이터를 메모리 카드에 저장해[F6]두면 후편 「슈퍼로봇대전F 완결편」에서 "
+  },
+  {
+   "offset": 43822,
+   "budget_bytes": 158,
+   "source_hex": "00 ED 4B EF BF 3E A8 11 C0 11 DC CB B2 B7 EC 16 EC 52 1B 00 EE D8 ED 3D EF BF 3F 77 F6 6D ED 82 EE 64 4D 6A EC 89 EC 91 69 A1 11 CF B6 11 AE 6E 3E A8 11 C0 11 DC CB B2 F6 B7 EC 16 EC 52 1B 3F 6D EC 5E EC E4 ED 4A 8E 9E D9 91 56 5E ED AB ED 9D 6D A6 A8 B5 F6 CF B6 11 AE 3C 32 C5 DC B2 9E 3D 67 EC 5E EC E4 ED 4A 6D A6 B9 D9 99 B6 11 AE F6 3C 31 C5 DC B2 9E 3D 66 58 E4 F6 00 7D 5E 3A EC 5E EC E4 ED 4A 6D A6 B9 D9 99 B6 11 AE 6E 43 4E 63 41 62 65 81 F6 ED 3E 43 7D 5A 8F E4",
+   "japanese_text": "␣後編「ス-パ-ロボット大戦F␣完結編」へ[F6]の引継ぎに必要なゲ-ムデ-タは「ス-パ-ロボッ[F6]ト大戦F」の最終話をクリアした状態のシステ[F6]ムデ-タ(2ブロック)と最終話のシナリオデ-タ[F6](1ブロック)です。[F6]␣また,最終話のシナリオデ-タはいくつあっても[F6]構いません。",
+   "korean_text": " 후편 「슈퍼로봇대전F 완결편」으로의[F6]인계에 필요한 데이터는 「슈퍼로봇대전[F6]F」 최종화를 클리어한 상태의 시스템[F6]데이터입니다. "
+  },
+  {
+   "offset": 43987,
+   "budget_bytes": 17,
+   "source_hex": "EC 5F 32 EC 7E A8 11 C0 11 DC CB B2 B7 EC 16 EC 52",
+   "japanese_text": "第2次ス-パ-ロボット大戦",
+   "korean_text": "제2차슈퍼로봇대전"
+  },
+  {
+   "offset": 44005,
+   "budget_bytes": 17,
+   "source_hex": "EC 5F 33 EC 7E A8 11 C0 11 DC CB B2 B7 EC 16 EC 52",
+   "japanese_text": "第3次ス-パ-ロボット大戦",
+   "korean_text": "제3차슈퍼로봇대전"
+  },
+  {
+   "offset": 44023,
+   "budget_bytes": 9,
+   "source_hex": "1A 2D 00 CD A4 9C 6D EF A7",
+   "japanese_text": "EX␣マサキの章",
+   "korean_text": "EX 마사키"
+  },
+  {
+   "offset": 44033,
+   "budget_bytes": 10,
+   "source_hex": "1A 2D 00 D9 D4 11 BC 6D EF A7",
+   "japanese_text": "EX␣リュ-ネの章",
+   "korean_text": "EX 류네편"
+  },
+  {
+   "offset": 44044,
+   "budget_bytes": 9,
+   "source_hex": "1A 2D 00 A6 D4 95 6D EF A7",
+   "japanese_text": "EX␣シュウの章",
+   "korean_text": "EX 슈우편"
+  },
+  {
+   "offset": 44054,
+   "budget_bytes": 17,
+   "source_hex": "EC D4 EC 62 EC E1 EC 06 6D EC 85 EC 64 EE 65 ED 06",
+   "japanese_text": "魔装機神の世界設定",
+   "korean_text": "마장기신 세계설정"
+  },
+  {
+   "offset": 44072,
+   "budget_bytes": 24,
+   "source_hex": "ED 7E EC 74 27 16 22 6D A6 A8 B5 CF B6 11 AE 8E ED 04 EC 6E 56 7D 58 E4",
+   "japanese_text": "本体RAMのシステムデ-タを使用します。",
+   "korean_text": "본체RAM 데이터 사용."
+  },
+  {
+   "offset": 44097,
+   "budget_bytes": 26,
+   "source_hex": "9A 11 B7 D9 B2 A7 27 16 22 6D A6 A8 B5 CF B6 11 AE 8E ED 04 EC 6E 56 7D 58 E4",
+   "japanese_text": "カ-トリッジRAMのシステムデ-タを使用します。",
+   "korean_text": "카트리지RAM 데이터 사용."
+  },
+  {
+   "offset": 44124,
+   "budget_bytes": 21,
+   "source_hex": "68 60 88 6D A6 A8 B5 CF B6 11 AE 8E ED 04 EC 6E 56 7D 58 4A 14",
+   "japanese_text": "どちらのシステムデ-タを使用しますか?",
+   "korean_text": "어느 데이터를 쓸까요?"
+  },
+  {
+   "offset": 44146,
+   "budget_bytes": 27,
+   "source_hex": "D5 BA B2 B7 6D EC 50 EC 51 EC 2C 8E 10 31 56 7D 58 E4 F6 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "ユニットの移動力を+1します。[F6]よろしいですか?",
+   "korean_text": "유닛 이동력+1.[F6]확인?"
+  },
+  {
+   "offset": 44174,
+   "budget_bytes": 26,
+   "source_hex": "D5 BA B2 B7 6D 1D 25 8E 10 32 30 30 30 56 7D 58 E4 F6 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "ユニットのHPを+2000します。[F6]よろしいですか?",
+   "korean_text": "유닛 HP+2000.[F6]확인?"
+  },
+  {
+   "offset": 44201,
+   "budget_bytes": 27,
+   "source_hex": "D5 BA B2 B7 6D EC 62 EC 01 8E 10 35 30 30 56 7D 58 E4 F6 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "ユニットの装甲を+500します。[F6]よろしいですか?",
+   "korean_text": "유닛 장갑+500.[F6]확인?"
+  },
+  {
+   "offset": 44229,
+   "budget_bytes": 25,
+   "source_hex": "D5 BA B2 B7 6D 1A 23 8E 10 31 35 30 56 7D 58 E4 F6 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "ユニットのENを+150します。[F6]よろしいですか?",
+   "korean_text": "유닛 EN+150.[F6]확인?"
+  },
+  {
+   "offset": 44255,
+   "budget_bytes": 28,
+   "source_hex": "D5 BA B2 B7 6D ED A6 EC 51 ED 01 8E 10 32 30 56 7D 58 E4 F6 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "ユニットの運動性を+20します。[F6]よろしいですか?",
+   "korean_text": "유닛 운동성+20.[F6]확인?"
+  },
+  {
+   "offset": 44284,
+   "budget_bytes": 44,
+   "source_hex": "1D 25 00 1A 23 00 ED A6 EC 51 ED 01 00 EC 62 EC 01 00 EC 63 EC 64 EC 65 EC 66 00 4B 3A 6A 69 89 7D 58 E4 F6 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "HP␣EN␣運動性␣装甲␣限界反応␣が,になります。[F6]よろしいですか?",
+   "korean_text": "HP EN 운동성 장갑 한계반응 이,가 됨.[F6]확인?"
+  },
+  {
+   "offset": 44329,
+   "budget_bytes": 12,
+   "source_hex": "ED F1 EC F3 4B ED 52 89 7D 5A 8F E4",
+   "japanese_text": "資金が足りません。",
+   "korean_text": "자금 부족!"
+  },
+  {
+   "offset": 44342,
+   "budget_bytes": 18,
+   "source_hex": "52 8B ED 0D EC 70 6D EC 4A EE AA 6E 66 4C 7D 5A 8F E4",
+   "japanese_text": "これ以上の改造はできません。",
+   "korean_text": "더는 개조 불가!"
+  },
+  {
+   "offset": 44361,
+   "budget_bytes": 2,
+   "source_hex": "EC B6",
+   "japanese_text": "空",
+   "korean_text": "공"
+  },
+  {
+   "offset": 44364,
+   "budget_bytes": 2,
+   "source_hex": "EC F1",
+   "japanese_text": "陸",
+   "korean_text": "육"
+  },
+  {
+   "offset": 44367,
+   "budget_bytes": 2,
+   "source_hex": "EC 4F",
+   "japanese_text": "海",
+   "korean_text": "해"
+  },
+  {
+   "offset": 44370,
+   "budget_bytes": 2,
+   "source_hex": "F0 0D",
+   "japanese_text": "宇",
+   "korean_text": "우"
+  },
+  {
+   "offset": 44373,
+   "budget_bytes": 24,
+   "source_hex": "EC 6F EC 81 EC FF EC 66 6D 8E 6A 56 7D 58 E4 F6 87 8C 56 43 66 58 4A 14",
+   "japanese_text": "地形適応のをにします。[F6]よろしいですか?",
+   "korean_text": "지형적응 변경.[F6]확인?"
+  },
+  {
+   "offset": 44398,
+   "budget_bytes": 8,
+   "source_hex": "D5 BA B2 B7 EC 4A EE AA",
+   "japanese_text": "ユニット改造",
+   "korean_text": "유닛개조"
+  },
+  {
+   "offset": 44407,
+   "budget_bytes": 9,
+   "source_hex": "00 EC 0A EC 56 EC 4A EE AA",
+   "japanese_text": "␣武器改造",
+   "korean_text": "무기개조"
+  },
+  {
+   "offset": 44417,
+   "budget_bytes": 9,
+   "source_hex": "C0 93 DC B2 B7 EC 79 EC 2C",
+   "japanese_text": "パイロット能力",
+   "korean_text": "PILOT능력"
+  },
+  {
+   "offset": 44427,
+   "budget_bytes": 4,
+   "source_hex": "6D 89 4A 47",
+   "japanese_text": "のりかえ",
+   "korean_text": "환승"
+  },
+  {
+   "offset": 44432,
+   "budget_bytes": 5,
+   "source_hex": "EE 4F EC 78 00",
+   "japanese_text": "妖精␣",
+   "korean_text": "요정"
+  },
+  {
+   "offset": 44438,
+   "budget_bytes": 6,
+   "source_hex": "C0 93 DC B2 B7 00",
+   "japanese_text": "パイロット␣",
+   "korean_text": "파일럿"
+  },
+  {
+   "offset": 44445,
+   "budget_bytes": 10,
+   "source_hex": "C0 93 DC B2 B7 F6 EE 4F EC 78",
+   "japanese_text": "パイロット[F6]妖精",
+   "korean_text": "PILOT[F6]요정"
+  },
+  {
+   "offset": 44456,
+   "budget_bytes": 20,
+   "source_hex": "6D 89 4A 47 ED 0F EC 79 69 D5 BA B2 B7 4B 41 89 7D 5A 8F E4",
+   "japanese_text": "のりかえ可能なユニットがありません。",
+   "korean_text": "환승할 유닛이 없음!"
+  },
+  {
+   "offset": 44477,
+   "budget_bytes": 19,
+   "source_hex": "6D 89 4A 47 ED 0F EC 79 69 EE 4F EC 78 6E 43 7D 5A 8F E4",
+   "japanese_text": "のりかえ可能な妖精はいません。",
+   "korean_text": "환승할 요정이 없음!"
+  },
+  {
+   "offset": 44497,
+   "budget_bytes": 19,
+   "source_hex": "ED 7A ED 1F C0 11 B3 8E EC 99 EE 25 56 65 43 7D 5A 8F E4",
+   "japanese_text": "強化パ-ツを所持していません。",
+   "korean_text": "강화파츠 없음!"
+  },
+  {
+   "offset": 44517,
+   "budget_bytes": 2,
+   "source_hex": "69 56",
+   "japanese_text": "なし",
+   "korean_text": "무"
+  },
+  {
+   "offset": 44522,
+   "budget_bytes": 8,
+   "source_hex": "EC 50 EC 51 EC 2C 10 31",
+   "japanese_text": "移動力+1",
+   "korean_text": "이동력+1"
+  },
+  {
+   "offset": 44531,
+   "budget_bytes": 8,
+   "source_hex": "EC 50 EC 51 EC 2C 10 32",
+   "japanese_text": "移動力+2",
+   "korean_text": "이동력+2"
+  },
+  {
+   "offset": 44540,
+   "budget_bytes": 21,
+   "source_hex": "ED A6 EC 51 ED 01 10 31 32 F6 EC 63 EC 64 EC 65 EC 66 10 32 30",
+   "japanese_text": "運動性+12[F6]限界反応+20",
+   "korean_text": "운동성+12[F6]한계반응+20"
+  },
+  {
+   "offset": 44562,
+   "budget_bytes": 19,
+   "source_hex": "ED A6 EC 51 ED 01 10 38 F6 EC 63 EC 64 EC 65 EC 66 10 35",
+   "japanese_text": "運動性+8[F6]限界反応+5",
+   "korean_text": "운동성+8[F6]한계반응+5"
+  },
+  {
+   "offset": 44582,
+   "budget_bytes": 17,
+   "source_hex": "EC 50 EC 51 EC 2C 10 31 F6 ED A6 EC 51 ED 01 10 33",
+   "japanese_text": "移動力+1[F6]運動性+3",
+   "korean_text": "이동력+1[F6]운동성+3"
+  },
+  {
+   "offset": 44600,
+   "budget_bytes": 20,
+   "source_hex": "ED A6 EC 51 ED 01 10 35 F6 EC 63 EC 64 EC 65 EC 66 10 31 30",
+   "japanese_text": "運動性+5[F6]限界反応+10",
+   "korean_text": "운동성+5[F6]한계반응+10"
+  },
+  {
+   "offset": 44621,
+   "budget_bytes": 16,
+   "source_hex": "1E C4 92 11 DA B8 8E EC 62 ED FE 66 4C 7D 58 E4",
+   "japanese_text": "Iフィ-ルドを装備できます。",
+   "korean_text": "I필드 장비 가능."
+  },
+  {
+   "offset": 44638,
+   "budget_bytes": 20,
+   "source_hex": "97 BC DA 9D 11 35 30 EC 71 EE 59 E4 F6 ED 04 43 F0 4C 65 E4",
+   "japanese_text": "エネルギ-50回復。[F6]使い捨て。",
+   "korean_text": "에너지50회복.[F6]1회용."
+  },
+  {
+   "offset": 44659,
+   "budget_bytes": 21,
+   "source_hex": "97 BC DA 9D 11 32 30 30 EC 71 EE 59 E4 F6 ED 04 43 F0 4C 65 E4",
+   "japanese_text": "エネルギ-200回復。[F6]使い捨て。",
+   "korean_text": "에너지200회복.[F6]1회용."
+  },
+  {
+   "offset": 44681,
+   "budget_bytes": 35,
+   "source_hex": "D5 BA B2 B7 6D AE 93 C6 4B EC B6 EC F1 6A 69 89 F6 EC 6F EC 81 EC FF EC 66 4B EC B6 16 6A 69 89 7D 58 E4",
+   "japanese_text": "ユニットのタイプが空陸になり[F6]地形適応が空Aになります。",
+   "korean_text": "타입 공륙화[F6]지형적응 공A로."
+  },
+  {
+   "offset": 44717,
+   "budget_bytes": 41,
+   "source_hex": "CD B2 C6 EC 4E EC 56 3A EC 5A EC 5B 31 6D EC 0A EC 56 ED 0D ED 10 F6 6D EC 0A EC 56 6D EC 5A EC 5B 4B 31 ED 53 47 7D 58 E4",
+   "japanese_text": "マップ兵器,射程1の武器以外[F6]の武器の射程が1増えます。",
+   "korean_text": "맵병기·사정1 외 무기[F6]사정+1."
+  },
+  {
+   "offset": 44759,
+   "budget_bytes": 14,
+   "source_hex": "1D 25 10 31 30 30 F6 EC 62 EC 01 10 35 30",
+   "japanese_text": "HP+100[F6]装甲+50",
+   "korean_text": "HP+100[F6]장갑+50"
+  },
+  {
+   "offset": 44774,
+   "budget_bytes": 15,
+   "source_hex": "1D 25 10 31 30 30 F6 EC 62 EC 01 10 31 30 30",
+   "japanese_text": "HP+100[F6]装甲+100",
+   "korean_text": "HP+100[F6]장갑+100"
+  },
+  {
+   "offset": 44790,
+   "budget_bytes": 30,
+   "source_hex": "EC 50 EC 51 EC 2C 10 32 F6 ED A6 EC 51 ED 01 10 31 35 F6 EC 63 EC 64 EC 65 EC 66 10 32 30",
+   "japanese_text": "移動力+2[F6]運動性+15[F6]限界反応+20",
+   "korean_text": "이동력+2[F6]운동성+15[F6]한계반응+20"
+  },
+  {
+   "offset": 44821,
+   "budget_bytes": 16,
+   "source_hex": "C2 11 CF BF D9 91 8E EC 62 ED FE 66 4C 7D 58 E4",
+   "japanese_text": "ビ-ムバリアを装備できます。",
+   "korean_text": "빔막 장비 가능."
+  },
+  {
+   "offset": 44838,
+   "budget_bytes": 16,
+   "source_hex": "C2 11 CF A2 11 B7 8E EC 62 ED FE 66 4C 7D 58 E4",
+   "japanese_text": "ビ-ムコ-トを装備できます。",
+   "korean_text": "빔코트 장비가능."
+  },
+  {
+   "offset": 44855,
+   "budget_bytes": 19,
+   "source_hex": "1D 25 32 30 30 30 EC 71 EE 59 E4 F6 ED 04 43 F0 4C 65 E4",
+   "japanese_text": "HP2000回復。[F6]使い捨て。",
+   "korean_text": "HP2000회복.[F6]1회용."
+  },
+  {
+   "offset": 44875,
+   "budget_bytes": 15,
+   "source_hex": "1D 25 10 32 30 30 F6 EC 62 EC 01 10 31 35 30",
+   "japanese_text": "HP+200[F6]装甲+150",
+   "korean_text": "HP+200[F6]장갑+150"
+  },
+  {
+   "offset": 44891,
+   "budget_bytes": 15,
+   "source_hex": "1D 25 10 32 30 30 F6 EC 62 EC 01 10 32 30 30",
+   "japanese_text": "HP+200[F6]装甲+200",
+   "korean_text": "HP+200[F6]장갑+200"
+  },
+  {
+   "offset": 44907,
+   "budget_bytes": 17,
+   "source_hex": "EC 60 EC A3 EC 71 EE 59 E4 F6 ED 04 43 F0 4C 65 E4",
+   "japanese_text": "残弾回復。[F6]使い捨て。",
+   "korean_text": "잔탄회복.[F6]1회용."
+  },
+  {
+   "offset": 44925,
+   "budget_bytes": 17,
+   "source_hex": "1D 25 C4 DA EC 71 EE 59 E4 F6 ED 04 43 F0 4C 65 E4",
+   "japanese_text": "HPフル回復。[F6]使い捨て。",
+   "korean_text": "HP풀회복.[F6]1회용."
+  },
+  {
+   "offset": 44951,
+   "budget_bytes": 23,
+   "source_hex": "EC 62 ED FE 56 65 43 8A ED 7A ED 1F C0 11 B3 8E F6 6E 59 56 7D 58 E4",
+   "japanese_text": "装備している強化パ-ツを[F6]はずします。",
+   "korean_text": "장착한 강화파츠를[F6]해제."
+  }
+ ]
+}

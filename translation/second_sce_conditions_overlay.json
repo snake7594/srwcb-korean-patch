@@ -1,0 +1,1059 @@
+{
+ "schema": "srwcb-second-sce-conditions-overlay-v1",
+ "purpose": "Korean victory/defeat condition and misc non-dialogue strings in 2_SCE.BIN; merged into the SCE record replacements (variable length).",
+ "records": [
+  {
+   "offset": 4065,
+   "record_bytes": 31,
+   "raw_sha256": "ce6a89feb5de1e0a086692ff05db71958f1b7b18c3bf39e6c8c5502d56cd7348",
+   "text_start_rel": 15,
+   "prefix_hex": "CE 00 C1 01 BF 00 01 E9 03 FE FF 04 00 13 00",
+   "japanese_text": "敵のせん滅",
+   "korean_text": "적 섬멸"
+  },
+  {
+   "offset": 4097,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 4108,
+   "record_bytes": 42,
+   "raw_sha256": "13dd02e89a1642188c76f94a137c876f7c4351a6420acef6916b8927aea4e416",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "選択の実験です。さてどっち?[F6]␣␣はじめから[F6]␣␣次の処理へスキップ",
+   "korean_text": "선택 실험입니다. 어느 쪽?[F6]  처음부터[F6]  다음 처리로 스킵"
+  },
+  {
+   "offset": 4182,
+   "record_bytes": 17,
+   "raw_sha256": "ec3bc3a69363d4882b8ed3399dc76ad23f93b47f550639c6388cb362e639e130",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "成功![F7]つぎいってみよう!!",
+   "korean_text": "성공![F7]다음 가 보자!!"
+  },
+  {
+   "offset": 5981,
+   "record_bytes": 15,
+   "raw_sha256": "6d3d699603763f790f24b917dbf1138f1f7284d058c998d4001b07327546ed60",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "ピ-ポ!␣ピ-ポ!␣ピ-ポ!",
+   "korean_text": "삐뽀! 삐뽀! 삐뽀!"
+  },
+  {
+   "offset": 6147,
+   "record_bytes": 15,
+   "raw_sha256": "6d3d699603763f790f24b917dbf1138f1f7284d058c998d4001b07327546ed60",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "ピ-ポ!␣ピ-ポ!␣ピ-ポ!",
+   "korean_text": "삐뽀! 삐뽀! 삐뽀!"
+  },
+  {
+   "offset": 6162,
+   "record_bytes": 14,
+   "raw_sha256": "06c47e9fa1e427b2e01aba2bfd1aae1ccf184610598964eb1f27bb2d670d4ff3",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "キィィィィィィ!␣バタン!",
+   "korean_text": "끼이이이익! 쾅!"
+  },
+  {
+   "offset": 6247,
+   "record_bytes": 22,
+   "raw_sha256": "e39c7e02e410e242aec60e7310612e49a011c4a09600a68d16e6b5e78115a063",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "␣␣バタン![F6]ピ-ポ!␣ピ-ポ!␣ピ-ポ!",
+   "korean_text": "  쾅![F6]삐뽀! 삐뽀! 삐뽀!"
+  },
+  {
+   "offset": 6269,
+   "record_bytes": 45,
+   "raw_sha256": "6753e95e17ef0a174516c7adf3acee63a6735aff19fd17296f9d4681e933152d",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "--わたくしは..[F6]␣わたくしは,リリ-ナ=ド-リアン[F6]␣........あなたは?--",
+   "korean_text": "--저는..[F6] 저는, 릴리나 도리안[F6] ........당신은?--"
+  },
+  {
+   "offset": 8006,
+   "record_bytes": 21,
+   "raw_sha256": "825ecc5bef582f77f5666f251b9c82e8f16846876ef2c27434dc2e72ea5299e2",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "リリ-ナ(間違いない。あの子だわ)",
+   "korean_text": "릴리나(틀림없어. 그 아이야)"
+  },
+  {
+   "offset": 14733,
+   "record_bytes": 130,
+   "raw_sha256": "a4304f70dcadd6b65b855e2f269498bf3d4d8ee7c95f73158fdceddbb3b5d067",
+   "text_start_rel": 122,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 59 01 FC 05 00 00 A0 04 30 F8 00 00 A6 59 01 FC 05 FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 C6 07 62 02 B3 01 08 58 01 B3 47 08 88 01 B4 70 08 60 02 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 02 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 14864,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 24173,
+   "record_bytes": 326,
+   "raw_sha256": "62cd2c05698744633e3b3ca59ce6e001959e700b9bf028bbd3191fdafb6d79f5",
+   "text_start_rel": 318,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 CD 00 12 06 00 00 A0 04 30 F8 00 00 A6 CD 00 12 06 FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 87 0A 94 01 B3 BC 0A 88 01 B3 E2 0A 44 03 B4 06 0B 94 01 D0 02 39 01 F1 00 6E 00 A5 94 0A 0B 00 02 0A 03 00 50 01 00 50 01 10 54 00 B9 06 C2 10 01 00 C2 04 26 01 C0 02 97 00 F2 12 00 01 00 C2 0B 01 00 C1 05 97 00 C1 04 97 00 01 00 C2 02 97 02 26 01 C2 00 01 00 0A 14 00 02 A5 14 0A 01 00 01 0A 0E 00 B4 C7 0A 5C 02 B4 E5 0A 58 01 B4 0D 0B 5D 02 B3 1B 0B 54 01 B4 26 0B 5C 02 B3 58 0B 54 01 B4 86 0B 58 01 D0 02 22 01 F0 00 4A 00 A5 94 0A 0B 00 02 0A 03 00 50 01 00 50 01 10 54 00 B9 06 0A 14 00 02 A5 14 0A 01 00 01 0A 0E 00 B4 BD 0B 60 02 B3 CD 0B 94 01 B4 FA 0B 58 00 B4 0B 0C 60 02 B4 31 0C 88 01 B3 76 0C 94 01 B4 AD 0C 60 02 B3 DC 0C 94 01 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 03 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 24500,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 34263,
+   "record_bytes": 148,
+   "raw_sha256": "1d7d10979b997fc1786e4d02b1d02a3f6d9c71a622c0234a10d8c679fb54fb1c",
+   "text_start_rel": 140,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 F0 0F 82 05 00 00 A0 04 30 F8 00 00 A6 F0 0F 82 05 FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 C1 05 A2 00 C1 02 A2 00 B4 78 05 5C 02 B3 8B 05 1C 01 B4 D2 05 58 00 B3 FC 05 88 01 B4 D2 06 60 02 B4 1A 07 61 02 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 04 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 34412,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 42693,
+   "record_bytes": 145,
+   "raw_sha256": "f9166e6e3e20db5af28397254cfa1ca2a34e46c433c97005cae52a1e16552ca5",
+   "text_start_rel": 137,
+   "prefix_hex": "05 54 01 B4 15 06 58 01 B3 2A 06 56 01 B4 68 07 58 01 B4 BD 07 58 01 B4 AD 06 68 00 B3 EA 06 5B 00 B4 F7 06 68 00 B3 1A 07 60 02 B4 32 07 68 00 50 01 00 50 01 10 54 00 B9 06 C2 10 22 00 C7 1A 00 65 08 C2 04 B9 00 C2 02 98 02 B9 00 C2 00 34 00 C1 05 55 00 C1 05 56 00 C1 04 55 00 1E 00 C1 04 56 00 22 00 C1 0E 56 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 05 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 42839,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 51729,
+   "record_bytes": 115,
+   "raw_sha256": "1492998eff5a482099385661afb14a62e93f1565e986625161c72cbfbdfba2cc",
+   "text_start_rel": 107,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 E4 0F DE 06 00 00 A0 04 30 F8 00 00 A6 E4 0F DE 06 FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 C2 04 61 02 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 06 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 51845,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 59982,
+   "record_bytes": 43,
+   "raw_sha256": "d7ededaf2aa0f795cad4a82d7cc32000c26a93c192f0656880f75633ea119803",
+   "text_start_rel": 33,
+   "prefix_hex": "BF 00 07 C1 05 D0 00 C1 02 D0 00 E9 03 FE FF 04 00 1B 00 EC 93 EC 91 EC 92 77 ED D3 ED A9 E4 F5 26",
+   "japanese_text": "は敵の全滅。",
+   "korean_text": "후에는 적 전멸。"
+  },
+  {
+   "offset": 60026,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 68368,
+   "record_bytes": 302,
+   "raw_sha256": "e05e56e6696a2de9fb67f4b41bc2ce6678fb59f091e82e553443ca1363f7c4e0",
+   "text_start_rel": 284,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 44 0F EE 07 00 00 A0 04 30 F8 00 00 A6 44 0F EE 07 FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 D0 02 23 01 F1 00 64 00 B4 AB 05 8C 02 B3 C3 05 5D 02 B4 D0 05 8C 02 B4 FC 05 8C 02 B3 36 06 5C 02 B4 5D 06 8C 02 A5 94 0A 0B 00 02 0A 03 00 50 01 00 50 01 10 54 00 B9 06 C2 10 2C 01 C1 05 A2 00 C1 05 A3 00 C2 0B 54 00 C2 0B 2C 01 C1 02 A2 00 C1 02 A3 00 C2 00 54 00 C2 00 2C 01 0A 14 00 02 A5 14 0A 01 00 01 0A 0E 00 B4 8B 13 78 00 B4 B8 13 78 00 B3 99 10 60 02 B3 28 12 58 00 B4 9D 10 78 00 B3 B4 10 54 01 B4 BC 10 78 00 B3 CF 10 56 01 50 01 00 50 01 10 54 00 B9 06 C2 04 1F 00 C2 02 55 02 1F 00 C2 00 1E 00 C2 0E 01 C2 0E 0C C2 11 08 02 C2 11 11 02 D5 00 30 75 D0 00 AC 00 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 08 E9 03 FE FF 04 00 15 00",
+   "japanese_text": "ラインX1(ロ-レライ)の破壊",
+   "korean_text": "라인X1(로렐라이) 파괴"
+  },
+  {
+   "offset": 68671,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 80389,
+   "record_bytes": 187,
+   "raw_sha256": "0f1c6f838c079e2b601941e2069af5bdac26d7f4a511179480651702d48e88d5",
+   "text_start_rel": 172,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 0C 01 86 07 00 00 A0 04 30 F8 00 00 A6 0C 01 86 07 FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 C2 00 F7 00 B4 D4 08 88 01 B3 0C 09 70 03 B4 32 09 68 00 B3 78 09 58 00 B4 BE 09 60 02 D0 02 26 01 F1 00 23 00 B4 E6 09 78 05 B3 25 0A 60 02 B4 3A 0A 78 05 B4 5D 0A 8A 01 B4 8F 0A 78 05 C2 10 5E 81 C1 0E 5E 07 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 09 E9 03 FE FF 04 00 12 00",
+   "japanese_text": "ギャン(マ=クベ)の破壊",
+   "korean_text": "갼(마 쿠베) 파괴"
+  },
+  {
+   "offset": 80577,
+   "record_bytes": 13,
+   "raw_sha256": "c51b61b68ee57ad048e82e9198526c933e78f2c77e1b808fbf2876cf4ee2e4f8",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "兜甲児が倒される",
+   "korean_text": "코지 격파당함"
+  },
+  {
+   "offset": 80591,
+   "record_bytes": 19,
+   "raw_sha256": "90297f76f39119b4097bef2702a68ef81b52dd9f51e6dd57e2fa0e9fd76bfb21",
+   "text_start_rel": 4,
+   "prefix_hex": "04 00 12 00",
+   "japanese_text": "ギャン(マ=クベ)の破壊",
+   "korean_text": "갼(마 쿠베) 파괴"
+  },
+  {
+   "offset": 80611,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 89828,
+   "record_bytes": 262,
+   "raw_sha256": "fb122ab0c8cdf6825e027b34db83b446f196c33b8aecb8db934a946c48023ab1",
+   "text_start_rel": 247,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 7C 00 6E 09 00 00 A0 04 30 F8 00 00 A6 7C 00 6E 09 FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 D0 02 28 01 F1 00 44 00 B4 D2 04 54 01 B3 F3 04 78 01 B3 26 05 74 01 B4 47 05 54 01 B3 62 05 74 01 B3 8C 05 70 01 B3 BE 05 78 01 B3 EA 05 74 01 B4 0E 06 54 01 50 01 00 50 01 10 54 00 B9 06 0A 3C 00 C2 10 5F 81 C1 0E 5F 07 D0 02 26 01 F1 00 4B 00 B4 1D 06 68 00 50 01 00 50 01 10 54 00 B9 06 0A 3C 00 B3 32 06 61 02 B4 3A 06 78 05 B3 60 06 8A 01 B4 77 06 78 05 B3 94 06 8A 01 B4 B4 06 78 05 B3 D2 06 8A 01 B4 DB 06 68 00 B3 EE 06 59 00 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 0A E9 03 FE FF 04 00 12 00",
+   "japanese_text": "ギャン(マ=クベ)の破壊",
+   "korean_text": "갼(마 쿠베) 파괴"
+  },
+  {
+   "offset": 90091,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 98058,
+   "record_bytes": 267,
+   "raw_sha256": "92b194e86073efcb57353e8660ae95505fa57d9f27e22799d427c31b24ab0f17",
+   "text_start_rel": 259,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 24 00 76 0B 00 00 A0 04 30 F8 00 00 A6 24 00 76 0B FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 C1 05 5B 01 C1 02 5B 01 C2 00 5C 00 B4 87 06 1C 01 B3 A7 06 50 00 B4 C7 06 D4 00 B3 C5 09 50 00 B3 F5 09 50 00 D0 00 44 00 B3 A3 0A 50 00 B4 84 08 D4 00 B3 AA 08 50 00 B4 2A 07 60 02 B3 40 07 50 00 B4 6C 07 1C 01 B3 04 0A 50 00 B3 47 0A 50 00 B4 F0 07 60 02 B3 0B 08 50 00 B4 23 08 60 02 50 01 00 50 01 10 54 00 B9 06 0A 1E 00 C1 05 35 00 C0 0D 81 08 00 F0 00 0F 00 C2 0B 07 00 C1 04 35 00 07 00 03 0C 00 C2 0B 08 00 C1 04 35 00 08 00 C1 05 47 00 C2 0B 0A 00 C1 04 47 00 0A 00 C1 0E 35 06 C1 0E 47 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 0B E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 98326,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 107557,
+   "record_bytes": 223,
+   "raw_sha256": "7836a6f6c7a5a1532d3a0aeb1d237a45e35cc91a8ab51c243aeeaf82a2ad40d5",
+   "text_start_rel": 215,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 54 00 BE 0B 00 00 A0 04 30 F8 00 00 A6 54 00 BE 0B FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 45 0A 04 00 B4 5C 0A 04 00 B4 83 0A 04 00 B3 9D 0A 56 01 A5 94 0A 0B 00 02 0A 03 00 50 01 00 50 01 10 54 00 B9 06 0A 14 00 02 A5 14 0A 01 00 01 0A 0E 00 B4 09 07 A4 03 B3 2C 07 5C 02 B4 4C 07 A7 03 50 01 00 50 01 10 54 00 B9 06 C1 05 97 00 C2 04 09 00 C1 04 97 00 09 00 C1 05 55 00 C2 04 21 00 C1 04 55 00 21 00 C2 0F 18 00 1B 00 C2 0F 19 00 1C 00 C2 0F 1A 00 1D 00 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 0C E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 107781,
+   "record_bytes": 19,
+   "raw_sha256": "6364fee922bade293e23c283d8c8a687ea3cbe64305ef7dfa5bd4e6e3e41c594",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "ミデアの撃墜,味方の全滅",
+   "korean_text": "미데아 격추, 아군 전멸"
+  },
+  {
+   "offset": 107801,
+   "record_bytes": 12,
+   "raw_sha256": "01b660cdab19979ae92f8f06ceaa321831c014620146399e05354048b1ee0ebf",
+   "text_start_rel": 4,
+   "prefix_hex": "04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 107814,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 116928,
+   "record_bytes": 185,
+   "raw_sha256": "af15bbbff9610bb49a8cfcc58f893233a58af75dab5d3c77e8fda56d648b6c52",
+   "text_start_rel": 169,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 7C 00 6E 0A 00 00 A0 04 30 F8 00 00 A6 7C 00 6E 0A FE FC 00 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 5C 04 A4 03 B3 81 04 60 02 B4 D0 04 5C 02 D0 02 2A 01 F1 00 2A 00 B3 D2 04 70 00 B4 DC 04 58 00 B3 F9 04 70 00 B4 7A 07 58 00 B4 D5 07 58 00 B3 90 05 70 00 B4 A5 05 58 00 B3 C8 05 70 00 50 01 00 50 01 10 54 00 B9 06 D0 00 AF 00 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 0D E9 03 FE FF 04 00 13 00",
+   "japanese_text": "ビグ.ザム(ドズル)の破壊",
+   "korean_text": "빅 잠(도즐) 파괴"
+  },
+  {
+   "offset": 117114,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 126583,
+   "record_bytes": 35,
+   "raw_sha256": "0a461902a2804659f8be5b2edf8460aa227ba643444a12177700408793b0a942",
+   "text_start_rel": 27,
+   "prefix_hex": "C1 0E 1A 02 C2 10 1C 80 C1 0E 1C 06 BF 00 0E D0 01 49 00 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 126619,
+   "record_bytes": 14,
+   "raw_sha256": "22dadc12e257cb87e470b3595719ee5f90142679b8db09432fce307667ac4c7d",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "ネェル.ア-ガマの破壊",
+   "korean_text": "넬 아가마 파괴"
+  },
+  {
+   "offset": 135849,
+   "record_bytes": 189,
+   "raw_sha256": "266a65fd1cf931a6a672140c8739d0ddb7bf56881955524ec5bb3b1e04492dd8",
+   "text_start_rel": 181,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A1 00 01 A3 E6 0F 70 06 00 B0 A4 9E F5 02 00 4A FC 00 B0 A1 01 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 B7 04 5C 02 B3 CA 04 58 00 B4 F2 04 D4 00 B3 25 05 68 00 B4 34 05 54 01 B3 3D 05 68 00 B4 69 05 A4 03 B3 75 05 68 00 B4 89 05 88 01 D0 02 2C 01 F1 00 25 00 B4 95 05 54 01 B3 B0 05 58 00 B4 C6 05 84 00 B3 DF 05 56 01 B4 03 06 8E 01 B3 0C 06 44 03 B4 3A 06 8C 01 B3 4A 06 61 02 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 0F E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 136039,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 143908,
+   "record_bytes": 131,
+   "raw_sha256": "c80f40634162c103ac998ea917ce7dcd68635f9a3078f939400012f6978507eb",
+   "text_start_rel": 123,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A1 00 01 A3 E6 0F E0 05 00 B0 A4 0A F3 02 00 B6 F9 00 B0 A1 01 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 53 09 5C 02 B3 68 09 A4 03 B4 93 09 44 03 B3 A8 09 8C 01 B4 D8 09 54 01 B3 0D 0A 58 00 B4 2D 0A 70 03 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 10 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 144040,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 153840,
+   "record_bytes": 205,
+   "raw_sha256": "b179bb392d78137fe955c65b507c44cf4c2651905b60ae9b6ffc377c0f6d268e",
+   "text_start_rel": 166,
+   "prefix_hex": "75 FA 00 B0 A1 01 01 02 A5 14 0A 01 00 01 0A 0E 00 D0 02 2E 01 F0 00 14 00 B4 52 08 56 01 B3 7E 08 70 03 B4 98 08 60 02 03 11 00 B4 BD 08 58 00 B3 DF 08 5C 02 B4 FE 08 56 01 D0 02 30 01 F1 00 34 00 A5 94 0A 0B 00 02 0A 03 00 50 01 00 50 01 10 54 00 B9 06 0A 14 00 02 A5 14 0A 01 00 01 0A 0E 00 D0 02 30 01 F1 00 00 00 B4 EE 08 88 01 B3 FD 08 58 01 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 11 D0 01 2E 01 D0 01 49 00 E9 03 FE FF 04 00 2A 00",
+   "japanese_text": "脱出ポイントにネェル.ア-ガマがたどり着くこと,もしくは敵の全滅",
+   "korean_text": "탈출 지점에 넬 아가마 도달, 또는 적 전멸"
+  },
+  {
+   "offset": 154046,
+   "record_bytes": 14,
+   "raw_sha256": "22dadc12e257cb87e470b3595719ee5f90142679b8db09432fce307667ac4c7d",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "ネェル.ア-ガマの破壊",
+   "korean_text": "넬 아가마 파괴"
+  },
+  {
+   "offset": 163397,
+   "record_bytes": 131,
+   "raw_sha256": "97b606910bdbf6b19d10c01f8972f44d070c7b65f6f84bb0ffbfa1be4fff7e81",
+   "text_start_rel": 103,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A1 00 01 A3 66 00 50 02 00 B0 A4 D3 F7 F8 FE 03 F9 00 B0 A1 01 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 85 05 88 01 B3 95 05 8C 01 B4 BD 05 61 02 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 12 E9 03 FE FF 04 00 1F 00",
+   "japanese_text": "11タ-ン以内に,すべての発電ミラ-の破壊",
+   "korean_text": "11턴 이내에 모든 발전 미러 파괴"
+  },
+  {
+   "offset": 163529,
+   "record_bytes": 24,
+   "raw_sha256": "2c71e0965f04b2e495bf351e1def6ee7688495333a5a30e85b802a7f16b22c06",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "ソ-ラレイの発動,または味方の全滅",
+   "korean_text": "솔라 레이 발동 또는 아군 전멸"
+  },
+  {
+   "offset": 163554,
+   "record_bytes": 12,
+   "raw_sha256": "01b660cdab19979ae92f8f06ceaa321831c014620146399e05354048b1ee0ebf",
+   "text_start_rel": 4,
+   "prefix_hex": "04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 163567,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 171141,
+   "record_bytes": 293,
+   "raw_sha256": "180128b7e299b25c1cb87ec0c6c9b2db0cd4405d45becb272f01613a63dab437",
+   "text_start_rel": 285,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A1 00 01 A3 E6 0F 70 06 00 B0 A4 9E F5 02 00 4A FC 00 B0 A1 01 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 E3 03 68 00 50 01 00 50 01 10 54 00 B9 06 0A 3C 00 B4 EB 03 78 00 B3 03 04 60 02 B4 1B 04 78 00 B3 50 04 60 02 B4 6A 04 78 00 B3 73 04 60 02 B4 78 04 A7 03 B3 AB 04 61 02 B4 B2 04 78 00 D0 02 2A 01 F1 00 61 00 B4 C4 04 78 00 B3 D9 04 58 00 B4 E4 04 78 00 B4 17 05 71 00 B3 1E 05 58 00 B4 43 05 78 00 B4 7C 05 70 00 B3 8B 05 58 00 B4 F4 07 78 00 B4 21 08 78 00 B4 75 08 78 00 B3 50 06 58 00 B4 59 06 78 00 B3 85 06 58 00 B3 A6 06 68 00 B4 C5 06 78 00 B3 EC 06 68 00 B4 F9 06 78 00 B3 03 07 60 02 B3 1C 07 60 02 B4 4D 07 78 00 B3 9D 07 61 02 50 01 00 50 01 10 54 00 B9 06 D5 00 50 C3 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 13 C1 0E E9 02 C1 0E 35 02 C1 0E DC 02 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 171435,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 179378,
+   "record_bytes": 120,
+   "raw_sha256": "818682ea5351a38ec8e97f68c30e0d04231711044ebf01a15663b2838439f620",
+   "text_start_rel": 112,
+   "prefix_hex": "D0 02 33 01 F1 00 5F 00 A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A1 00 01 A3 E2 0F EB 09 00 B0 A4 AA FC 51 00 AF F4 00 B0 A3 58 02 96 04 00 A0 A1 01 01 02 A5 14 0A 01 00 01 0A 0E 00 B1 F2 03 D7 00 50 01 00 50 01 10 54 00 B9 06 C1 02 38 80 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 14 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 179499,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 186582,
+   "record_bytes": 123,
+   "raw_sha256": "32725f483fab2b73c16464b7635d0952eca806cee7dd5d495f7cc82b7030b852",
+   "text_start_rel": 115,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A1 00 01 A3 E2 0F EB 09 00 B0 A4 AA FC 51 00 AF F4 00 B0 A3 58 02 96 04 00 A0 A1 01 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 CF 04 5C 02 B3 F9 04 58 00 B4 1C 05 54 01 B3 3C 05 A4 03 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 15 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 186706,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 195405,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 204543,
+   "record_bytes": 172,
+   "raw_sha256": "f2622e197f846c759edbbcfeaf41c2097cb88098e4647d733f06a3e15be359db",
+   "text_start_rel": 163,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A1 00 01 A3 F2 0F 1B 00 00 B0 A4 6C 00 51 00 A1 F5 00 B0 A3 58 02 F6 0D 00 A0 A1 01 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 8B 04 68 00 B3 BB 04 61 02 B4 D9 04 68 00 50 01 00 50 01 10 54 00 B9 06 A3 F2 0F 0B 00 3C B0 A4 12 00 51 00 69 FA 3C B0 A0 07 0A 01 00 A1 0C FB 0A 0A 00 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 17 C0 25 98 00 E9 03 FE FF 04 00 22 00 32 30 AE 11 DF 7D 66 3A D8 11 3B 9A 93 D8 CF 8E ED 5E 8A E4 F5 26",
+   "japanese_text": "は敵の全滅",
+   "korean_text": "후에는 적 전멸"
+  },
+  {
+   "offset": 204716,
+   "record_bytes": 13,
+   "raw_sha256": "0acdcdaff7a4c8f41532af5e12ee5f78d1d7a477cba931b163ed45bb8cd75616",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "ラ-.カイラムの破壊",
+   "korean_text": "라 카이람 파괴"
+  },
+  {
+   "offset": 212154,
+   "record_bytes": 194,
+   "raw_sha256": "39e9aea2ab9b65141f48dc1930273835c9d28248b81d46217a9724cb2da54466",
+   "text_start_rel": 179,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 E4 00 0E 03 00 00 A0 04 30 F8 00 00 A6 E4 00 0E 03 FE FC 00 A1 01 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 B4 CD 03 61 02 B3 0D 04 68 00 50 01 00 50 01 10 54 00 B9 06 0A 3C 00 B4 21 04 78 00 D0 02 2A 01 F1 00 0C 00 B3 6D 04 5B 00 B4 86 04 78 00 B3 A5 07 62 02 B3 E7 07 61 02 B4 1F 05 5C 02 B3 2B 05 62 02 B4 4C 05 88 01 50 01 00 50 01 10 54 00 B9 06 C1 0E 98 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 18 E9 03 FE FF 04 00 12 00",
+   "japanese_text": "ジ.O(シロッコ)の破壊",
+   "korean_text": "지 오(시로코) 파괴"
+  },
+  {
+   "offset": 212349,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 220315,
+   "record_bytes": 279,
+   "raw_sha256": "ec9e22ca88247645331824367db5fd66dd4b4b0499707fff5ed0e438a15614a9",
+   "text_start_rel": 267,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 C1 0F DC 02 00 00 A0 04 30 F8 00 00 A6 C1 0F DC 02 FE FC 00 A1 01 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 C1 0E 98 02 B4 70 03 70 03 B3 83 03 54 01 A5 94 0A 0B 00 02 0A 03 00 50 01 00 50 01 10 54 00 B9 06 0A 14 00 02 A5 14 0A 01 00 01 0A 0E 00 B4 7F 03 61 02 B3 8F 03 68 00 B4 60 08 60 02 B4 AE 08 60 02 B3 0D 04 58 00 B4 D3 08 60 02 B4 25 09 60 02 D0 02 38 01 F1 00 4C 00 B3 87 04 E1 00 B4 98 04 68 00 B3 BD 04 E1 00 B4 CC 04 D5 00 B3 D7 04 E2 00 B4 EE 04 60 02 B3 02 05 D6 00 B4 13 09 60 02 B4 40 09 60 02 B3 8A 05 D6 00 B4 9C 05 E1 00 B3 AA 05 D4 00 C2 04 2F 00 C1 05 38 00 C1 04 38 00 2F 00 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 19 E9 03 FE FF 04 00 0F 00",
+   "japanese_text": "ギルギルガンの破壊",
+   "korean_text": "길길간 파괴"
+  },
+  {
+   "offset": 220595,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 220606,
+   "record_bytes": 18,
+   "raw_sha256": "224d25d65e9791a63c7d5d3d0f5ee9ae12fafe8f1db5affb907127f9896aca0d",
+   "text_start_rel": 4,
+   "prefix_hex": "04 00 11 00",
+   "japanese_text": "メカギルギルガンの破壊",
+   "korean_text": "메카 길길간 파괴"
+  },
+  {
+   "offset": 220625,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 228857,
+   "record_bytes": 126,
+   "raw_sha256": "8bd08cde92b30908dd63d08288da8d1b215a56d11a202c73b7a6892c7df40e4e",
+   "text_start_rel": 109,
+   "prefix_hex": "A1 02 01 60 00 35 58 00 60 05 A1 02 02 00 A0 00 00 A0 01 A0 03 51 0F 94 03 00 00 A0 04 30 F8 00 00 A6 51 0F 94 03 FE FC 00 A1 01 A0 07 0A 01 00 A1 0C FB 01 02 A5 14 0A 01 00 01 0A 0E 00 B2 48 02 61 02 50 01 00 50 01 10 54 00 B9 06 A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 1A E9 03 FE FF 04 00 14 00",
+   "japanese_text": "ラフレシア(カロッゾ)の破壊",
+   "korean_text": "라플레시아(카로조) 파괴"
+  },
+  {
+   "offset": 228984,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 235362,
+   "record_bytes": 36,
+   "raw_sha256": "f094f50d841739fb4229f59ca10775c56169533863e086608bfbfd134c6f826d",
+   "text_start_rel": 19,
+   "prefix_hex": "D0 00 48 00 BF 00 1B D0 00 4E 01 E9 03 FE FF 04 00 14 00",
+   "japanese_text": "ヴァルシオン(ビアン)の破壊",
+   "korean_text": "발시온(비안) 파괴"
+  },
+  {
+   "offset": 235399,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 242743,
+   "record_bytes": 40,
+   "raw_sha256": "fcadbca91447f420b9afee268f3088555d6792202d2450b0f83cdf27c301d416",
+   "text_start_rel": 32,
+   "prefix_hex": "A5 94 0A 0B 00 02 0A 03 00 A1 04 50 01 00 50 01 10 54 00 B9 06 BF 00 01 E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 242784,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 245077,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 245094,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 252669,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 252686,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 260261,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 260278,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 267853,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 267870,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 275445,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 275462,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 283037,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 283054,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 290629,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 290646,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 298221,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 298238,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 305813,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 305830,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 313405,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 313422,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 320997,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 321014,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 328589,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 328606,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 336181,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 336198,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 343773,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 343790,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 351365,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 351382,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 358957,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 358974,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 366549,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 366566,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 374141,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 374158,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 381733,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 381750,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 389325,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 389342,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 396917,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 396934,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 404509,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 404526,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  },
+  {
+   "offset": 412101,
+   "record_bytes": 16,
+   "raw_sha256": "b7ed634b25c254da3c91c8b94df001bba043b4a6c7a7a353a04627eb5f078ef7",
+   "text_start_rel": 8,
+   "prefix_hex": "E9 03 FE FF 04 00 0B 00",
+   "japanese_text": "敵の全滅",
+   "korean_text": "적 전멸"
+  },
+  {
+   "offset": 412118,
+   "record_bytes": 10,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "text_start_rel": 0,
+   "prefix_hex": "",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸"
+  }
+ ]
+}

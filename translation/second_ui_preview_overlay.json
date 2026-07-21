@@ -1,0 +1,1870 @@
+{
+ "schema": "srwcb-second-ui-preview-overlay-v1",
+ "purpose": "Compressed Korean translations for the 89 SECOND root-VM preview/condition dialogue records; rebuilt IN PLACE inside the retail 3,235-byte arena (no code or header moves).",
+ "asset_id": "common_preview_and_conditions_pool",
+ "source": {
+  "executable": "SECOND/SECOND.WAR",
+  "pool_offset_hex": "0x5DC6..0x6A69"
+ },
+ "policy": {
+  "truncation_allowed": false,
+  "control_tokens_preserved": true,
+  "in_place_arena_bytes": 3235,
+  "measured_record_bytes": 3200
+ },
+ "record_count": 89,
+ "records": [
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 0,
+   "source_offset": 24006,
+   "raw_sha256": "ffa773cce2e1744b4bd1ab081b70ac7fdc8d34822b875e52a9c4bdef35acab4e",
+   "japanese_text": "の全滅",
+   "korean_text": " 전멸",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r0_0"
+    }
+   ],
+   "ko_parts": {
+    "r0_0": " 전멸"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 2,
+   "source_offset": 24013,
+   "raw_sha256": "2a4d98a6fd0244db30788d056421007d4a4bbd4769d71d0282bb445fc4ca4edf",
+   "japanese_text": "味方の全滅",
+   "korean_text": "아군 전멸",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r2_0"
+    }
+   ],
+   "ko_parts": {
+    "r2_0": "아군 전멸"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 4,
+   "source_offset": 24024,
+   "raw_sha256": "a2d142fb962da6443f17162af2840d877fe7b6ea844e77c7576a2cfd1a189c41",
+   "japanese_text": "予告編\nDrJ「コロニ-に核攻撃を仕掛けるなどと人道に\n外れた戦術も,なりふりかまわぬ勝利のためなら\nいたしかたないのだろう。よってここに降伏を宣言する」",
+   "korean_text": "예고편 닥터J「콜로니 핵 공격이란 비인도적 전술도 승리 위해선 어쩔 수 없지. 이에 항복을 선언한다」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r4_0"
+    }
+   ],
+   "ko_parts": {
+    "r4_0": "예고편 닥터J「콜로니 핵 공격이란 비인도적 전술도 승리 위해선 어쩔 수 없지. 이에 항복을 선언한다」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 5,
+   "source_offset": 24121,
+   "raw_sha256": "3b5a779767d0aafe3a985d5107bb79d2f904c3d34463ab5a037002c92678817e",
+   "japanese_text": "レディ「よし,降伏を認める。ただちにガンダムモドキは\n投降せよ」",
+   "korean_text": "레이디「항복 인정. 가짜 건담은 즉시 투항하라」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r5_0"
+    }
+   ],
+   "ko_parts": {
+    "r5_0": "레이디「항복 인정. 가짜 건담은 즉시 투항하라」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 6,
+   "source_offset": 24159,
+   "raw_sha256": "a4f2aaabc43d6c3670ed3ed08101cb57901ab896a41f38714f761d1d783d7d7a",
+   "japanese_text": "ヒイロ「‥‥‥‥」",
+   "korean_text": "히이로「…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r6_0"
+    }
+   ],
+   "ko_parts": {
+    "r6_0": "히이로「…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 7,
+   "source_offset": 24173,
+   "raw_sha256": "cf2ace9d649bad26ba6c4c627df0902cc2ea05d6d617f2e9a0c179071b26773a",
+   "japanese_text": "ブライト「!!　彼は‥‥ヒイロ=ユイとかいう‥‥」",
+   "korean_text": "브라이트「!! 그는… 히이로 유이란…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r7_0"
+    }
+   ],
+   "ko_parts": {
+    "r7_0": "브라이트「!! 그는… 히이로 유이란…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 8,
+   "source_offset": 24204,
+   "raw_sha256": "f57ccfb2ac37e2df497c88253e4aabbfbd2b159102015d128ed17fbaf6573483",
+   "japanese_text": "DrJ「降伏はする。しかしガンダムは渡せん!\nくり返す!　降伏はする!　しかしガンダムは渡せん!!」",
+   "korean_text": "닥터J「항복한다, 건담은 못 준다! 반복한다! 항복한다, 건담은 못 준다!!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r8_0"
+    }
+   ],
+   "ko_parts": {
+    "r8_0": "닥터J「항복한다, 건담은 못 준다! 반복한다! 항복한다, 건담은 못 준다!!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 9,
+   "source_offset": 24262,
+   "raw_sha256": "0e6722dcfe248d1399234ac210d18305e51187dd8e9185bbcd946a9c33d057ef",
+   "japanese_text": "ヒイロ「任務‥‥了解!」",
+   "korean_text": "히이로「임무… 확인!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r9_0"
+    }
+   ],
+   "ko_parts": {
+    "r9_0": "히이로「임무… 확인!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 10,
+   "source_offset": 24281,
+   "raw_sha256": "d059b8d079c3bb0ff922529ca0095915cf7f68fa889b74b3da41fb9fba573172",
+   "japanese_text": "レディ「何!?　自爆したというのか!?」",
+   "korean_text": "레이디「뭣!? 자폭했다고!?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r10_0"
+    }
+   ],
+   "ko_parts": {
+    "r10_0": "레이디「뭣!? 자폭했다고!?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 11,
+   "source_offset": 24305,
+   "raw_sha256": "78c7e5e6bd33dff2102f3fb120eeeaf3f309c9bcf12eb667785697eb9e44acb8",
+   "japanese_text": "ギレン「ハマ-ンよ,よくぞ我々のおらぬ間,DCを\n維持してきてくれた。礼をいうぞ」",
+   "korean_text": "기렌「하만, 우리 없는 새 DC를 지켰군. 고맙다」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r11_0"
+    }
+   ],
+   "ko_parts": {
+    "r11_0": "기렌「하만, 우리 없는 새 DC를 지켰군. 고맙다」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 12,
+   "source_offset": 24352,
+   "raw_sha256": "efa1ef8ef46f21473791ce56049157d307f131f236c7a9caf692233b1b513663",
+   "japanese_text": "ハマ-ン「‥‥もったいないお言葉」",
+   "korean_text": "하만「…과분한 말씀을」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r12_0"
+    }
+   ],
+   "ko_parts": {
+    "r12_0": "하만「…과분한 말씀을」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 13,
+   "source_offset": 24374,
+   "raw_sha256": "e7514c490b84d1195fc0aa282d79b2ade3fb206abcec7858ec238739a765464d",
+   "japanese_text": "キシリア「しかし総帥,現在の情況は,決して順調とは\nいえません。早急に組織の再編を行う必要があります」",
+   "korean_text": "키시리아「총수님, 상황은 순조롭지 않습니다. 조직 재편이 시급합니다」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r13_0"
+    }
+   ],
+   "ko_parts": {
+    "r13_0": "키시리아「총수님, 상황은 순조롭지 않습니다. 조직 재편이 시급합니다」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 14,
+   "source_offset": 24444,
+   "raw_sha256": "4a187b594fe38e4506d0f8af1c51ce5d4319445688dae8b8628fa8ee72f7f1d2",
+   "japanese_text": "ギレン「そうだな‥‥」",
+   "korean_text": "기렌「그래…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r14_0"
+    }
+   ],
+   "ko_parts": {
+    "r14_0": "기렌「그래…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 15,
+   "source_offset": 24458,
+   "raw_sha256": "8b30437e75934fca8d2a046cfe866175d9d6cfe8d27df7ef92895220ca3078db",
+   "japanese_text": "レディ「閣下‥‥これからいかがなさるおつもりなのです?」",
+   "korean_text": "레이디「각하…어쩌실 작정입니까?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r15_0"
+    }
+   ],
+   "ko_parts": {
+    "r15_0": "레이디「각하…어쩌실 작정입니까?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 16,
+   "source_offset": 24491,
+   "raw_sha256": "6421ebea2dc54c8bf5ad635e2ef367e4d597d656ca13391851ee95414adee339",
+   "japanese_text": "トレ-ズ「時代は私を排除しようとしている。\nならば,私はその流れに逆らう事はできない」",
+   "korean_text": "트라이즈「시대가 날 버리는군. 흐름은 못 거스른다」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r16_0"
+    }
+   ],
+   "ko_parts": {
+    "r16_0": "트라이즈「시대가 날 버리는군. 흐름은 못 거스른다」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 17,
+   "source_offset": 24544,
+   "raw_sha256": "90c33c5059ba8b78c449b2cfb4d907d9ed3977bd195822b5c5d5e7f7e8dc40a2",
+   "japanese_text": "レディ「閣下‥‥」",
+   "korean_text": "레이디「각하…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r17_0"
+    }
+   ],
+   "ko_parts": {
+    "r17_0": "레이디「각하…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 18,
+   "source_offset": 24558,
+   "raw_sha256": "4a6cf59562a41a63b5295ec066236a800f25a9d071873c88cf16c9dac7a29429",
+   "japanese_text": "トレ-ズ「わかってくれ,レディ。今はその時ではないのだ」",
+   "korean_text": "트라이즈「알아줘 레이디, 지금은 때가 아냐」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r18_0"
+    }
+   ],
+   "ko_parts": {
+    "r18_0": "트라이즈「알아줘 레이디, 지금은 때가 아냐」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 19,
+   "source_offset": 24589,
+   "raw_sha256": "0c0904532fe46cee44ebe2c565ccea9f76105cb3cc46f93f52e2a2d0a9689650",
+   "japanese_text": "トレ-ズ(ゼクス‥‥君はどこにいる?　このままでは\n地球連邦もティタ-ンズも,下らぬ人間の\n下らぬ行動を許してしまう‥‥)",
+   "korean_text": "트라이즈(제크스…어딨나? 이대론 연방도 티탄즈도 못난 자들 짓을 허용한다…)",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r19_0"
+    }
+   ],
+   "ko_parts": {
+    "r19_0": "트라이즈(제크스…어딨나? 이대론 연방도 티탄즈도 못난 자들 짓을 허용한다…)"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 20,
+   "source_offset": 24667,
+   "raw_sha256": "6e923ad17c785086bcc42b33bff20f753ca788886fbe9c36f605f63e25479270",
+   "japanese_text": "ハタリ「ベス!　見てくれ!　この全天座標の位置‥‥」",
+   "korean_text": "하타리「베스! 봐! 전천 좌표 위치가…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r20_0"
+    }
+   ],
+   "ko_parts": {
+    "r20_0": "하타리「베스! 봐! 전천 좌표 위치가…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 21,
+   "source_offset": 24703,
+   "raw_sha256": "a0596be55bf6016bc72dddc3e8364e4f75a41ebd69d6de218cbc505539321604",
+   "japanese_text": "ベス「?　太陽系内じゃない?　しかし‥‥」",
+   "korean_text": "베스「? 태양계 안? 하지만…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r21_0"
+    }
+   ],
+   "ko_parts": {
+    "r21_0": "베스「? 태양계 안? 하지만…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 22,
+   "source_offset": 24731,
+   "raw_sha256": "18fbb6ece493c56825b04e25b9840b4c86e13ad07e11792e9fc4f99c08039ce0",
+   "japanese_text": "ハタリ「ああ,モニタ-に映っているのは,どう見ても\n土星だ。全天座標がずれているらしい」",
+   "korean_text": "하타리「모니터에 비친 건 토성. 전천 좌표가 어긋났어」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r22_0"
+    }
+   ],
+   "ko_parts": {
+    "r22_0": "하타리「모니터에 비친 건 토성. 전천 좌표가 어긋났어」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 23,
+   "source_offset": 24784,
+   "raw_sha256": "4458ad0027a7d84eaf38ef89533349d0de25d9cb9e4fdf07894e47958b899843",
+   "japanese_text": "ベス「故障か?」",
+   "korean_text": "베스「고장?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r23_0"
+    }
+   ],
+   "ko_parts": {
+    "r23_0": "베스「고장?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 24,
+   "source_offset": 24795,
+   "raw_sha256": "56578b2fbb1a3fafef1cb2c4874fdd4626493c2ace2db08c4ed9c84d4a879900",
+   "japanese_text": "ハタリ「わからん‥‥調べてみる」",
+   "korean_text": "하타리「글쎄…알아보마」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r24_0"
+    }
+   ],
+   "ko_parts": {
+    "r24_0": "하타리「글쎄…알아보마」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 25,
+   "source_offset": 24815,
+   "raw_sha256": "37f2b928e36d51b6f391d9a9812da4be02293ee05ad6e03fa7283df47b33fde5",
+   "japanese_text": "カララ「!!　ベス!　あれは!!」",
+   "korean_text": "카라라「베스! 저건!!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r25_0"
+    }
+   ],
+   "ko_parts": {
+    "r25_0": "카라라「베스! 저건!!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 26,
+   "source_offset": 24833,
+   "raw_sha256": "34eaeaf23f7904db500c3de9dbeb0e1a0ee2a8afca230687fdc188657c567c57",
+   "japanese_text": "ベス「バッフクランか!?　バカな,あのデスドライブの\nあとをつけてきたというのか!?」",
+   "korean_text": "베스「버프 클랜!? 데스 드라이브를 쫓아왔나!?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r26_0"
+    }
+   ],
+   "ko_parts": {
+    "r26_0": "베스「버프 클랜!? 데스 드라이브를 쫓아왔나!?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 27,
+   "source_offset": 24877,
+   "raw_sha256": "8cbbc87516dd08dcc2b2eb6e7d16a5457d80f5761c49c34d4646428ed9ee48e5",
+   "japanese_text": "コスモ「くそっ!　カ-シャ,いくぞ!!」",
+   "korean_text": "코스모「칫! 카샤 간다!!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r27_0"
+    }
+   ],
+   "ko_parts": {
+    "r27_0": "코스모「칫! 카샤 간다!!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 28,
+   "source_offset": 24898,
+   "raw_sha256": "eb367b60ed7ff960e95c27b9a082dfc3d2ef67e03c65d172feb240131e47e0b9",
+   "japanese_text": "ダラム「僥倖というべきなのだろうな‥‥」",
+   "korean_text": "다람「행운이랄까…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r28_0"
+    }
+   ],
+   "ko_parts": {
+    "r28_0": "다람「행운이랄까…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 29,
+   "source_offset": 24923,
+   "raw_sha256": "3e98bafcf138d0651d8b51ef0db543159af5006a1b6d0dea336cf9c65bfcabeb",
+   "japanese_text": "ギジェ「は?」",
+   "korean_text": "기제「예?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r29_0"
+    }
+   ],
+   "ko_parts": {
+    "r29_0": "기제「예?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 30,
+   "source_offset": 24931,
+   "raw_sha256": "cec40e51a183f984e44f064fa65cfe4fa422d0669fcc3e796e7f4aca9351bc2c",
+   "japanese_text": "ダラム「これほど近くにロゴダウの異星人の艦を\nとらえる事ができたという事実がだ。⟦F7⟧　本国から正規軍の追撃隊が到着する前に,\n我々の手柄をたてられる」",
+   "korean_text": "다람「로고다우 외계 함선을 이리 가까이 잡았단 거다. 본국 정규군 추격대 오기 전에 공을 세울 수 있다」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r30_0"
+    },
+    {
+     "kind": "page_break",
+     "raw_hex": "F7"
+    },
+    {
+     "kind": "text",
+     "part_id": "r30_1"
+    }
+   ],
+   "ko_parts": {
+    "r30_0": "다람「로고다우 외계 함선을 이리 가까이 잡았단 거다.",
+    "r30_1": " 본국 정규군 추격대 오기 전에 공을 세울 수 있다」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 31,
+   "source_offset": 25028,
+   "raw_sha256": "33818de51ff0dc75156438f2469dce68795f03259c6b285562796571eb5b5f80",
+   "japanese_text": "ギジェ「はっ」",
+   "korean_text": "기제「옙」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r31_0"
+    }
+   ],
+   "ko_parts": {
+    "r31_0": "기제「옙」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 32,
+   "source_offset": 25036,
+   "raw_sha256": "6101ffc9bf5c765843585f974fc40e11d59637153e23eacf3f0e57ddbf00bbfc",
+   "japanese_text": "ダラム「忘れるな,我々は正規軍ではないのだ。\n巨神をとらえるために給料をもらっているのだからな」",
+   "korean_text": "다람「잊지 마, 우린 정규군이 아냐. 거신 잡는 게 밥벌이다」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r32_0"
+    }
+   ],
+   "ko_parts": {
+    "r32_0": "다람「잊지 마, 우린 정규군이 아냐. 거신 잡는 게 밥벌이다」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 33,
+   "source_offset": 25094,
+   "raw_sha256": "a99462888d101c17f3f94678ed32df838ee3e712d9431c6177e96ada945032ec",
+   "japanese_text": "⟦F9:02⟧「‥‥‥?」",
+   "korean_text": "「…?」",
+   "translation_parts": [
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r33_0"
+    }
+   ],
+   "ko_parts": {
+    "r33_0": "「…?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 34,
+   "source_offset": 25106,
+   "raw_sha256": "ce21fd17d30f9f6274c10321f30910729a09b96a7280a845beb2bdcd1d012384",
+   "japanese_text": "⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」シンジ「‥‥今日は,⟦F9:02⟧さんの誕生日ですよね。\nお祝いに,みんなでケ-キを作ってみたんですけど‥‥」",
+   "korean_text": "「…?」「…?」「…?」「…?」「…?」「…?」「…?」신지「…오늘 님 생일이잖아요. 축하하려고 다 같이 케이크를 만들어 봤는데…」",
+   "translation_parts": [
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r34_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r34_1"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r34_2"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r34_3"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r34_4"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r34_5"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r34_6"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r34_7"
+    }
+   ],
+   "ko_parts": {
+    "r34_0": "「…?」",
+    "r34_1": "「…?」",
+    "r34_2": "「…?」",
+    "r34_3": "「…?」",
+    "r34_4": "「…?」",
+    "r34_5": "「…?」",
+    "r34_6": "「…?」신지「…오늘 ",
+    "r34_7": "님 생일이잖아요. 축하하려고 다 같이 케이크를 만들어 봤는데…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 35,
+   "source_offset": 25245,
+   "raw_sha256": "a9c6397c65318d4858d1bae8f8051dccd418c62bfd7768d81974227d08c5b411",
+   "japanese_text": "アスカ「そうよ,あなたのために私達が精根込めて\n作ったんだから。願い事でもしてさっさと火\n消しなさいよっ!」",
+   "korean_text": "아스카「그래, 널 위해 정성껏 만든 거야. 소원이나 빌고 촛불 꺼!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r35_0"
+    }
+   ],
+   "ko_parts": {
+    "r35_0": "아스카「그래, 널 위해 정성껏 만든 거야. 소원이나 빌고 촛불 꺼!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 36,
+   "source_offset": 25310,
+   "raw_sha256": "335b95dbe5d7bae908606ce0948037fd98835c4dfee2954535d38dbaca436d7c",
+   "japanese_text": "シンジ「‥‥よく言うよ‥‥アスカはロウソクを\n立てただけじゃないか‥‥」",
+   "korean_text": "신지「…말은 잘해…아스카는 초만 꽂았잖아…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r36_0"
+    }
+   ],
+   "ko_parts": {
+    "r36_0": "신지「…말은 잘해…아스카는 초만 꽂았잖아…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 37,
+   "source_offset": 25355,
+   "raw_sha256": "a9b5581837bbda08fc1223c020c00a8a73622a8201640f1f5b18baee4be2e956",
+   "japanese_text": "アスカ「な,何よあんた,文句があるのなら\nはっきりいいなさいよ!!」",
+   "korean_text": "아스카「뭐야, 불만 있음 똑바로 말해!!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r37_0"
+    }
+   ],
+   "ko_parts": {
+    "r37_0": "아스카「뭐야, 불만 있음 똑바로 말해!!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 38,
+   "source_offset": 25393,
+   "raw_sha256": "da5ae5ab07e4ef5b86c5abe8d54eed724faa8a77d8bdb86374aa1da7cfc636f6",
+   "japanese_text": "⟦F9:02⟧男(ケンカする)⟦F9:02⟧女(ケンカしない)⟦G:AA7⟧JUMP-6シンジ「じゃあ,はっきり言うけど‥‥」",
+   "korean_text": "남(싸운다)여(안 싸운다)JUMP-6신지「분명히 말할게…」",
+   "translation_parts": [
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r38_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r38_1"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F5 A7"
+    },
+    {
+     "kind": "text",
+     "part_id": "r38_2"
+    }
+   ],
+   "ko_parts": {
+    "r38_0": "남(싸운다)",
+    "r38_1": "여(안 싸운다)",
+    "r38_2": "JUMP-6신지「분명히 말할게…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 39,
+   "source_offset": 25448,
+   "raw_sha256": "5089ce794dc517c3add652351bff40e94b4bfdbe295c60fa88b5b9b5eddcdfa7",
+   "japanese_text": "アスカ「な,何よ何なのよ!」",
+   "korean_text": "아스카「뭐, 뭐야!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r39_0"
+    }
+   ],
+   "ko_parts": {
+    "r39_0": "아스카「뭐, 뭐야!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 40,
+   "source_offset": 25465,
+   "raw_sha256": "ee1f90ea36b1ff115d5286958472bd3efb1c75f40b3be80661ba6a781237e2b6",
+   "japanese_text": "レイ「‥‥」",
+   "korean_text": "레이「…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r40_0"
+    }
+   ],
+   "ko_parts": {
+    "r40_0": "레이「…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 41,
+   "source_offset": 25474,
+   "raw_sha256": "1fed28d3bd4b81bfb1957cfae7bbd67d73e040052aed54163c9fae9a777577b1",
+   "japanese_text": "シンジ「!?　ア,アスカ,今日は大事な日だから\nケンカはやめとこうよ‥‥」",
+   "korean_text": "신지「!? 아스카, 중요한 날이니 싸움은 참자…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r41_0"
+    }
+   ],
+   "ko_parts": {
+    "r41_0": "신지「!? 아스카, 중요한 날이니 싸움은 참자…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 42,
+   "source_offset": 25519,
+   "raw_sha256": "22d1f258533bce28bb720d7e2e77c35796da8594dba41baa14a5660e96430526",
+   "japanese_text": "アスカ「な,何それ!?　‥‥まあいいわ\n今回は大目に見てあげるわ‥‥」",
+   "korean_text": "아스카「뭐, 뭐야!? …됐어, 이번만 봐준다…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r42_0"
+    }
+   ],
+   "ko_parts": {
+    "r42_0": "아스카「뭐, 뭐야!? …됐어, 이번만 봐준다…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 43,
+   "source_offset": 25565,
+   "raw_sha256": "5029cc538dae813b1f05348f43ba89ca2913caa9a82f77bb1cb463bab64d06d0",
+   "japanese_text": "トウジ「さて,ケンカもおさまったことやし\n⟦F9:02⟧さん火ぃ消して下さい。\n今,電気消しますんで‥‥」",
+   "korean_text": "토우지「싸움도 끝났으니 님 촛불 꺼요. 불 끕니다…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r43_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r43_1"
+    }
+   ],
+   "ko_parts": {
+    "r43_0": "토우지「싸움도 끝났으니 ",
+    "r43_1": "님 촛불 꺼요. 불 끕니다…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 44,
+   "source_offset": 25623,
+   "raw_sha256": "0d299a05fdc03afea9542046df27afddc2b47cf6e221b85357ab0cbd1d53694d",
+   "japanese_text": "トウジ「どないしたんです,何で消さんのですか?\n自分ら⟦F9:02⟧さんのために用意したんです。\n遠慮せずに,どうぞ,どうぞ」",
+   "korean_text": "토우지「왜 안 끄세요? 님 위해 준비했어요. 사양 말고 어서요」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r44_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r44_1"
+    }
+   ],
+   "ko_parts": {
+    "r44_0": "토우지「왜 안 끄세요? ",
+    "r44_1": "님 위해 준비했어요. 사양 말고 어서요」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 45,
+   "source_offset": 25690,
+   "raw_sha256": "cb3d06653a03519a710196383c8161bffa11cd211c97b7e1b6c05a2f2c18c3d3",
+   "japanese_text": "アスカ「そうよ,このバカの言うとおりだわ\nさっさと消しなさいよ!」",
+   "korean_text": "아스카「바보 말대로야, 얼른 꺼!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r45_0"
+    }
+   ],
+   "ko_parts": {
+    "r45_0": "아스카「바보 말대로야, 얼른 꺼!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 46,
+   "source_offset": 25726,
+   "raw_sha256": "85780ffad58c7634aa0c41382b0ebbe6c71af9024bfc8421d2d7475813adcff0",
+   "japanese_text": "アスカ(なんで消さないの,あんたが消さないんだったら\nわたしが代わりに消してあげるわ‥‥\nお願い事はもちろん‥‥⟦F7⟧　加持さんのお嫁さんになれますように♥)",
+   "korean_text": "아스카(왜 안 꺼? 안 끌 거면 내가 꺼 줄게… 소원은 물론… 카지 씨 신부가 되게 해줘♥)",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r46_0"
+    },
+    {
+     "kind": "page_break",
+     "raw_hex": "F7"
+    },
+    {
+     "kind": "text",
+     "part_id": "r46_1"
+    }
+   ],
+   "ko_parts": {
+    "r46_0": "아스카(왜 안 꺼? 안 끌 거면 내가 꺼 줄게… 소원은 물론…",
+    "r46_1": " 카지 씨 신부가 되게 해줘♥)"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 47,
+   "source_offset": 25817,
+   "raw_sha256": "c1d48b00a4f808852ad7bebba1068a327032d7d675407c5661023ec3c5f903fa",
+   "japanese_text": "トウジ「惣流,お前が火ぃ消したやろ」",
+   "korean_text": "토우지「소류, 네가 껐지」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r47_0"
+    }
+   ],
+   "ko_parts": {
+    "r47_0": "토우지「소류, 네가 껐지」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 48,
+   "source_offset": 25841,
+   "raw_sha256": "226cb6e5e4b3375695a425edd1d1643eaca2908f17b8573bf2956f1a24245b87",
+   "japanese_text": "アスカ「あんたバカァ?　わたしがそんなこと\nするはずないでしょ!!」",
+   "korean_text": "아스카「너 바보야? 내가 그럴 리가!!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r48_0"
+    }
+   ],
+   "ko_parts": {
+    "r48_0": "아스카「너 바보야? 내가 그럴 리가!!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 49,
+   "source_offset": 25876,
+   "raw_sha256": "037ddb162b4632e6343e342e9ff0d881984acf2c76551b1258071342cebe5ce6",
+   "japanese_text": "シンジ「そうだよトウジ。いくらアスカでも\nそんな事するはずないよ。そう思うよね綾波」",
+   "korean_text": "신지「그래. 아스카가 그럴 리가. 그치 아야나미」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r49_0"
+    }
+   ],
+   "ko_parts": {
+    "r49_0": "신지「그래. 아스카가 그럴 리가. 그치 아야나미」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 50,
+   "source_offset": 25923,
+   "raw_sha256": "675f5660a6dfd1b6f70ca4839908e1dbd03436aaf4faed68cfe3ea8faaad03de",
+   "japanese_text": "レイ「‥‥消したわ‥‥」",
+   "korean_text": "레이「…껐어…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r50_0"
+    }
+   ],
+   "ko_parts": {
+    "r50_0": "레이「…껐어…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 51,
+   "source_offset": 25941,
+   "raw_sha256": "a7b0930af8945a1bb4a8f11dbf11b4c85e2afc7ff94de85df24338ddf96c02f6",
+   "japanese_text": "シンジ「ああ,はっきり言うけどアスカはいつでも‥‥」",
+   "korean_text": "신지「그래, 아스카는 언제나…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r51_0"
+    }
+   ],
+   "ko_parts": {
+    "r51_0": "신지「그래, 아스카는 언제나…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 52,
+   "source_offset": 25971,
+   "raw_sha256": "0e7e7c3463a8ed6e65dbe03e0b96ba6ad81246fe5d2a930ab44b54ebf7d93603",
+   "japanese_text": "トウジ「お前ら夫婦ゲンカするんやったら\nこの部屋から出ていけや!」",
+   "korean_text": "토우지「부부싸움 할 거면 나가라!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r52_0"
+    }
+   ],
+   "ko_parts": {
+    "r52_0": "토우지「부부싸움 할 거면 나가라!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 53,
+   "source_offset": 26011,
+   "raw_sha256": "40820ae33d3986ad7e2000c78739baa7bac2d720bddd3056a2b748f6cfb886fa",
+   "japanese_text": "アスカ「な,何よ,うるさいわね!!」",
+   "korean_text": "아스카「시끄러워!!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r53_0"
+    }
+   ],
+   "ko_parts": {
+    "r53_0": "아스카「시끄러워!!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 54,
+   "source_offset": 26031,
+   "raw_sha256": "ee1f90ea36b1ff115d5286958472bd3efb1c75f40b3be80661ba6a781237e2b6",
+   "japanese_text": "レイ「‥‥」",
+   "korean_text": "레이「…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r54_0"
+    }
+   ],
+   "ko_parts": {
+    "r54_0": "레이「…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 55,
+   "source_offset": 26040,
+   "raw_sha256": "ecc36aff59e6a3144526c71aa40f809316c68b21ac0990d791c7e1f0637fbe98",
+   "japanese_text": "アスカ「で,出ていけばいいんでしょ,出ていけば!\nいくわよバカシンジ!」",
+   "korean_text": "아스카「나가면 되잖아! 간다 바보 신지!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r55_0"
+    }
+   ],
+   "ko_parts": {
+    "r55_0": "아스카「나가면 되잖아! 간다 바보 신지!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 56,
+   "source_offset": 26079,
+   "raw_sha256": "23dd5c9965a557884830b809ee1982d0c3506b0235969407162b8e03f3499925",
+   "japanese_text": "シンジ「ま,待てよアスカ‥‥」",
+   "korean_text": "신지「잠깐 아스카…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r56_0"
+    }
+   ],
+   "ko_parts": {
+    "r56_0": "신지「잠깐 아스카…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 57,
+   "source_offset": 26098,
+   "raw_sha256": "7ba7cc81315d35b36e8b019230fe4ff4d3612807a3f8c56f5907851c75bdf5df",
+   "japanese_text": "トウジ「⟦F9:02⟧さん,あいつらのことはほっといて\n火ぃ消して下さい。今,電気消しますんで‥‥」",
+   "korean_text": "토우지「님, 쟤들은 두고 촛불 꺼요. 불 끕니다…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r57_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r57_1"
+    }
+   ],
+   "ko_parts": {
+    "r57_0": "토우지「",
+    "r57_1": "님, 쟤들은 두고 촛불 꺼요. 불 끕니다…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 58,
+   "source_offset": 26153,
+   "raw_sha256": "e3ffde6b8491951e288806e0dc764fa60df79a70963390a122f8bee9cba8ed55",
+   "japanese_text": "　　消す\n　消さない",
+   "korean_text": "끈다 안 끈다",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r58_0"
+    }
+   ],
+   "ko_parts": {
+    "r58_0": "끈다 안 끈다"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 59,
+   "source_offset": 26166,
+   "raw_sha256": "feabfe4b0af6bac849a8e2100b923c0b91b6f24ebbb52edd52412d82e31c6d5a",
+   "japanese_text": "トウジ「おめっとさん」",
+   "korean_text": "토우지「축하해요」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r59_0"
+    }
+   ],
+   "ko_parts": {
+    "r59_0": "토우지「축하해요」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 60,
+   "source_offset": 26178,
+   "raw_sha256": "b66ec80efb9f7f2be3316591248019cf0c10837bbd7d5ee4a83952a1bc16e795",
+   "japanese_text": "シゲル「おめでとう」",
+   "korean_text": "시게루「축하해」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r60_0"
+    }
+   ],
+   "ko_parts": {
+    "r60_0": "시게루「축하해」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 61,
+   "source_offset": 26189,
+   "raw_sha256": "573c6e45381449b6457beef9f272f0fa5b110ab399305e46d78f3887541d0cde",
+   "japanese_text": "レイ「おめでとう」",
+   "korean_text": "레이「축하해」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r61_0"
+    }
+   ],
+   "ko_parts": {
+    "r61_0": "레이「축하해」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 62,
+   "source_offset": 26199,
+   "raw_sha256": "c2380f708ac9a2bb1f70585fa99d5362e59efe747ad2053d5321dd6fdd483d75",
+   "japanese_text": "シンジ「アスカ‥‥」",
+   "korean_text": "신지「아스카…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r62_0"
+    }
+   ],
+   "ko_parts": {
+    "r62_0": "신지「아스카…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 63,
+   "source_offset": 26212,
+   "raw_sha256": "9d42930d4cae8db184f7198a7d3ad719352042ac304fd0b60519007ecb6453cc",
+   "japanese_text": "アスカ「何よ!」",
+   "korean_text": "아스카「뭐!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r63_0"
+    }
+   ],
+   "ko_parts": {
+    "r63_0": "아스카「뭐!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 64,
+   "source_offset": 26222,
+   "raw_sha256": "2823d8ef13df2f25215ec4d8f341b6830ed1fe918b683236782a408853fd8608",
+   "japanese_text": "シンジ「みんなケ-キ食べてるみたいだよ」",
+   "korean_text": "신지「다들 케이크 먹나 봐」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r64_0"
+    }
+   ],
+   "ko_parts": {
+    "r64_0": "신지「다들 케이크 먹나 봐」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 65,
+   "source_offset": 26244,
+   "raw_sha256": "a964ff8bdb8e6f25ceae57c1637dc6a519cc05d5456a2602914db0c669dd3e56",
+   "japanese_text": "アスカ「それがどうしたのよ」",
+   "korean_text": "아스카「그래서?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r65_0"
+    }
+   ],
+   "ko_parts": {
+    "r65_0": "아스카「그래서?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 66,
+   "source_offset": 26259,
+   "raw_sha256": "62a813b88c6cf887404435834bb2a8833e60e6e14e4a5c835c78bf73d7e2a5ac",
+   "japanese_text": "シンジ「僕‥‥⟦F9:02⟧さんにおめでとうも\n言ってないよ。ケンカはやめて部屋に戻ろうか‥‥」",
+   "korean_text": "신지「난… 님께 축하도 못 했어. 싸움 관두고 돌아갈까…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r66_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r66_1"
+    }
+   ],
+   "ko_parts": {
+    "r66_0": "신지「난… ",
+    "r66_1": "님께 축하도 못 했어. 싸움 관두고 돌아갈까…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 67,
+   "source_offset": 26312,
+   "raw_sha256": "d1161123b1d87658a63f181e92220f2e0b27789f2da779819a7f3d82d393d457",
+   "japanese_text": "アスカ「あんたバカァ?　みっともなくて戻れるはず\nないでしょ!　おめでとうが言いたいなら\nここから言えばいいじゃない」",
+   "korean_text": "아스카「너 바보야? 창피해서 못 돌아가! 축하는 여기서 해」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r67_0"
+    }
+   ],
+   "ko_parts": {
+    "r67_0": "아스카「너 바보야? 창피해서 못 돌아가! 축하는 여기서 해」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 68,
+   "source_offset": 26375,
+   "raw_sha256": "1866e22c833ccf2935e55d9f780c29e232ce4d4b1ca142eb31cda45a62e9aaa4",
+   "japanese_text": "シンジ「こ,ここからって‥‥そんなの言えないよ‥‥」",
+   "korean_text": "신지「여, 여기서는… 못 해…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r68_0"
+    }
+   ],
+   "ko_parts": {
+    "r68_0": "신지「여, 여기서는… 못 해…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 69,
+   "source_offset": 26407,
+   "raw_sha256": "f62af878dc4b881c71774308d6b8415ee93618f031511c2b8d39c53d63c282d2",
+   "japanese_text": "アスカ「気持ち悪い‥‥」",
+   "korean_text": "아스카「징그러…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r69_0"
+    }
+   ],
+   "ko_parts": {
+    "r69_0": "아스카「징그러…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 70,
+   "source_offset": 26425,
+   "raw_sha256": "c40acccf42f68020d5831e73a599b098773ce92fa056c2ec1ea551ffbc7a5045",
+   "japanese_text": "トウジ「どないしたんです,何で消さんのですか?\n自分ら⟦F9:02⟧さんのために用意したんです。\n遠慮せずに,どうぞ,どうぞ‥‥」",
+   "korean_text": "토우지「왜 안 끄세요? 님 위해 준비했어요. 사양 말고 어서요…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r70_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r70_1"
+    }
+   ],
+   "ko_parts": {
+    "r70_0": "토우지「왜 안 끄세요? ",
+    "r70_1": "님 위해 준비했어요. 사양 말고 어서요…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 71,
+   "source_offset": 26496,
+   "raw_sha256": "e90b36a0ea6c2827dd58c66e5f20c66b572368b334ebe747c7539b13d3238c67",
+   "japanese_text": "トウジ「なんやシンジ,夫婦ゲンカは終ったか?」",
+   "korean_text": "토우지「신지, 부부싸움 끝났나?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r71_0"
+    }
+   ],
+   "ko_parts": {
+    "r71_0": "토우지「신지, 부부싸움 끝났나?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 72,
+   "source_offset": 26523,
+   "raw_sha256": "639c317bb26f827d5c37dea59eb7c760964536752c1695ec394f306a16ab202d",
+   "japanese_text": "シンジ「‥‥みなさんすみませんでした。\nみっともない所を見せちゃって‥‥」",
+   "korean_text": "신지「…다들 죄송해요. 못난 모습 보여서…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r72_0"
+    }
+   ],
+   "ko_parts": {
+    "r72_0": "신지「…다들 죄송해요. 못난 모습 보여서…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 73,
+   "source_offset": 26567,
+   "raw_sha256": "ebaec0321c856118235f938895a2412c31187366063898984c6c51c1d70d7d00",
+   "japanese_text": "アスカ(なにあやまってんのよ!\nあやまればいいってもんじゃないのよ‥‥\nみっともない)",
+   "korean_text": "아스카(뭘 사과해! 사과하면 다야… 꼴불견이야)",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r73_0"
+    }
+   ],
+   "ko_parts": {
+    "r73_0": "아스카(뭘 사과해! 사과하면 다야… 꼴불견이야)"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 74,
+   "source_offset": 26613,
+   "raw_sha256": "3c5ed2bf717f93576b72f01b7eed3cbaa87853944af6d468cce08b2f85b24bb0",
+   "japanese_text": "トウジ「ごちゃごちゃいわんでええから\nさっさとこっち来て⟦F9:02⟧さんをみんなで\n祝おうやないか」",
+   "korean_text": "토우지「군말 말고 이리 와서 님을 같이 축하하자」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r74_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r74_1"
+    }
+   ],
+   "ko_parts": {
+    "r74_0": "토우지「군말 말고 이리 와서 ",
+    "r74_1": "님을 같이 축하하자」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 75,
+   "source_offset": 26662,
+   "raw_sha256": "510e211d75a45c752ea80d15e172cb5ad87df34cbcd2c901abd9a2e880dc939e",
+   "japanese_text": "シンジ「うん」",
+   "korean_text": "신지「응」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r75_0"
+    }
+   ],
+   "ko_parts": {
+    "r75_0": "신지「응」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 76,
+   "source_offset": 26670,
+   "raw_sha256": "4060c0a0903f696e8bddc91fb1b355bf379978e56181b32fc822b9e428b329d4",
+   "japanese_text": "トウジ「さ,みんなそろったことやし‥‥\n⟦F9:02⟧さんお願いしまっせ」",
+   "korean_text": "토우지「다 모였으니… 님 부탁해요」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r76_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r76_1"
+    }
+   ],
+   "ko_parts": {
+    "r76_0": "토우지「다 모였으니… ",
+    "r76_1": "님 부탁해요」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 77,
+   "source_offset": 26706,
+   "raw_sha256": "7cfa72dd13e7572aa08e555c65e85e5e17e4b4474aa2c5cd501de82e69376f44",
+   "japanese_text": "アスカ「おめでとう」",
+   "korean_text": "아스카「축하해」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r77_0"
+    }
+   ],
+   "ko_parts": {
+    "r77_0": "아스카「축하해」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 78,
+   "source_offset": 26717,
+   "raw_sha256": "cd7e352112786d1193e46ca189521899ad59f5850608e513087f3874e32aded8",
+   "japanese_text": "シンジ「おめでとう」",
+   "korean_text": "신지「축하해」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r78_0"
+    }
+   ],
+   "ko_parts": {
+    "r78_0": "신지「축하해」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 79,
+   "source_offset": 26728,
+   "raw_sha256": "ce009d50dd7786c53be384ef87796c4b23e0d55a8825bc17e5223c7641bc9dfb",
+   "japanese_text": "アスカ(‥‥何よ,あのシンジの態度,なんだか\nムカムカするわ。それに何で加持さんがいないのよ\nこんな時に加持さんがいてくれたら‥‥⟦F7⟧　なんかスッキリすることないかしら?　‥‥!?)",
+   "korean_text": "아스카(…뭐야, 저 신지 태도, 짜증 나. 카지 씨는 왜 없담. 있어 줬으면… 속 시원해질 일 없나? …!?)",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r79_0"
+    },
+    {
+     "kind": "page_break",
+     "raw_hex": "F7"
+    },
+    {
+     "kind": "text",
+     "part_id": "r79_1"
+    }
+   ],
+   "ko_parts": {
+    "r79_0": "아스카(…뭐야, 저 신지 태도, 짜증 나. 카지 씨는 왜 없담. 있어 줬으면…",
+    "r79_1": " 속 시원해질 일 없나? …!?)"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 80,
+   "source_offset": 26834,
+   "raw_sha256": "b12430120e20bee096166199f29201eb31cfa6f08a40bcca4eddc271d9e7e2e4",
+   "japanese_text": "⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」⟦F9:02⟧「‥‥‥?」アスカ(あぁ,スッキリした‥‥)",
+   "korean_text": "「…?」「…?」「…?」「…?」「…?」「…?」「…?」「…?」아스카(아아, 속 시원해…)",
+   "translation_parts": [
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r80_0"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r80_1"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r80_2"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r80_3"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r80_4"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r80_5"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r80_6"
+    },
+    {
+     "kind": "control",
+     "raw_hex": "F9 02"
+    },
+    {
+     "kind": "text",
+     "part_id": "r80_7"
+    }
+   ],
+   "ko_parts": {
+    "r80_0": "「…?」",
+    "r80_1": "「…?」",
+    "r80_2": "「…?」",
+    "r80_3": "「…?」",
+    "r80_4": "「…?」",
+    "r80_5": "「…?」",
+    "r80_6": "「…?」",
+    "r80_7": "「…?」아스카(아아, 속 시원해…)"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 81,
+   "source_offset": 26941,
+   "raw_sha256": "c1d48b00a4f808852ad7bebba1068a327032d7d675407c5661023ec3c5f903fa",
+   "japanese_text": "トウジ「惣流,お前が火ぃ消したやろ」",
+   "korean_text": "토우지「소류, 네가 껐지」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r81_0"
+    }
+   ],
+   "ko_parts": {
+    "r81_0": "토우지「소류, 네가 껐지」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 82,
+   "source_offset": 26965,
+   "raw_sha256": "e34746d5abbbf605ea7db2a0460d10e3b5f0a79f0e67f0105661e2ba2d3d4eb5",
+   "japanese_text": "アスカ「な,何よ,あんたバカァ?\nわたしがそんなことするはずないでしょ!!」",
+   "korean_text": "아스카「너 바보야? 내가 그럴 리가!!」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r82_0"
+    }
+   ],
+   "ko_parts": {
+    "r82_0": "아스카「너 바보야? 내가 그럴 리가!!」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 83,
+   "source_offset": 27005,
+   "raw_sha256": "622873f3fba40be7b85e0bcce78e7a94622c492935e81b3ec2e76d604709c54c",
+   "japanese_text": "シンジ「そうだよトウジ。いくらアスカでも\nそんな事するはずないよ。綾波もそう思うよね」",
+   "korean_text": "신지「그래. 아스카가 그럴 리가. 아야나미도 그치」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r83_0"
+    }
+   ],
+   "ko_parts": {
+    "r83_0": "신지「그래. 아스카가 그럴 리가. 아야나미도 그치」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 84,
+   "source_offset": 27053,
+   "raw_sha256": "675f5660a6dfd1b6f70ca4839908e1dbd03436aaf4faed68cfe3ea8faaad03de",
+   "japanese_text": "レイ「‥‥消したわ‥‥」",
+   "korean_text": "레이「…껐어…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r84_0"
+    }
+   ],
+   "ko_parts": {
+    "r84_0": "레이「…껐어…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 85,
+   "source_offset": 27071,
+   "raw_sha256": "bc68ac1c7ccb2fa494bcfaf38357c1bd2ab9843bae11ae31b30d8f02579ca9e8",
+   "japanese_text": "イデ「‥‥‥‥」",
+   "korean_text": "이데「…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r85_0"
+    }
+   ],
+   "ko_parts": {
+    "r85_0": "이데「…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 86,
+   "source_offset": 27084,
+   "raw_sha256": "f5b3b0103ff190840195939e08fe9c2a6ebc7886fe5159ac16959e52370adec0",
+   "japanese_text": "コスモ「こ,これは‥‥!?」",
+   "korean_text": "코스모「이건…!?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r86_0"
+    }
+   ],
+   "ko_parts": {
+    "r86_0": "코스모「이건…!?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 87,
+   "source_offset": 27101,
+   "raw_sha256": "d0086976604281a701bb744e71e32783a3d385d613d6868945e784c8ef4b94c5",
+   "japanese_text": "カ-シャ「イデの‥‥怒り‥‥?」",
+   "korean_text": "카샤「이데의…분노…?」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r87_0"
+    }
+   ],
+   "ko_parts": {
+    "r87_0": "카샤「이데의…분노…?」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 88,
+   "source_offset": 27123,
+   "raw_sha256": "ab86b99a9361c54753c6feb9e4f32125fc1a9ed1e18a7d25937e5654b09466b4",
+   "japanese_text": "ジョリバ「どうも,イデのやつに見放されたらしいぞ,我々‥‥」",
+   "korean_text": "조리바「이데가 우릴 버린 듯하군…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r88_0"
+    }
+   ],
+   "ko_parts": {
+    "r88_0": "조리바「이데가 우릴 버린 듯하군…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 89,
+   "source_offset": 27159,
+   "raw_sha256": "94dfc21c81e1faa4ed86004494ac5363828af167068483bbd2f7bcd15044ec80",
+   "japanese_text": "ハタリ「バカな‥‥俺はまだ,何もやっちゃいないんだぞ‥‥」",
+   "korean_text": "하타리「말도 안 돼… 난 아직 아무것도 안 했는데…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r89_0"
+    }
+   ],
+   "ko_parts": {
+    "r89_0": "하타리「말도 안 돼… 난 아직 아무것도 안 했는데…」"
+   },
+   "status": "translated"
+  },
+  {
+   "asset_id": "common_preview_and_conditions_pool",
+   "sequential_index": 90,
+   "source_offset": 27195,
+   "raw_sha256": "0b430c77c89581a0adf5feb167e85d94c509f6e98c47a851908bbcccebe3860d",
+   "japanese_text": "ベス「コスモ‥‥俺達は‥‥やる事がすべて遅かったのかも\n知れん‥‥」",
+   "korean_text": "베스「코스모… 우린… 다 너무 늦었는지도…」",
+   "translation_parts": [
+    {
+     "kind": "text",
+     "part_id": "r90_0"
+    }
+   ],
+   "ko_parts": {
+    "r90_0": "베스「코스모… 우린… 다 너무 늦었는지도…」"
+   },
+   "status": "translated"
+  }
+ ]
+}

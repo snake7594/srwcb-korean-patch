@@ -2,10 +2,9 @@
 """Build the independently reviewed, variable-length SECOND Korean patch.
 
 This builder has no import or fallback path to the rejected fixed-slot/Google
-translation cache.  It rebuilds all three runtime message containers,
-relocates the executable UI, moves the four enlarged files to fresh ISO
-extents, patches any additional required font glyphs, and can produce and
-decode-verify the final xdelta.
+translation cache.  It rebuilds all three runtime message containers, moves
+the enlarged files to fresh ISO extents, patches any additional required font
+glyphs, and can produce and decode-verify the final xdelta.
 """
 from __future__ import annotations
 
@@ -58,10 +57,13 @@ from relocate_expanded_iso_files import (  # noqa: E402
 )
 from patch_second_exe_ui import (  # noqa: E402
     collect_korean_ui_texts,
+    encode_ui_text,
     patch_second_executable_ui,
+    patch_shared_executable_ui,
 )
 from second_translation_codec import (  # noqa: E402
     EXTRA_GLYPH_START,
+    STRUCTURAL_GLYPH_INDICES,
     add_extra_glyph_mapping,
     assemble_translated_record,
     load_safe_glyph_map,
@@ -70,24 +72,26 @@ from second_translation_codec import (  # noqa: E402
 )
 
 
-ROOT = Path(__file__).resolve().parents[1]
-EXTRACTED = ROOT / "extracted"
-SAFE_BUILD = ROOT / "test_build" / "exe_font_safe_test"
+ROOT = Path(__file__).resolve().parents[2]
+EXTRACTED = ROOT / "korean_patch" / "extracted"
+SAFE_BUILD = ROOT / "korean_patch" / "test_build" / "exe_font_safe_test"
 SAFE_EXTRACTED = SAFE_BUILD / "extracted"
 SAFE_FONT = SAFE_BUILD / "font" / "srwcb_font_hangul_test_2816_16x16.bin"
 SAFE_TRACK = SAFE_BUILD / "Super Robot Taisen Complete Box Hangul Safe Font Test (Track 1).bin"
 ORIGINAL_TRACK = ROOT / "Super Robot Taisen Complete Box (Track 1).bin"
-BDF = ROOT / "font" / "Galmuri14.bdf"
-# The dialogue ledger reconstructs original-game records and is intentionally
-# kept in local_inputs.  UI metadata is published only in its sanitized form.
-LEDGER = ROOT / "local_inputs" / "second_translation_ledger.json"
-OVERLAY = ROOT / "translation" / "second_translation_overlay.json"
-UI_INVENTORY = ROOT / "translation" / "second_ui_inventory.json"
-UI_SCRIPT_OVERLAY = ROOT / "translation" / "second_ui_scripts_overlay.json"
-UI_TABLE_OVERLAY = ROOT / "translation" / "second_ui_tables_overlay.json"
-UI_NAME_OVERLAY = ROOT / "translation" / "second_ui_names_overlay.json"
-UI_COMMON_OVERLAY = ROOT / "translation" / "second_ui_common_master_overlay.json"
-DEFAULT_OUTPUT = ROOT / "test_build" / "second_korean_v0.2.1-pre-menu-fix"
+BDF = ROOT / "korean_patch" / "assets" / "Galmuri14.bdf"
+LEDGER = ROOT / "korean_patch" / "research" / "translation_v2" / "second_translation_ledger.json"
+OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_translation_overlay.json"
+UI_INVENTORY = ROOT / "korean_patch" / "research" / "second_exe_ui_full_inventory.json"
+UI_SCRIPT_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_scripts_overlay.json"
+UI_TABLE_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_tables_overlay.json"
+UI_NAME_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_names_overlay.json"
+UI_COMMON_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_common_master_overlay.json"
+UI_PREVIEW_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_preview_overlay.json"
+UI_MAP_LABEL_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_map_labels_overlay.json"
+SCE_CONDITIONS_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_sce_conditions_overlay.json"
+BUILD_LABEL = "v0.8.7-full-menus"
+DEFAULT_OUTPUT = ROOT / "korean_patch" / "test_build" / f"second_korean_{BUILD_LABEL}"
 XDELTA = ROOT / "xdelta.exe"
 
 SOURCE_SCE = EXTRACTED / "SECOND" / "2_SCE.BIN"
@@ -207,6 +211,18 @@ def build_dynamic_font(
     if len(safe_font) != FONT_BYTES:
         raise ValueError("safe injected font has an unexpected size")
     patched_font = bytearray(safe_font)
+    pristine_second = (EXTRACTED / SECOND_BATTLE_EXECUTABLE).read_bytes()
+    pristine_font_offset = FONT_EXE_LAYOUT[SECOND_BATTLE_EXECUTABLE]
+    pristine_font = pristine_second[
+        pristine_font_offset:pristine_font_offset + FONT_BYTES
+    ]
+    if len(pristine_font) != FONT_BYTES:
+        raise ValueError("pristine SECOND font has an unexpected size")
+    for index in STRUCTURAL_GLYPH_INDICES:
+        start = index * GLYPH_BYTES
+        patched_font[start:start + GLYPH_BYTES] = pristine_font[
+            start:start + GLYPH_BYTES
+        ]
     rows: list[dict[str, Any]] = []
     for ordinal, char in enumerate(extra_characters):
         index = EXTRA_GLYPH_START + ordinal
@@ -245,6 +261,7 @@ def build_dynamic_font(
         "characters": rows,
         "safe_font_sha256": sha256_bytes(safe_font),
         "dynamic_font_sha256": sha256_bytes(bytes(patched_font)),
+        "restored_structural_glyphs": sorted(STRUCTURAL_GLYPH_INDICES),
     }, dynamic_extracted
 
 
@@ -774,6 +791,9 @@ def main() -> int:
     ap.add_argument("--ui-table-overlay", type=Path, default=UI_TABLE_OVERLAY)
     ap.add_argument("--ui-name-overlay", type=Path, default=UI_NAME_OVERLAY)
     ap.add_argument("--ui-common-overlay", type=Path, default=UI_COMMON_OVERLAY)
+    ap.add_argument("--ui-preview-overlay", type=Path, default=UI_PREVIEW_OVERLAY)
+    ap.add_argument("--ui-map-label-overlay", type=Path, default=UI_MAP_LABEL_OVERLAY)
+    ap.add_argument("--sce-conditions-overlay", type=Path, default=SCE_CONDITIONS_OVERLAY)
     ap.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
     ap.add_argument("--safe-track", type=Path, default=SAFE_TRACK)
     ap.add_argument("--original-track", type=Path, default=ORIGINAL_TRACK)
@@ -788,6 +808,7 @@ def main() -> int:
         args.ui_table_overlay,
         args.ui_name_overlay,
         args.ui_common_overlay,
+        args.ui_preview_overlay,
     ]
     normalised_texts = [
         normalise_for_font(value)[0]
@@ -797,6 +818,17 @@ def main() -> int:
     normalised_texts.extend(
         normalise_for_font(value)[0]
         for value in collect_korean_ui_texts(ui_overlay_paths)
+    )
+    # Map-label heap and SCE condition overlays carry their Korean outside the
+    # standard UI overlay schemas; feed their text into the dynamic font too.
+    map_label_doc = json.loads(args.ui_map_label_overlay.read_text(encoding="utf-8"))
+    sce_conditions_doc = json.loads(
+        args.sce_conditions_overlay.read_text(encoding="utf-8")
+    )
+    normalised_texts.extend(
+        normalise_for_font(str(row.get("korean_text", "")).replace("[F6]", "").replace("[F7]", ""))[0]
+        for doc in (map_label_doc, sce_conditions_doc)
+        for row in doc.get("records", [])
     )
     base_map = load_safe_glyph_map()
     extra_characters = required_extra_characters(normalised_texts, base_map)
@@ -810,6 +842,38 @@ def main() -> int:
     sce_repl, bm_repl, dead_repl, record_manifest = make_replacements(
         rows, translations, glyph_map, source_sce, source_bmess, source_dead
     )
+
+    # Merge the non-dialogue SCE strings (victory/defeat conditions, sirens,
+    # unquoted lines) into the same variable-length record replacement set.
+    # Records may carry a leading VM/code prefix that is preserved verbatim;
+    # only the Japanese text span from text_start_rel onward is re-encoded.
+    sce_condition_manifest: list[dict[str, Any]] = []
+    for row in sce_conditions_doc.get("records", []):
+        offset = int(row["offset"])
+        length = int(row["record_bytes"])
+        raw = source_sce[offset:offset + length]
+        if hashlib.sha256(raw).hexdigest() != row["raw_sha256"]:
+            raise ValueError(f"SCE condition source changed at {offset:#x}")
+        if offset in sce_repl:
+            raise ValueError(
+                f"SCE condition {offset:#x} collides with a ledger replacement"
+            )
+        prefix = raw[: int(row["text_start_rel"])]
+        korean = str(row["korean_text"])
+        encoded_parts = [
+            encode_ui_text(part.replace("[F6]", "\n"), glyph_map, terminate=False)
+            for part in korean.split("[F7]")
+        ]
+        encoded = b"\xF7".join(encoded_parts)
+        sce_repl[offset] = prefix + encoded + b"\xFF"
+        sce_condition_manifest.append(
+            {
+                "offset": offset,
+                "source_bytes": length,
+                "replacement_bytes": len(sce_repl[offset]),
+                "korean_text": korean,
+            }
+        )
 
     rebuilt_sce, sce_manifest = rebuild_second_sce(source_sce, sce_repl)
     rebuilt_bmess = rebuild_bmess_repack(source_bmess, bm_repl)
@@ -827,6 +891,12 @@ def main() -> int:
         glyph_map,
         args.ui_inventory,
         ui_overlay_paths,
+        label_overlay_path=args.ui_map_label_overlay,
+    )
+    shared_executable_ui = patch_shared_executable_ui(
+        runtime_extracted / Path("SLPS_020.70"),
+        args.ui_script_overlay,
+        glyph_map,
     )
     battle_scratch = patch_second_battle_scratch(runtime_extracted, rebuilt_bmess)
     for row in embedded_bmess_tables:
@@ -874,6 +944,7 @@ def main() -> int:
         },
         "font": font_manifest,
         "executable_ui": executable_ui,
+        "shared_executable_ui": shared_executable_ui,
         "embedded_bmess_tables": embedded_bmess_tables,
         "battle_scratch": battle_scratch,
         "records": {
@@ -907,7 +978,7 @@ def main() -> int:
     }
 
     if not args.skip_track:
-        output_track = args.output_dir / "Super Robot Taisen Complete Box Second Korean v0.2.1-pre (Track 1).bin"
+        output_track = args.output_dir / f"Super Robot Taisen Complete Box Second Korean {BUILD_LABEL} (Track 1).bin"
         relocation = relocate_files(
             args.safe_track,
             output_track,
@@ -944,7 +1015,7 @@ def main() -> int:
         manifest["track"] = relocation
 
         if not args.skip_xdelta:
-            patch_path = args.output_dir / "srwcb-second-korean-v0.2.1-pre.xdelta"
+            patch_path = args.output_dir / f"srwcb-second-korean-{BUILD_LABEL}.xdelta"
             manifest["xdelta"] = create_and_verify_xdelta(
                 args.original_track, output_track, args.xdelta, patch_path
             )

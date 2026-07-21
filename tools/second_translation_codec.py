@@ -9,15 +9,34 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-ROOT = Path(__file__).resolve().parents[1]
-FONT_MAP = ROOT / "font" / "hangul_ksx1001_exe_mapping.tsv"
-REVIEWED_MAP = ROOT / "font" / "srwcb_embedded_font_mapping_reviewed.json"
+ROOT = Path(__file__).resolve().parents[2]
+FONT_MAP = ROOT / "korean_patch" / "test_build" / "exe_font_safe_test" / "font" / "hangul_ksx1001_exe_mapping.tsv"
+REVIEWED_MAP = ROOT / "korean_patch" / "research" / "srwcb_embedded_font_mapping_reviewed.json"
 
-MAX_LINE_CELLS = 26
+# The retail SECOND dialogue window is twenty full-width cells wide.  The
+# earlier 26-cell value was inferred from the source script's Japanese byte
+# spans; Korean Hangul uses the full-width renderer and consequently clipped
+# the rightmost characters in every long line.  Keep this as the single
+# layout limit so every rebuilt dialogue record is wrapped consistently.
+MAX_LINE_CELLS = 20
 MAX_PAGE_LINES = 3
 GLYPH_COUNT = 0xB00
 EXTRA_GLYPH_START = 0xA2F
 EXTRA_GLYPH_END = GLYPH_COUNT - 1
+
+# These three cells are not ordinary Japanese letters.  The UI VM uses 0x3FF
+# as an invisible full-width phase spacer and 0x6FF/0x700 as the left/right
+# arrows on the name-entry pages.  The original all-Hangul injection covered
+# them with 릭/읏/응, which made otherwise untranslated structural cells appear
+# as garbage.  Keep the retail bitmaps at these indices and move the displaced
+# Hangul syllables to the dynamic tail together with the other extra glyphs.
+STRUCTURAL_GLYPH_INDICES = frozenset({0x3FF, 0x6FF, 0x700})
+
+# The retail low-font circle/cross mappings are encoded with two bytes but
+# their glyph indices remain below 0x101, so the renderer advances only one
+# cell.  Button selector fields need the original two-cell symbols inside an
+# exact four-byte slot; allocate these two glyphs again in the dynamic range.
+FORCED_FULL_WIDTH_CHARACTERS = frozenset({"○", "×"})
 
 # These substitutions do not remove meaning.  They only choose the matching
 # glyph already present in the low, unmodified portion of the game font.
@@ -68,7 +87,12 @@ def load_safe_glyph_map() -> dict[str, int]:
     mapping: dict[str, int] = {" ": 0}
     for line in FONT_MAP.read_text(encoding="utf-8").splitlines()[1:]:
         fields = line.split("\t")
-        if len(fields) >= 4 and fields[2]:
+        if (
+            len(fields) >= 4
+            and fields[2]
+            and fields[2] not in FORCED_FULL_WIDTH_CHARACTERS
+            and int(fields[3], 16) not in STRUCTURAL_GLYPH_INDICES
+        ):
             mapping[fields[2]] = int(fields[3], 16)
 
     reviewed = json.loads(REVIEWED_MAP.read_text(encoding="utf-8"))
@@ -82,7 +106,8 @@ def load_safe_glyph_map() -> dict[str, int]:
         if index >= 0x101:
             continue
         char = chr(int(unicode_label[2:], 16))
-        mapping.setdefault(char, index)
+        if char not in FORCED_FULL_WIDTH_CHARACTERS:
+            mapping.setdefault(char, index)
     return mapping
 
 

@@ -1,4 +1,1 @@
-0894206e6fc99ea65ef7d45f9987a73ee925563ecb0c50da8fafea5dbf373cf1  srwcb-hangul-exe-font-test-v0.0.2-pre.xdelta
-70baa8cc6be876968a893bbe0723f398201ed48f35b173249044ec029f4d50b8  srwcb-second-korean-v0.1.0-pre.xdelta
-da03fd939e8183e3d6b360ab407af896715d9fe67e5d0574411f38e37f7796fc  srwcb-second-korean-v0.2.0-pre.xdelta
-ff5e532f1e9e1626df74e48adf86559d6b919a8db2cfb5b30799a93a9ba3e78c  srwcb-second-korean-v0.2.1-pre.xdelta
+99c691a95e4f3ebc50868fb10d93bf3e2e6ee680fe9b42554aeb0ea74db9177f *srwcb-second-korean-v0.8.7.xdelta
