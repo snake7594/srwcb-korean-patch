@@ -1,1 +1,2 @@
 99c691a95e4f3ebc50868fb10d93bf3e2e6ee680fe9b42554aeb0ea74db9177f *srwcb-second-korean-v0.8.7.xdelta
+df7e5a536d2d622d2dace3c07ec4ab1188e04ec3cf773f191c7ed493465d9381 *srw2-standalone-korean-v0.8.7.xdelta
