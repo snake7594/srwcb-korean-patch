@@ -1,12 +1,13 @@
 # 슈퍼로봇대전 컴플리트 박스 한국어 패치
 
-> **v0.9.0 (최신)** — 《제3차 슈퍼로봇대전》 **대사(시나리오·전투)** 한글화를
-> 추가했습니다. 컴플리트 박스판은 하나의 패치로 **제2차(전체) + 제3차(대사)** 가
-> 함께 적용되고(`srwcb-second-third-korean-v0.9.0-third-dialogue.xdelta`),
-> **제3차 단독판(별매 CD, SLPS-02530)** 도 지원합니다
-> (`srw3-standalone-korean-v0.9.0.xdelta`). 제3차 메뉴·이름 테이블은 추후
-> 업데이트 예정입니다. 자세한 내용은
-> [v0.9.0 릴리스 노트](docs/RELEASE_NOTES_v0.9.0.md)를 보세요.
+> **v0.9.1 (최신)** — 《제3차 슈퍼로봇대전》을 **대사부터 메뉴·이름·시나리오 제목·
+> 맵 UI까지 전부** 한국어로 옮겼습니다. 컴플리트 박스판은 하나의 패치로
+> **제2차(전체) + 제3차(전체)** 가 함께 적용되고
+> (`srwcb-second-third-korean-v0.9.1.xdelta`), **제3차 단독판(별매 CD,
+> SLPS-02530)** 도 지원합니다(`srw3-standalone-korean-v0.9.1.xdelta`).
+> v0.9.0은 제3차 메뉴가 깨져 보이는 문제가 있어 프리릴리스로 내렸습니다 —
+> 반드시 v0.9.1을 사용하세요. 자세한 내용은
+> [v0.9.1 릴리스 노트](docs/RELEASE_NOTES_v0.9.1.md)를 보세요.
 
 아래 설명은 제2차(`v0.8.7`) 기준이며, 제2차는 v0.9.0에도 그대로 포함됩니다.
 
@@ -62,7 +63,7 @@
 
 ### 간편 적용 (Windows, 권장)
 
-릴리스에서 easy-apply zip(최신 **`srwcb-cb-korean-v0.9.0-easy-apply.zip`**,
+릴리스에서 easy-apply zip(최신 **`srwcb-cb-korean-v0.9.1-easy-apply.zip`**,
 제2차 전용은 `srwcb-second-korean-v0.8.7-easy-apply.zip`)을 받아 압축을 풀면
 `xdelta.exe`·패치·적용 스크립트가 모두 들어 있습니다.
 

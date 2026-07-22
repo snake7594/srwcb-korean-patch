@@ -1,20 +1,20 @@
 ﻿#requires -version 3
-# 제3차 슈퍼로봇대전 단독판(별매 CD, SLPS_02530) 대사 한글패치 v0.9.0 적용 엔진
+# 제3차 슈퍼로봇대전 단독판(별매 CD, SLPS_02530) 한글패치 v0.9.1 적용 엔진
 # 이 스크립트는 "한글패치 적용하기.bat" 이 자동으로 실행합니다.
 
 $ErrorActionPreference = 'Stop'
 
 $root    = $PSScriptRoot
 $xdelta  = Join-Path $root 'xdelta.exe'
-$patch   = Join-Path $root 'srw3-standalone-korean-v0.9.0.xdelta'
+$patch   = Join-Path $root 'srw3-standalone-korean-v0.9.1.xdelta'
 
 $T1NAME  = 'Dai 3 Ji Super Robot Taisen.bin'
-$OUTNAME = 'Dai 3 Ji Super Robot Taisen (Korean).bin'
-$CUENAME = 'Dai 3 Ji Super Robot Taisen (Korean).cue'
+$OUTNAME = 'Dai 3 Ji Super Robot Taisen (Korean) v0.9.1.bin'
+$CUENAME = 'Dai 3 Ji Super Robot Taisen (Korean) v0.9.1.cue'
 
 $EXP_SRC   = 'd81007738c10792f17dd8d9cae6fe1954347d83a930aad959a3fe9c3f4a7667f'
-$EXP_OUT   = '366d97cf1044f1f42e8bc4dea2506035069413eb8f768780200e53a3da28ee87'
-$EXP_PATCH = 'e0f3bf09d81f4502820cc1c53e732463926645515c86d17abc213c537bc00059'
+$EXP_OUT   = '4c1d5a9382d776522254225ad0eb3f8488a8d8471cec068e16823ccf960e19a0'
+$EXP_PATCH = '6d0445849fb11b04f9716cf6b8523b4a94597dffb46631412b8520b520f27ac8'
 
 function Get-Sha256([string]$p) { return (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash.ToLower() }
 function Close-Window([int]$code) {
@@ -31,12 +31,12 @@ function Fail([string]$msg) {
 try {
     Write-Host ''
     Write-Host '============================================================'
-    Write-Host '   제3차 슈퍼로봇대전 단독판(별매 CD) 대사 한글패치 v0.9.0'
+    Write-Host '   제3차 슈퍼로봇대전 단독판(별매 CD) 한글패치 v0.9.1'
     Write-Host '============================================================'
     Write-Host ''
 
     if (-not (Test-Path -LiteralPath $xdelta)) { Fail "xdelta.exe 가 없습니다. 패치 파일들을 한 폴더에 함께 두세요." }
-    if (-not (Test-Path -LiteralPath $patch))  { Fail "srw3-standalone-korean-v0.9.0.xdelta 가 없습니다." }
+    if (-not (Test-Path -LiteralPath $patch))  { Fail "srw3-standalone-korean-v0.9.1.xdelta 가 없습니다." }
 
     # --- 원본 .bin 찾기: 드래그앤드롭 인자 > 표준 파일명 > 폴더 내 유일한 .bin ---
     $src = $null
@@ -114,7 +114,7 @@ try {
     Write-Host ''
     Write-Host "     $cue" -ForegroundColor Cyan
     Write-Host ''
-    Write-Host '  * 제3차 대사(스토리/전투)가 한글로 나옵니다.'
+    Write-Host '  * 제3차 대사+메뉴 전체가 한글로 나옵니다.'
     Write-Host '  * 반드시 생성된 .cue 로 여세요 (.ccd/.cue 원본으로 열면 "메모리 확인"에서 멈춥니다).'
     Write-Host '  * 원본 파일은 그대로 보존됩니다.'
     Close-Window 0
