@@ -1,0 +1,3 @@
+7455c07008c0874159d242be324e987e6207894d78f0ef58a4434d265ee4f304 *srwcb-second-third-korean-v0.9.0-third-dialogue.xdelta
+cdf0986438db49397a35ad5edc5512aad5aa714415c5392db6f71348d31c53b2 *srwcb-cb-korean-v0.9.0-easy-apply.zip
+df7e5a536d2d622d2dace3c07ec4ab1188e04ec3cf773f191c7ed493465d9381 *srw2-standalone-korean-v0.8.7.xdelta
