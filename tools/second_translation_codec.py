@@ -19,7 +19,24 @@ REVIEWED_MAP = ROOT / "korean_patch" / "research" / "srwcb_embedded_font_mapping
 # the rightmost characters in every long line.  Keep this as the single
 # layout limit so every rebuilt dialogue record is wrapped consistently.
 MAX_LINE_CELLS = 20
+# The retail renderer (RE'd at 0x8006F564) wraps a dialogue line when a
+# phase-aware cursor countdown reaches the box width of 18 units.  Low-index
+# glyphs (<0x101: ASCII punctuation, spaces) advance one unit; a high glyph
+# advances one unit in phase 0 or two in phase 1, then toggles the phase; F6
+# resets the phase.  Japanese stays phase-aligned so its auto-wraps land on
+# glyph boundaries, but Korean punctuation shifts the phase and the game's
+# auto-wrap then splits a two-byte glyph (dropping its lead byte -> the first
+# glyph of the next box renders as garbage).  We therefore pre-break every line
+# at <= this width so the game never auto-wraps a dialogue record.
+MAX_LINE_ADVANCE = 18
 MAX_PAGE_LINES = 3
+
+
+def glyph_advance(index: int, phase: int) -> tuple[int, int]:
+    """Return (advance_units, next_phase) for one glyph in the dialogue renderer."""
+    if index < 0x101:
+        return 1, phase
+    return 1 + phase, phase ^ 1
 GLYPH_COUNT = 0xB00
 EXTRA_GLYPH_START = 0xA2F
 EXTRA_GLYPH_END = GLYPH_COUNT - 1
@@ -151,6 +168,8 @@ class LayoutState:
     data: bytearray = field(default_factory=bytearray)
     pages: list[list[str]] = field(default_factory=lambda: [[""]])
     page_cell_counts: list[list[int]] = field(default_factory=lambda: [[0]])
+    page_advances: list[list[int]] = field(default_factory=lambda: [[0]])
+    phase: int = 0
     pending_spaces: int = 0
     inserted_line_breaks: int = 0
     inserted_page_breaks: int = 0
@@ -165,20 +184,37 @@ class LayoutState:
     def current_cells(self) -> int:
         return self.page_cell_counts[-1][-1]
 
-    def _append_visual(self, text: str, cells: int) -> None:
+    @property
+    def current_advance(self) -> int:
+        return self.page_advances[-1][-1]
+
+    def _span_advance(self, text: str) -> int:
+        """Phase-aware renderer advance of ``text`` starting from the current phase."""
+        phase = self.phase
+        total = 0
+        for char in text:
+            step, phase = glyph_advance(self.glyph_map[char], phase)
+            total += step
+        return total
+
+    def _append_visual(self, text: str, cells: int, advance: int = 0) -> None:
         self.pages[-1][-1] += text
         self.page_cell_counts[-1][-1] += cells
+        self.page_advances[-1][-1] += advance
 
     def _new_line_or_page(self) -> None:
+        self.phase = 0  # the renderer resets the wide phase at every F6/F7 break
         if len(self.pages[-1]) < MAX_PAGE_LINES:
             self.data.append(0xF6)
             self.pages[-1].append("")
             self.page_cell_counts[-1].append(0)
+            self.page_advances[-1].append(0)
             self.inserted_line_breaks += 1
         else:
             self.data.append(0xF7)
             self.pages.append([""])
             self.page_cell_counts.append([0])
+            self.page_advances.append([0])
             self.inserted_page_breaks += 1
 
     def _emit_char(self, char: str) -> None:
@@ -186,27 +222,22 @@ class LayoutState:
             index = self.glyph_map[char]
         except KeyError as exc:
             raise ValueError(f"no font glyph allocated for {char!r} U+{ord(char):04X}") from exc
+        advance, self.phase = glyph_advance(index, self.phase)
         self.data.extend(encode_glyph_index(index))
-        self._append_visual(char, 1)
+        self._append_visual(char, 1, advance)
 
     def _emit_spaces(self, count: int) -> None:
         for _ in range(count):
-            if self.current_cells >= MAX_LINE_CELLS:
+            if self.current_advance + 1 > MAX_LINE_ADVANCE:
                 self._new_line_or_page()
             self._emit_char(" ")
 
     def _emit_word(self, word: str) -> None:
-        cursor = 0
-        while cursor < len(word):
-            if self.current_cells >= MAX_LINE_CELLS:
+        for char in word:
+            advance, _ = glyph_advance(self.glyph_map[char], self.phase)
+            if self.current_advance and self.current_advance + advance > MAX_LINE_ADVANCE:
                 self._new_line_or_page()
-            available = MAX_LINE_CELLS - self.current_cells
-            take = min(available, len(word) - cursor)
-            for char in word[cursor : cursor + take]:
-                self._emit_char(char)
-            cursor += take
-            if cursor < len(word):
-                self._new_line_or_page()
+            self._emit_char(char)
 
     def emit_text(self, text: str) -> None:
         for token in re.findall(r" +|[^ ]+", text):
@@ -215,8 +246,9 @@ class LayoutState:
                 continue
 
             if self.pending_spaces:
-                needed = self.pending_spaces + len(token)
-                if self.current_cells and self.current_cells + needed > MAX_LINE_CELLS:
+                # spaces advance one unit each (low glyph, no phase change)
+                needed = self.pending_spaces + self._span_advance(token)
+                if self.current_advance and self.current_advance + needed > MAX_LINE_ADVANCE:
                     # A layout break is the visible separator at a word
                     # boundary; no lexical space is deleted within a line.
                     self._new_line_or_page()
@@ -224,7 +256,7 @@ class LayoutState:
                 else:
                     self._emit_spaces(self.pending_spaces)
                 self.pending_spaces = 0
-            elif self.current_cells and self.current_cells + len(token) > MAX_LINE_CELLS:
+            elif self.current_advance and self.current_advance + self._span_advance(token) > MAX_LINE_ADVANCE:
                 # There was no legal word boundary.  Split a long token rather
                 # than alter or truncate it.
                 self._new_line_or_page()
@@ -232,17 +264,17 @@ class LayoutState:
 
     def emit_control(self, raw: bytes, visible_cells: int = 0) -> None:
         if self.pending_spaces:
-            if self.current_cells and self.current_cells + self.pending_spaces + visible_cells > MAX_LINE_CELLS:
+            if self.current_advance and self.current_advance + self.pending_spaces + visible_cells > MAX_LINE_ADVANCE:
                 self._new_line_or_page()
                 self.whitespace_wraps += 1
             else:
                 self._emit_spaces(self.pending_spaces)
             self.pending_spaces = 0
-        if visible_cells and self.current_cells and self.current_cells + visible_cells > MAX_LINE_CELLS:
+        if visible_cells and self.current_advance and self.current_advance + visible_cells > MAX_LINE_ADVANCE:
             self._new_line_or_page()
         self.data.extend(raw)
         label = "⟦" + raw.hex(" ").upper() + "⟧"
-        self._append_visual(label, visible_cells)
+        self._append_visual(label, visible_cells, visible_cells)
 
     def preserve_page_break(self, raw: bytes) -> None:
         if raw != b"\xF7":
@@ -255,14 +287,16 @@ class LayoutState:
         self.data.extend(raw)
         self.pages.append([""])
         self.page_cell_counts.append([0])
+        self.page_advances.append([0])
+        self.phase = 0
         self.preserved_page_breaks += 1
 
     def finish(self) -> tuple[bytes, dict[str, Any]]:
         if self.pending_spaces:
             self._emit_spaces(self.pending_spaces)
             self.pending_spaces = 0
-        if any(cells > MAX_LINE_CELLS for page in self.page_cell_counts for cells in page):
-            raise AssertionError("layout exceeded line-cell limit")
+        if any(adv > MAX_LINE_ADVANCE for page in self.page_advances for adv in page):
+            raise AssertionError("layout exceeded line-advance (box width) limit")
         if any(len(page) > MAX_PAGE_LINES for page in self.pages):
             raise AssertionError("layout exceeded lines-per-page limit")
         self.data.append(0xFF)
