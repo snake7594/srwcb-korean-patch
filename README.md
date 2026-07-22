@@ -50,9 +50,27 @@
 
 ## 패치 적용
 
-정상 소유한 아래 원본 Track 1과 별도로 구한 xdelta3 실행 파일이
-필요합니다. 저장소와 릴리스에는 게임 ROM과 `xdelta.exe`가 포함되지
-않습니다.
+### 간편 적용 (Windows, 권장)
+
+릴리스에서 **`srwcb-second-korean-v0.8.7-easy-apply.zip`** 를 받아 압축을
+풀면 `xdelta.exe`·패치·적용 스크립트가 모두 들어 있습니다.
+
+1. 정품 디스크에서 추출한 원본 `.bin` 2개(Track 1·Track 2)를 압축을 푼
+   폴더에 넣습니다.
+2. **`한글패치 적용하기.bat`** 를 더블클릭합니다. (또는 원본 Track 1
+   `.bin` 파일을 이 배치파일 아이콘 위로 끌어다 놓아도 됩니다.)
+3. SHA-256 검증 → 패치 → 결과 검증이 끝나면 같은 폴더에 한글판 Track 1과
+   `.cue` 가 만들어집니다. 에뮬레이터(DuckStation 등)에서 그 **`.cue`** 를
+   여세요.
+
+원본 `.bin` 은 변경되지 않으며, 결과물은 자동으로 SHA-256 검증됩니다.
+(`.bat` 은 PowerShell 실행 정책을 우회하여 동봉된 스크립트만 실행합니다.)
+
+### 수동 적용
+
+직접 적용하려면 정상 소유한 아래 원본 Track 1과 별도로 구한 xdelta3
+실행 파일이 필요합니다. 저장소에는 게임 ROM과 `xdelta.exe`가 포함되지
+않습니다(위 간편 적용 zip 에는 `xdelta.exe`가 동봉되어 있습니다).
 
 ```text
 원본 파일: Super Robot Taisen Complete Box (Track 1).bin

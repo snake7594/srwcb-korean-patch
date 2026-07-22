@@ -1,0 +1,14 @@
+﻿이 폴더에 포함된 xdelta.exe 는 제3자 오픈소스 도구입니다.
+
+  xdelta3 (VCDIFF 바이너리 델타 도구)
+  프로젝트: https://github.com/jmacd/xdelta
+  저작권: Joshua P. MacDonald 및 xdelta 기여자
+  각 배포판의 오픈소스 라이선스가 그대로 적용됩니다.
+
+이 한글패치 배포본은 사용 편의를 위해 xdelta.exe 를 함께 넣었을 뿐이며,
+xdelta3 자체를 수정하지 않았습니다. 최신 버전과 소스 코드는 위 프로젝트
+페이지에서 받을 수 있습니다.
+
+한글패치(번역 데이터, 스크립트)의 저작권/라이선스는 별개이며,
+프로젝트 저장소를 참고하세요:
+  https://github.com/snake7594/srwcb-korean-patch
