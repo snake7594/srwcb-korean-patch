@@ -1,5 +1,5 @@
 ﻿#requires -version 3
-# 슈퍼로봇대전 컴플리트 박스 한글패치 v0.9.2 (제2차 전체 + 제3차 전체) 적용 엔진
+# 슈퍼로봇대전 컴플리트 박스 한글패치 v0.9.3 (제2차 전체 + 제3차 전체) 적용 엔진
 # 이 스크립트는 "한글패치 적용하기.bat" 이 자동으로 실행합니다.
 # (직접 실행하려면 원본 Track 1 .bin 을 인자로 넘기거나 같은 폴더에 두세요.)
 
@@ -7,16 +7,16 @@ $ErrorActionPreference = 'Stop'
 
 $root    = $PSScriptRoot
 $xdelta  = Join-Path $root 'xdelta.exe'
-$patch   = Join-Path $root 'srwcb-second-third-korean-v0.9.2.xdelta'
+$patch   = Join-Path $root 'srwcb-second-third-korean-v0.9.3.xdelta'
 
 $T1NAME  = 'Super Robot Taisen Complete Box (Track 1).bin'
 $T2NAME  = 'Super Robot Taisen Complete Box (Track 2).bin'
-$OUTNAME = 'Super Robot Taisen Complete Box Korean v0.9.2 (Track 1).bin'
-$CUENAME = 'Super Robot Taisen Complete Box Korean v0.9.2.cue'
+$OUTNAME = 'Super Robot Taisen Complete Box Korean v0.9.3 (Track 1).bin'
+$CUENAME = 'Super Robot Taisen Complete Box Korean v0.9.3.cue'
 
 $EXP_SRC   = '3f25650b588774d55c3bbb5b771779beab408eaca020e9a622133ade323a0f94'
-$EXP_OUT   = '31f5e57d2ae918abfbabb017af95a0ae754e1805974a76984e597eec52c12fa4'
-$EXP_PATCH = 'd7744ccab5d52e876d01251d916d14a187a02ee83527972fd95ca9192ffe4056'
+$EXP_OUT   = 'be073775cb4e3e7fa31fdb91142b6231abded9150a7c3fe47efc33cd5baebe3b'
+$EXP_PATCH = '890987d98816fed5e8c93c6c7aac0cdd1ae67b6ad3c913acb1c7508665f3aff1'
 
 function Get-Sha256([string]$p) {
     return (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash.ToLower()
@@ -35,13 +35,13 @@ function Fail([string]$msg) {
 try {
     Write-Host ''
     Write-Host '============================================================'
-    Write-Host '   슈퍼로봇대전 컴플리트 박스 한글패치 v0.9.2'
+    Write-Host '   슈퍼로봇대전 컴플리트 박스 한글패치 v0.9.3'
     Write-Host '   (제2차 전체 + 제3차 전체)'
     Write-Host '============================================================'
     Write-Host ''
 
     if (-not (Test-Path -LiteralPath $xdelta)) { Fail "xdelta.exe 가 없습니다. 패치 파일들을 한 폴더에 함께 두세요." }
-    if (-not (Test-Path -LiteralPath $patch))  { Fail "srwcb-second-third-korean-v0.9.2.xdelta 가 없습니다." }
+    if (-not (Test-Path -LiteralPath $patch))  { Fail "srwcb-second-third-korean-v0.9.3.xdelta 가 없습니다." }
 
     # --- 원본 Track 1 찾기: 드래그앤드롭 인자 > 스크립트 폴더 > 현재 폴더 ---
     $src = $null

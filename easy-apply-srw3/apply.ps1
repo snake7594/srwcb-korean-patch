@@ -1,20 +1,20 @@
 ﻿#requires -version 3
-# 제3차 슈퍼로봇대전 단독판(별매 CD, SLPS_02530) 한글패치 v0.9.2 적용 엔진
+# 제3차 슈퍼로봇대전 단독판(별매 CD, SLPS_02530) 한글패치 v0.9.3 적용 엔진
 # 이 스크립트는 "한글패치 적용하기.bat" 이 자동으로 실행합니다.
 
 $ErrorActionPreference = 'Stop'
 
 $root    = $PSScriptRoot
 $xdelta  = Join-Path $root 'xdelta.exe'
-$patch   = Join-Path $root 'srw3-standalone-korean-v0.9.2.xdelta'
+$patch   = Join-Path $root 'srw3-standalone-korean-v0.9.3.xdelta'
 
 $T1NAME  = 'Dai 3 Ji Super Robot Taisen.bin'
-$OUTNAME = 'Dai 3 Ji Super Robot Taisen (Korean) v0.9.2.bin'
-$CUENAME = 'Dai 3 Ji Super Robot Taisen (Korean) v0.9.2.cue'
+$OUTNAME = 'Dai 3 Ji Super Robot Taisen (Korean) v0.9.3.bin'
+$CUENAME = 'Dai 3 Ji Super Robot Taisen (Korean) v0.9.3.cue'
 
 $EXP_SRC   = 'd81007738c10792f17dd8d9cae6fe1954347d83a930aad959a3fe9c3f4a7667f'
-$EXP_OUT   = '9485a345401cbd10311029cade7a29ae882ce5454bac174bef6a5201f0f6d3aa'
-$EXP_PATCH = '29e2b05af4d70c69837c96e65c7d126fb4dbe90fbd21334df76a803cfdb5d33b'
+$EXP_OUT   = '817494693c08c5f3ae7a9c0f54f90849e7e96b5872e554f3e087a949fd871968'
+$EXP_PATCH = '022d6887d4717a6954f69ba037932e81a3c5188e3959ccdbce3e21cab1998e64'
 
 function Get-Sha256([string]$p) { return (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash.ToLower() }
 function Close-Window([int]$code) {
@@ -31,12 +31,12 @@ function Fail([string]$msg) {
 try {
     Write-Host ''
     Write-Host '============================================================'
-    Write-Host '   제3차 슈퍼로봇대전 단독판(별매 CD) 한글패치 v0.9.2'
+    Write-Host '   제3차 슈퍼로봇대전 단독판(별매 CD) 한글패치 v0.9.3'
     Write-Host '============================================================'
     Write-Host ''
 
     if (-not (Test-Path -LiteralPath $xdelta)) { Fail "xdelta.exe 가 없습니다. 패치 파일들을 한 폴더에 함께 두세요." }
-    if (-not (Test-Path -LiteralPath $patch))  { Fail "srw3-standalone-korean-v0.9.2.xdelta 가 없습니다." }
+    if (-not (Test-Path -LiteralPath $patch))  { Fail "srw3-standalone-korean-v0.9.3.xdelta 가 없습니다." }
 
     # --- 원본 .bin 찾기: 드래그앤드롭 인자 > 표준 파일명 > 폴더 내 유일한 .bin ---
     $src = $null
