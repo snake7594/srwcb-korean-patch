@@ -1,5 +1,9 @@
 d7744ccab5d52e876d01251d916d14a187a02ee83527972fd95ca9192ffe4056 *srwcb-second-third-korean-v0.9.2.xdelta
 3852ce1cd228a35962c5a4a47cfcace47e2635b3322022fc5c0deb4b66f14154 *srwcb-cb-korean-v0.9.2-easy-apply.zip
+11861dea749fbc1aa308c37a9090e5023030fc14324ab53cea5e25dfeb537a64 *srwcb-cb-korean-v0.9.2.cue
 29e2b05af4d70c69837c96e65c7d126fb4dbe90fbd21334df76a803cfdb5d33b *srw3-standalone-korean-v0.9.2.xdelta
 b846358495f667a05faa0150bf67038b45795a442dff14c4df9020fae1dbbe31 *srw3-standalone-korean-v0.9.2-easy-apply.zip
+3db3c4795499bd3972f3f5baac01eeb3617d8162b3fb5d21f1c42f3be187595c *srw3-standalone-korean-v0.9.2.cue
 4f4205037e9a0c2f7eefb5c9c353cc8c953648e5a15824f11bd4e9474f1cea59 *srw2-standalone-korean-v0.9.2.xdelta
+3639fce59c7ce42a8a43c74232c73c37ec79485afd9abe48b8717fb738d78caf *srw2-standalone-korean-v0.9.2-easy-apply.zip
+a9be54b4e1649a0e90d0e6d7e04eb49cd8535d5e62d34446a52c76c6d0594475 *srw2-standalone-korean-v0.9.2.cue

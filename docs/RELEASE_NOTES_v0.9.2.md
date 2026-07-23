@@ -27,13 +27,18 @@
 
 ## 적용
 
-| 판 | 간편 적용 zip | 패치 |
-|----|---------------|------|
-| **컴플리트 박스** (제2차 전체 + 제3차 전체) | `srwcb-cb-korean-v0.9.2-easy-apply.zip` | `srwcb-second-third-korean-v0.9.2.xdelta` |
-| **제3차 단독판** (SLPS-02530) | `srw3-standalone-korean-v0.9.2-easy-apply.zip` | `srw3-standalone-korean-v0.9.2.xdelta` |
-| **제2차 단독판** (SLPS-02406) | (PowerShell) `apply_srw2_standalone.ps1` | `srw2-standalone-korean-v0.9.2.xdelta` |
+세 판 모두 **간편 적용 zip**(더블클릭)과 **xdelta**(수동), 그리고 **별도 `.cue`** 를 제공합니다.
 
-zip 을 풀고 원본을 넣은 뒤 **`한글패치 적용하기.bat`** 더블클릭 → 생성된 **`.cue`** 로 실행하세요.
+| 판 | 간편 적용 zip | 패치(xdelta) | .cue (별도) |
+|----|---------------|--------------|-------------|
+| **컴플리트 박스** (제2차 전체 + 제3차 전체) | `srwcb-cb-korean-v0.9.2-easy-apply.zip` | `srwcb-second-third-korean-v0.9.2.xdelta` | `srwcb-cb-korean-v0.9.2.cue` |
+| **제3차 단독판** (SLPS-02530) | `srw3-standalone-korean-v0.9.2-easy-apply.zip` | `srw3-standalone-korean-v0.9.2.xdelta` | `srw3-standalone-korean-v0.9.2.cue` |
+| **제2차 단독판** (SLPS-02406) | `srw2-standalone-korean-v0.9.2-easy-apply.zip` | `srw2-standalone-korean-v0.9.2.xdelta` | `srw2-standalone-korean-v0.9.2.cue` |
+
+zip 을 풀고 원본을 넣은 뒤 **`한글패치 적용하기.bat`** 더블클릭하면 한글판 이미지와 `.cue` 가
+자동으로 만들어집니다. **`.cue` 는 zip 에 넣지 않았습니다** — 수동 적용(xdelta 직접) 하시는 분은
+위 별도 `.cue` 를 받아 패치된 이미지와 같은 폴더에 두고 열면 됩니다. (제2차 단독판은 PowerShell
+`apply_srw2_standalone.ps1` 방식도 계속 제공합니다.)
 
 | 파일 | SHA-256 |
 |------|---------|
