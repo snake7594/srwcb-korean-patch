@@ -11,13 +11,13 @@
 param(
   [Parameter(Mandatory=$true)][string]$SourceImg,
   [string]$Xdelta = ".\xdelta.exe",
-  [string]$Patch  = ".\release\srw2-standalone-korean-v0.9.2.xdelta",
+  [string]$Patch  = ".\release\srw2-standalone-korean-v0.9.3.xdelta",
   [string]$OutName = "Super Robot Taisen 2 (Korean)"
 )
 
 $ErrorActionPreference = "Stop"
 $RetailSha = "a3d3a603da98edcf3d454fba3dda57b112c54d5a1a7af51e6e86bc610bd608bd"
-$KoreanSha = "acf1c391201093980659993ab823a650b1923228726623370ecf2e25f03c887d"
+$KoreanSha = "1a14d915a0219f726d15bb041c381ddc74794828533579a06d69742a2f2d2032"
 
 if (-not (Test-Path $SourceImg)) { throw "Source image not found: $SourceImg" }
 if (-not (Test-Path $Xdelta))    { throw "xdelta.exe not found: $Xdelta (obtain separately)" }
