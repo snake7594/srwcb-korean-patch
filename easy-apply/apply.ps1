@@ -1,5 +1,5 @@
 ﻿#requires -version 3
-# 슈퍼로봇대전 컴플리트 박스 한글패치 v0.10.5 (제2차 + 제3차 + EX 전체) 적용 엔진
+# 슈퍼로봇대전 컴플리트 박스 한글패치 v0.10.7 (제2차 + 제3차 + EX 전체) 적용 엔진
 # 이 스크립트는 "한글패치 적용하기.bat" 이 자동으로 실행합니다.
 # (직접 실행하려면 원본 Track 1 .bin 을 인자로 넘기거나 같은 폴더에 두세요.)
 
@@ -7,16 +7,16 @@ $ErrorActionPreference = 'Stop'
 
 $root    = $PSScriptRoot
 $xdelta  = Join-Path $root 'xdelta.exe'
-$patch   = Join-Path $root 'srwcb-second-third-ex-korean-v0.10.5.xdelta'
+$patch   = Join-Path $root 'srwcb-second-third-ex-korean-v0.10.7.xdelta'
 
 $T1NAME  = 'Super Robot Taisen Complete Box (Track 1).bin'
 $T2NAME  = 'Super Robot Taisen Complete Box (Track 2).bin'
-$OUTNAME = 'Super Robot Taisen Complete Box Korean v0.10.5 (Track 1).bin'
-$CUENAME = 'Super Robot Taisen Complete Box Korean v0.10.5.cue'
+$OUTNAME = 'Super Robot Taisen Complete Box Korean v0.10.7 (Track 1).bin'
+$CUENAME = 'Super Robot Taisen Complete Box Korean v0.10.7.cue'
 
 $EXP_SRC   = '3f25650b588774d55c3bbb5b771779beab408eaca020e9a622133ade323a0f94'
-$EXP_OUT   = 'd71bf82bf23652e08e1735774069a107582f1b355d306a8833030a1848de87a7'
-$EXP_PATCH = 'd4f45bc2210f9f8f4c6a4595e35062192ae884daa0037db7f67e7f8a013890f7'
+$EXP_OUT   = '8f272288602ef39665ba0ce1babc88505a768646daed7fe29bb98e663650d72c'
+$EXP_PATCH = 'e608c8b471896fe0bb5fe792c600149f1a8d547ba9103d942d970b974eb2e1a3'
 
 function Get-Sha256([string]$p) {
     return (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash.ToLower()
@@ -35,13 +35,13 @@ function Fail([string]$msg) {
 try {
     Write-Host ''
     Write-Host '============================================================'
-    Write-Host '   슈퍼로봇대전 컴플리트 박스 한글패치 v0.10.5'
+    Write-Host '   슈퍼로봇대전 컴플리트 박스 한글패치 v0.10.7'
     Write-Host '   (제2차 + 제3차 + EX 전체)'
     Write-Host '============================================================'
     Write-Host ''
 
     if (-not (Test-Path -LiteralPath $xdelta)) { Fail "xdelta.exe 가 없습니다. 패치 파일들을 한 폴더에 함께 두세요." }
-    if (-not (Test-Path -LiteralPath $patch))  { Fail "srwcb-second-third-ex-korean-v0.10.5.xdelta 가 없습니다." }
+    if (-not (Test-Path -LiteralPath $patch))  { Fail "srwcb-second-third-ex-korean-v0.10.7.xdelta 가 없습니다." }
 
     # --- 원본 Track 1 찾기: 드래그앤드롭 인자 > 스크립트 폴더 > 현재 폴더 ---
     $src = $null
