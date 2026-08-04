@@ -120,6 +120,33 @@ python menu-align/menu_align_audit.py     # 메뉴 칸 정렬
 - **`xdelta executable not found`** — 무시해도 됩니다. 이미지 자체는 만들어집니다.
   패치 파일까지 원하면 `xdelta3` 를 `work/xdelta.exe` 로 두세요.
 
+## 릴리스 내기 (관리자용)
+
+릴리스마다 **패치 파일만 올리고 소스가 뒤처지는 일**이 없도록, 한 스크립트가
+아티팩트 생성과 소스 점검을 함께 합니다.
+
+```bash
+set SRWCB_XDELTA=D:	oolsÞlta3.exe
+python make_release.py v0.10.9 --prev v0.10.8
+```
+
+하는 일
+
+1. 저장소 스크립트에 하드코딩 경로가 생겼는지 검사 — **재현성 회귀를 막습니다**
+2. CB·단독판 `.xdelta` 생성 후 **역적용으로 결과 이미지 재현 확인**
+3. `.cue` / easy-apply zip / `SHA256SUMS` 생성
+4. 릴리스 노트 초안 생성
+
+그다음 노트를 채우고 커밋·태그·게시합니다.
+
+```bash
+git add -A && git commit -m "v0.10.9: …" && git tag v0.10.9 && git push --follow-tags
+gh release create v0.10.9 --notes-file docs/RELEASE_NOTES_v0.10.9.md release/*v0.10.9*
+```
+
+릴리스 바이너리(`.xdelta`·`.zip`)는 저장소에 담지 않고 GitHub Releases 로만
+배포합니다. 소스·번역은 항상 저장소에 함께 갱신합니다.
+
 ## 배포하지 않는 것
 
 게임 실행파일, 추출한 게임 데이터, 원문 대사 원장, BIOS, 에뮬레이터,
