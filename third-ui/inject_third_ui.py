@@ -8,14 +8,25 @@ unused Hangul slot is safe: only already-broken text could point at it.
 Assets: 10 pointer tables, ui_master, music/demo pool (repack + re-aim),
         map-label heap (byte-exact in place at SECOND offset + 0x2dc).
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import json, struct, sys, hashlib
-sys.path.insert(0, "D:/ps1/roms/SRWCB/korean_patch/tools")
+sys.path.insert(0, str(_P.TOOLS))
 from second_translation_codec import (load_safe_glyph_map, required_extra_characters,
                                       add_extra_glyph_mapping, normalise_for_font)
 from build_second_expanded_patch import FONT_EXE_LAYOUT
 
-ROOT = "D:/ps1/roms/SRWCB/korean_patch"
-SP = "C:/Users/Jay/AppData/Local/Temp/claude/D--ps1-roms-SRWCB/57133a9b-927c-4883-b4d5-bbcc7cdad986/scratchpad"
+ROOT = str(_P.WORK)
+SP = str(_P.BUILD)
 EXTRA_GLYPH_START, GLYPH_COUNT, GLYPH_BYTES = 0xA2F, 0xB00, 32
 STRUCT_GLYPHS = {0x3FF, 0x6FF, 0x700}
 CTRL_ARGS = {0xF6:0,0xF7:0,0xF8:1,0xF9:1,0xFA:0,0xFB:2,0xFC:2,0xFD:2,0xFE:1}

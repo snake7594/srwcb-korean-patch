@@ -4,14 +4,25 @@
 새 C_SMAP 은 원본과 크기가 같으므로 원래 LBA 2081 에 그대로 덮어쓴다.
 (파일을 옮기면 뒤 멤버 오프셋이 밀려 타이틀 로고·메뉴 창이 사라진다 — 실측 확인)
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import math, os, shutil, sys, hashlib
 
-sys.path.insert(0, "D:/ps1/roms/SRWCB/korean_patch/tools")
+sys.path.insert(0, str(_P.TOOLS))
 from patch_raw_track_exes import SECTOR_SIZE, USER_DATA_OFFSET as UDO, USER_DATA_SIZE as UDS, rebuild_mode2_form1
 
 SP = os.path.dirname(os.path.abspath(__file__))
-BASE = "D:/ps1/roms/SRWCB/korean_patch/test_build/third_full/Super Robot Taisen Complete Box Korean v0.10.1 (Track 1).bin"
-OUT = "D:/ps1/roms/SRWCB/korean_patch/test_build/third_full/Super Robot Taisen Complete Box Korean v0.10.2 (Track 1).bin"
+BASE = str(_P.OUT / "cb_korean_prev.bin")
+OUT = str(_P.OUT / "cb_korean_next.bin")
 NEW = f"{SP}/gfx/C_SMAP_ko.BIN"
 LBA, SIZE = 2081, 9932026
 

@@ -10,11 +10,22 @@ BASE 이미지가 없으면 레트일 + 릴리즈된 xdelta 로 되살릴 수 �
 TR 만 다시 고칠 때는 BASE 를 이미 만든 v0.10.5 이미지로 두고 그대로 덮어써도 된다
 (주입은 이미지가 아니라 test_build/ex_full/font_extracted/TR.WAR 에서 출발한다).
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import math, os, shutil, sys, hashlib
 from pathlib import Path
 
-ROOT = "D:/ps1/roms/SRWCB/korean_patch"
-sys.path.insert(0, f"{ROOT}/tools")
+ROOT = str(_P.WORK)
+sys.path.insert(0, str(_P.TOOLS))
 from patch_raw_track_exes import (SECTOR_SIZE, USER_DATA_OFFSET as UDO,
                                   USER_DATA_SIZE as UDS, rebuild_mode2_form1)
 from extract_psx_iso import RawMode2Image, read_tree

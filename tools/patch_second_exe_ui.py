@@ -15,6 +15,18 @@ or truncated to fit an old slot.
 
 from __future__ import annotations
 
+# --- 이식용 부트스트랩 (자동 삽입) ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------
+
+
 import hashlib
 import json
 import re
@@ -726,7 +738,7 @@ _REVIEWED_SOURCE_CHARACTERS: dict[int, str | None] | None = None
 def _reviewed_source_characters() -> dict[int, str | None]:
     global _REVIEWED_SOURCE_CHARACTERS
     if _REVIEWED_SOURCE_CHARACTERS is None:
-        path = Path(__file__).resolve().parents[1] / "research" / "srwcb_embedded_font_mapping_reviewed.json"
+        path = _P.FONT_MAPPING
         document = json.loads(path.read_text(encoding="utf-8"))
         _REVIEWED_SOURCE_CHARACTERS = {
             int(row["glyph_index"]): row.get("character")
@@ -3191,11 +3203,7 @@ def _prepare_shared_music_demo_pool(
 ) -> tuple[bytes, list[tuple[int, int]], dict[str, Any]]:
     """Rebuild SLPS's byte-identical music/demo title pool and its pointers."""
 
-    inventory_path = (
-        Path(__file__).resolve().parents[1]
-        / "research"
-        / "second_exe_ui_full_inventory.json"
-    )
+    inventory_path = _P.WORK / "research" / "second_exe_ui_full_inventory.json"
     inventory = load_json(inventory_path)
     group = inventory["common_music_demo_pool"]
     asset_id = str(group["asset_id"])
@@ -3269,11 +3277,7 @@ def _patch_shared_preview_conditions(
 ) -> tuple[list[tuple[int, int]], dict[str, Any]]:
     """Patch only the two equal-size condition labels in SLPS's root pool."""
 
-    inventory_path = (
-        Path(__file__).resolve().parents[1]
-        / "research"
-        / "second_exe_ui_full_inventory.json"
-    )
+    inventory_path = _P.WORK / "research" / "second_exe_ui_full_inventory.json"
     inventory = load_json(inventory_path)
     group = inventory["common_preview_pool"]
     asset_id = str(group["asset_id"])

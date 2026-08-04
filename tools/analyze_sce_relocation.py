@@ -76,6 +76,10 @@ def pointer_targets(data: bytes) -> list[int]:
     ]
 
 
+# 재배치 후 우연히 참조 조건을 만족하게 된 위치(런타임 무해, 진단용 기록)
+SPURIOUS_REFERENCE_GAINS: list[dict] = []
+
+
 def parse_records(data: bytes, start: int, end: int) -> tuple[Record, ...]:
     """Parse renderer bytecode; operand FF bytes are never terminators."""
     records: list[Record] = []
@@ -101,7 +105,12 @@ def parse_records(data: bytes, start: int, end: int) -> tuple[Record, ...]:
         # odd file-table target.  They are pool tail bytes, not another text
         # record.  Retain this observed quirk byte-for-byte during relocation.
         tail = data[record_start:end]
-        if len(tail) > 3 or any(tail):
+        # EX scenario 68 ends its pool with an unterminated run ("COMING SOON /
+        # NEXT / 第4次スーパーロボット大戦") that runs exactly to pool_end with no
+        # FF.  It carries no further record, so leave it in the pool tail, which
+        # the rebuilder preserves and verifies byte-for-byte.
+        unterminated_trailing_run = 0xFF not in tail
+        if not unterminated_trailing_run and (len(tail) > 3 or any(tail)):
             raise ValueError(f"unterminated record at {record_start:#x}")
     return tuple(records)
 
@@ -257,9 +266,25 @@ def relocate_sce(source: bytes, replacements: dict[int, bytes]) -> bytes:
                 f"scenario {old.index} record count changed from "
                 f"{len(old.records)} to {len(new.records)}"
             )
-        if len(old.references) != len(new.references):
+        old_ops = {r.operand_offset - old.block_start: r.opcode for r in old.references}
+        new_ops = {r.operand_offset - new.block_start: r.opcode for r in new.references}
+        lost = sorted(set(old_ops) - set(new_ops))
+        gained = sorted(set(new_ops) - set(old_ops))
+        # 유실은 치명적(실제 대사 포인터가 끊긴 것). 추가는 탐지기 오탐일 수 있다:
+        # find_text_references는 "B1/B3/B4 바이트 + u16 피연산자가 레코드 시작을 가리킴"이라는
+        # 휴리스틱이라, 레코드가 이동하면 무관한 바이트열이 우연히 조건을 만족할 수 있다.
+        # 그런 위치는 피연산자가 재기록되지 않았으므로(참조 집합 밖) 런타임 동작은 불변.
+        if lost:
             raise AssertionError(
-                f"scenario {old.index} lost text references after relocation"
+                f"scenario {old.index} lost text references after relocation: "
+                f"{len(old.references)} -> {len(new.references)}; "
+                f"lost(block-rel)={[hex(x) for x in lost[:8]]} "
+                f"opcodes={[hex(old_ops[x]) for x in lost[:8]]}"
+            )
+        if gained:
+            SPURIOUS_REFERENCE_GAINS.append(
+                {"scenario": old.index, "block_relative": gained,
+                 "opcodes": [new_ops[x] for x in gained]}
             )
     return bytes(output)
 

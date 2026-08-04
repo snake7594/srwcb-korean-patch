@@ -6,7 +6,19 @@ translation cache.  It rebuilds all three runtime message containers, moves
 the enlarged files to fresh ISO extents, patches any additional required font
 glyphs, and can produce and decode-verify the final xdelta.
 """
+
 from __future__ import annotations
+
+# --- 이식용 부트스트랩 (자동 삽입) ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------
 
 import argparse
 import hashlib
@@ -72,26 +84,26 @@ from second_translation_codec import (  # noqa: E402
 )
 
 
-ROOT = Path(__file__).resolve().parents[2]
-EXTRACTED = ROOT / "korean_patch" / "extracted"
-SAFE_BUILD = ROOT / "korean_patch" / "test_build" / "exe_font_safe_test"
+ROOT = _P.WORK
+EXTRACTED = _P.EXTRACTED
+SAFE_BUILD = _P.BUILD / "exe_font_safe_test"
 SAFE_EXTRACTED = SAFE_BUILD / "extracted"
 SAFE_FONT = SAFE_BUILD / "font" / "srwcb_font_hangul_test_2816_16x16.bin"
 SAFE_TRACK = SAFE_BUILD / "Super Robot Taisen Complete Box Hangul Safe Font Test (Track 1).bin"
 ORIGINAL_TRACK = ROOT / "Super Robot Taisen Complete Box (Track 1).bin"
-BDF = ROOT / "korean_patch" / "assets" / "Galmuri14.bdf"
-LEDGER = ROOT / "korean_patch" / "research" / "translation_v2" / "second_translation_ledger.json"
-OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_translation_overlay.json"
-UI_INVENTORY = ROOT / "korean_patch" / "research" / "second_exe_ui_full_inventory.json"
-UI_SCRIPT_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_scripts_overlay.json"
-UI_TABLE_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_tables_overlay.json"
-UI_NAME_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_names_overlay.json"
-UI_COMMON_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_common_master_overlay.json"
-UI_PREVIEW_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_preview_overlay.json"
-UI_MAP_LABEL_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_ui_map_labels_overlay.json"
-SCE_CONDITIONS_OVERLAY = ROOT / "korean_patch" / "translation_v2" / "second_sce_conditions_overlay.json"
+BDF = _P.GALMURI_BDF
+LEDGER = _P.LEDGER / "second_translation_ledger.json"
+OVERLAY = _P.TRANSLATION / "second_translation_overlay.json"
+UI_INVENTORY = (_P.WORK / "research") / "second_exe_ui_full_inventory.json"
+UI_SCRIPT_OVERLAY = _P.TRANSLATION / "second_ui_scripts_overlay.json"
+UI_TABLE_OVERLAY = _P.TRANSLATION / "second_ui_tables_overlay.json"
+UI_NAME_OVERLAY = _P.TRANSLATION / "second_ui_names_overlay.json"
+UI_COMMON_OVERLAY = _P.TRANSLATION / "second_ui_common_master_overlay.json"
+UI_PREVIEW_OVERLAY = _P.TRANSLATION / "second_ui_preview_overlay.json"
+UI_MAP_LABEL_OVERLAY = _P.TRANSLATION / "second_ui_map_labels_overlay.json"
+SCE_CONDITIONS_OVERLAY = _P.TRANSLATION / "second_sce_conditions_overlay.json"
 BUILD_LABEL = "v0.8.7-full-menus"
-DEFAULT_OUTPUT = ROOT / "korean_patch" / "test_build" / f"second_korean_{BUILD_LABEL}"
+DEFAULT_OUTPUT = _P.BUILD / f"second_korean_{BUILD_LABEL}"
 XDELTA = ROOT / "xdelta.exe"
 
 SOURCE_SCE = EXTRACTED / "SECOND" / "2_SCE.BIN"

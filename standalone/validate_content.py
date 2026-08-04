@@ -3,12 +3,23 @@ the ported SLPS and confirm each resolves to a record byte-identical to the
 corresponding record in the proven patched SECOND.WAR.  Also decode a sample to
 Korean.  If every table's resolved record set matches, the port is correct.
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import struct, json, bisect, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config
 
-P="D:/ps1/roms/"  # retained only for the two records_equiv paths below
+P=str(_P.WORK.parent) + "/"  # retained only for the two records_equiv paths below
 ps=open(config.CB_PATCHED_SECOND,"rb").read()
 sp=open(config.PATCHED_EXE,"rb").read()
 zones=json.load(open(config.DELTA_MAP)); zstarts=[z[0] for z in zones]

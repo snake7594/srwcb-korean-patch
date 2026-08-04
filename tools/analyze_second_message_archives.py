@@ -231,6 +231,21 @@ def parse_bmess(data: bytes) -> BMessArchive:
     blocks: list[BMessBlock] = []
     for index, (start, end) in enumerate(zip(table.targets, table.targets[1:])):
         raw = data[start:end]
+        if start == end:
+            # Empty slot: two consecutive pointers resolve to the same target, so
+            # this index carries no CPE block at all.  BMESS4 (EX) uses one at
+            # index 0; BMESS2/BMESS3 have none.  Keep it as a zero-length block so
+            # the pointer-field count is preserved on rebuild (dropping it would
+            # emit 399 targets into a 400-field table -> non-monotonic).
+            blocks.append(
+                BMessBlock(
+                    index=index, file_start=start, file_end=end, payload=b"",
+                    top_targets=(), selector_table_end=0,
+                    text_references={}, text_records={},
+                    unreferenced_quoted_records={},
+                )
+            )
+            continue
         if len(raw) < CPE_FIXED_OVERHEAD or raw[:4] != CPE_MAGIC:
             raise ValueError(f"BMESS block {index} has no CPE header")
         if raw[4:7] != b"\x08\x00\x01":
@@ -337,6 +352,8 @@ def analyze_bmess_runtime_scratch(
     results: list[dict[str, Any]] = []
 
     for block in archive.blocks:
+        if block.file_start == block.file_end:
+            continue        # 빈 슬롯(BMESS4 index 0)은 런타임에 로드되지 않는다
         payload = block.payload
         starts = set(block.top_targets)
         cursor = 0x14
@@ -562,6 +579,10 @@ def rebuild_bmess_repack(
     rebuilt_blocks: list[bytes] = []
 
     for block in archive.blocks:
+        if block.file_start == block.file_end:
+            # 빈 슬롯(BMESS4 index 0): 길이 0 그대로 재생성해 포인터 칸 수를 보존한다.
+            rebuilt_blocks.append(b"")
+            continue
         selected = sorted(
             target for owner, target in remaining if owner == block.index
         )

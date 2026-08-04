@@ -5,12 +5,23 @@ Reuses the proven SRW2/SRW3 delta-transplant classifier. EX.WAR changes are:
   embedded BMESS4 table [0x10431c,0x10495c) verbatim.
 EX needs no battle-scratch relocation (0x79 <= 0x200).
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import struct, json, bisect, hashlib
-ROOT="D:/ps1/roms/SRWCB/korean_patch"
+ROOT=str(_P.WORK)
 rs=open(f"{ROOT}/extracted/EX/EX.WAR","rb").read()               # retail EX.WAR
 ps=open(f"{ROOT}/test_build/ex_full/runtime/EX/EX.WAR","rb").read()  # patched
-sr=open("D:/ps1/roms/SRWEX/extracted/SLPS_025.29","rb").read()          # retail standalone
-zones=json.load(open("D:/ps1/roms/SRWEX/extracted/delta_map_ex.json")); zstarts=[z[0] for z in zones]
+sr=open(str(_P.WORK / "srwex" / "extracted") + "/SLPS_025.29","rb").read()          # retail standalone
+zones=json.load(open(str(_P.WORK / "srwex" / "extracted") + "/delta_map_ex.json")); zstarts=[z[0] for z in zones]
 FZ=zstarts[0]; SEC_LEN=len(rs); SLPS_LEN=len(sr); LAST_DELTA=zones[-1][2]
 VERBATIM=[(0x1d544,0x33544),(0x10431c,0x10495c)]   # font(EX 0x1d544), embedded BMESS4 table(EX 0x10431c)
 M32=0xffffffff
@@ -72,5 +83,5 @@ print("scratch split-addr SLP targets:",scratch)
 print("stats:",st)
 if prob: print("PROBLEMS:",prob[:20])
 assert len(out)==SLPS_LEN
-open("D:/ps1/roms/SRWEX/extracted/SLPS_025.29.patched","wb").write(out)
+open(str(_P.WORK / "srwex" / "extracted") + "/SLPS_025.29.patched","wb").write(out)
 print("wrote SLPS_025.29.patched",hex(len(out)),"sha256",hashlib.sha256(out).hexdigest()[:16])

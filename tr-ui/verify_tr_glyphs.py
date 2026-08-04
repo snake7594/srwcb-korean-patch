@@ -11,11 +11,22 @@
      사용된 글리프 인덱스를 모은다
   3) 그 인덱스의 폰트 슬롯이 도너 구간과 겹치면 실패
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import json, os, struct, sys
 
-ROOT = "D:/ps1/roms/SRWCB/korean_patch"
+ROOT = str(_P.WORK)
 SP = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, f"{ROOT}/tools"); sys.path.insert(0, SP)
+sys.path.insert(0, str(_P.TOOLS)); sys.path.insert(0, SP)
 import tr_extra_records as XR
 from patch_second_exe_ui import parse_second_ui_vm_record as PV
 

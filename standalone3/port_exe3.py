@@ -6,12 +6,23 @@ Reuses the proven SRW2 delta-transplant classifier. THIRD.WAR changes are:
   address loads (fix_split_addr), stride opcode @0xC3898 verbatim.
 No music-pool / UI-table changes (dialogue-only).
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import struct, json, bisect, hashlib
-ROOT="D:/ps1/roms/SRWCB/korean_patch"
+ROOT=str(_P.WORK)
 rs=open(f"{ROOT}/extracted/THIRD/THIRD.WAR","rb").read()               # retail THIRD.WAR
 ps=open(f"{ROOT}/test_build/third_full/runtime/THIRD/THIRD.WAR","rb").read()  # patched
-sr=open("D:/ps1/roms/SRW3/extracted/SLPS_025.30","rb").read()          # retail standalone
-zones=json.load(open("D:/ps1/roms/SRW3/extracted/delta_map3.json")); zstarts=[z[0] for z in zones]
+sr=open(str(_P.WORK / "srw3" / "extracted") + "/SLPS_025.30","rb").read()          # retail standalone
+zones=json.load(open(str(_P.WORK / "srw3" / "extracted") + "/delta_map3.json")); zstarts=[z[0] for z in zones]
 FZ=zstarts[0]; SEC_LEN=len(rs); SLPS_LEN=len(sr); LAST_DELTA=zones[-1][2]
 VERBATIM=[(0x2872c,0x3e72c),(0x109fe4,0x10a624)]   # font, embedded BMESS3 table
 M32=0xffffffff
@@ -86,5 +97,5 @@ print("scratch split-addr SLP targets:",scratch)
 print("stats:",st)
 if prob: print("PROBLEMS:",prob[:20])
 assert len(out)==SLPS_LEN
-open("D:/ps1/roms/SRW3/extracted/SLPS_025.30.patched","wb").write(out)
+open(str(_P.WORK / "srw3" / "extracted") + "/SLPS_025.30.patched","wb").write(out)
 print("wrote SLPS_025.30.patched",hex(len(out)),"sha256",hashlib.sha256(out).hexdigest()[:16])

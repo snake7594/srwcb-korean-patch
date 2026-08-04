@@ -5,10 +5,21 @@ the proven v0.8.7 SECOND.WAR executable patch onto the standalone SLPS_024.06
 (different offsets) and reuses the CB rebuilt data files.  Point CB_BUILD at
 the latest Complete Box build directory to re-derive the standalone in sync.
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 from pathlib import Path
 
 # --- Complete Box project (source of the proven patch) ---
-CB_ROOT = Path("D:/ps1/roms/SRWCB/korean_patch")
+CB_ROOT = _P.WORK
 CB_BUILD = CB_ROOT / "test_build" / "second_korean_v0.8.7-full-menus"
 CB_RETAIL_SECOND = CB_ROOT / "extracted" / "SECOND" / "SECOND.WAR"
 CB_PATCHED_SECOND = CB_BUILD / "font_extracted" / "SECOND" / "SECOND.WAR"
@@ -16,7 +27,7 @@ CB_REBUILT = CB_BUILD / "rebuilt"
 CB_INVENTORY = CB_ROOT / "research" / "second_exe_ui_full_inventory.json"
 
 # --- SRW2 standalone (user-owned game image; NOT distributed) ---
-SRW2_ROOT = Path("D:/ps1/roms/SRW2")
+SRW2_ROOT = (_P.WORK / "srw2")
 SRW2_IMG = SRW2_ROOT / "Super Robot Taisen 2.img"
 SRW2_EXTRACTED = SRW2_ROOT / "extracted"          # retail files pulled from the image
 SRW2_RETAIL_EXE = SRW2_EXTRACTED / "SLPS_024.06"

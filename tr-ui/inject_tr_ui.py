@@ -13,11 +13,22 @@ EX는 THIRD와 엔진/레코드 구조가 1:1이라 오프셋만 다르다(정�
   * 레코드 통째 재토큰화 금지 — 교체 스팬 단위로만 (UI-VM 옵코드 F0-F5 겹침)
   * 스팬은 원본 renderer advance/phase 시그니처에 맞춤 (고정폭 셀 깨짐 방지)
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import json, struct, sys, os, re, hashlib
 
-ROOT = "D:/ps1/roms/SRWCB/korean_patch"
-SP = "C:/Users/Jay/AppData/Local/Temp/claude/D--ps1-roms-SRWCB/57133a9b-927c-4883-b4d5-bbcc7cdad986/scratchpad"
-sys.path.insert(0, f"{ROOT}/tools"); sys.path.insert(0, SP)
+ROOT = str(_P.WORK)
+SP = str(_P.BUILD)
+sys.path.insert(0, str(_P.TOOLS)); sys.path.insert(0, SP)
 
 from second_translation_codec import (load_safe_glyph_map, add_extra_glyph_mapping,
                                       required_extra_characters, normalise_for_font)

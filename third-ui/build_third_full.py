@@ -7,10 +7,21 @@ Order matters:
   4. embedded BMESS3 table + battle-scratch patches onto the font-patched THIRD.WAR
   5. UI injection last (it stores records in unused font glyph slots)
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import json, struct, sys, re, shutil, hashlib
 from pathlib import Path
-ROOT = Path("D:/ps1/roms/SRWCB/korean_patch")
-SP = "C:/Users/Jay/AppData/Local/Temp/claude/D--ps1-roms-SRWCB/57133a9b-927c-4883-b4d5-bbcc7cdad986/scratchpad"
+ROOT = _P.WORK
+SP = str(_P.BUILD)
 sys.path.insert(0, str(ROOT / "tools"))
 
 import rebuild_second_sce as R

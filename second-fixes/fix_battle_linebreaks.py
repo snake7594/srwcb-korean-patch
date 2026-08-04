@@ -13,10 +13,21 @@ pre-break 를 배틀·사망 대사에도 적용해, 원판 1줄짜리(≤29유�
 
 검증: 제거 후 모든 레코드가 40유닛 이내(배틀 박스)에 들어감을 확인했다.
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import sys, math, struct
 from pathlib import Path
 
-R = "D:/ps1/roms/SRWCB/korean_patch"
+R = str(_P.WORK)
 sys.path.insert(0, f"{R}/tools")
 from analyze_second_message_archives import parse_bmess, parse_dead
 from second_translation_codec import glyph_advance

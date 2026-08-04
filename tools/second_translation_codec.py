@@ -1,6 +1,18 @@
 #!/usr/bin/env python3
 """Glyph encoding and lossless dialogue layout for SECOND's Korean patch."""
+
 from __future__ import annotations
+
+# --- 이식용 부트스트랩 (자동 삽입) ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------
 
 import json
 import re
@@ -9,9 +21,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-ROOT = Path(__file__).resolve().parents[2]
-FONT_MAP = ROOT / "korean_patch" / "test_build" / "exe_font_safe_test" / "font" / "hangul_ksx1001_exe_mapping.tsv"
-REVIEWED_MAP = ROOT / "korean_patch" / "research" / "srwcb_embedded_font_mapping_reviewed.json"
+ROOT = _P.WORK
+FONT_MAP = _P.BUILD / "exe_font_safe_test" / "font" / "hangul_ksx1001_exe_mapping.tsv"
+REVIEWED_MAP = _P.FONT_MAPPING
 
 # The retail SECOND dialogue window is twenty full-width cells wide.  The
 # earlier 26-cell value was inferred from the source script's Japanese byte

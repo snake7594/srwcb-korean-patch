@@ -5,13 +5,24 @@
    retarget their ISO directory entries.
  * Single MODE2/2352 data-track .cue (proven on the SRW2/SRW3 standalones).
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import struct, math, shutil, hashlib, sys, os
 
-sys.path.insert(0, "D:/ps1/roms/SRWCB/korean_patch/tools")
+sys.path.insert(0, str(_P.TOOLS))
 from patch_raw_track_exes import SECTOR_SIZE, USER_DATA_OFFSET as UDO, USER_DATA_SIZE as UDS, rebuild_mode2_form1
 
-SRWEX = "D:/ps1/roms/SRWEX"
-EXB = "D:/ps1/roms/SRWCB/korean_patch/test_build/ex_full"
+SRWEX = str(_P.WORK / "srwex")
+EXB = str(_P.BUILD / "ex_full")
 SRC_IMG = f"{SRWEX}/Super Robot Taisen EX (J).img"
 OUT_DIR = f"{SRWEX}/port"; os.makedirs(OUT_DIR, exist_ok=True)
 OUT_IMG = f"{OUT_DIR}/Super Robot Taisen EX (Korean).img"

@@ -186,11 +186,6 @@ def main() -> int:
         type=Path,
         help="write a patched BIOS copy for visual testing",
     )
-    parser.add_argument(
-        "--force",
-        action="store_true",
-        help="overwrite an existing --patched-bios output",
-    )
     parser.add_argument("--columns", type=int, default=64)
     parser.add_argument(
         "--baseline-row",
@@ -203,13 +198,6 @@ def main() -> int:
     args = parser.parse_args()
     if (args.bios is None) != (args.patched_bios is None):
         parser.error("--bios and --patched-bios must be supplied together")
-    if args.bios and args.patched_bios:
-        source_bios = args.bios.resolve()
-        output_bios = args.patched_bios.resolve()
-        if source_bios == output_bios:
-            parser.error("--patched-bios must not overwrite --bios")
-        if output_bios.exists() and not args.force:
-            parser.error("--patched-bios already exists; pass --force to overwrite it")
     if args.columns <= 0:
         parser.error("--columns must be positive")
 

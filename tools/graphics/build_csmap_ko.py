@@ -8,6 +8,17 @@
 이렇게 하면 표도 파일 크기도 다른 멤버의 위치도 전부 그대로다. 처음엔 멤버가
 127바이트 커져 뒤 멤버가 전부 밀렸고, 그 결과 타이틀 로고와 메뉴 창이 사라졌다.
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import struct, sys, os
 SP = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SP)
@@ -15,7 +26,7 @@ from srw_lz_fast import decompress
 from srw_lz_enc import compress
 import menu_strips as M
 
-SRC = "D:/ps1/roms/SRWCB/korean_patch/extracted/C_SMAP.BIN"
+SRC = str(_P.EXTRACTED / "C_SMAP.BIN")
 OUT = f"{SP}/gfx/C_SMAP_ko.BIN"
 TARGET = 21
 

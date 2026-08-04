@@ -11,10 +11,21 @@
 
 도너 안전성: 살아있는 레코드가 참조하는 글리프 슬롯은 절대 쓰지 않는다.
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import sys, json, struct, os
 from pathlib import Path
 
-R = "D:/ps1/roms/SRWCB/korean_patch"
+R = str(_P.WORK)
 sys.path.insert(0, f"{R}/tools")
 sys.path.insert(0, str(Path(__file__).parent))
 import audit_all as A

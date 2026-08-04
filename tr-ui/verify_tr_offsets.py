@@ -6,9 +6,20 @@
 내용이 같은지** 전부 확인한다. 표의 원시 바이트를 통째로 비교하면 안 된다 —
 포인터 배열 뒤 풀의 끝 위치가 조금 다르고 그 뒤엔 무관한 데이터가 온다.
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import struct, sys
 
-ROOT = "D:/ps1/roms/SRWCB/korean_patch"
+ROOT = str(_P.WORK)
 EX = open(f"{ROOT}/extracted/EX/EX.WAR", "rb").read()
 TR = open(f"{ROOT}/extracted/TR.WAR", "rb").read()
 BASE = 0x8000f800

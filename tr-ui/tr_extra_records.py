@@ -7,11 +7,21 @@ TR.WAR 은 EX.WAR 과 엔진·테이블이 1:1 이고 UI 테이블 본문은 헤
 다만 오프셋은 다르다. 상수 델타로 밀면 틀리는 곳이 있어서(레코드 풀 안 위치는
 제각각) **EX 레트일 바이트를 TR 레트일에서 유일 검색**해 위치를 잡는다.
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import json, os, re, struct
 
 SP = os.path.dirname(os.path.abspath(__file__))
-ROOT = "D:/ps1/roms/SRWCB/korean_patch"
-
+ROOT = str(_P.WORK)
 KANJI2KO = {"陸": "육", "空": "공", "水": "수", "宇": "우", "宙": "주",
             "地": "지", "中": "중"}
 TYPE_TABLE, TYPE_COUNT = 0x095b4, 15     # EX 0x095b8 - 4

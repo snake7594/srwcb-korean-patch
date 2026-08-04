@@ -13,10 +13,21 @@
   * 시나리오 대사 박스 폭 18, 페이지당 3줄
   * 전투/사망 대사 폭 40 (F7 없으면 X≥40 래핑), 사실상 1~2줄
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import sys, math, json, re, struct
 from pathlib import Path
 
-R = "D:/ps1/roms/SRWCB/korean_patch"
+R = str(_P.WORK)
 sys.path.insert(0, f"{R}/tools")
 from extract_psx_iso import RawMode2Image, read_tree
 from second_translation_codec import (glyph_advance, load_safe_glyph_map,

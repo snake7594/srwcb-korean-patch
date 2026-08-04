@@ -1,6 +1,7 @@
 # Disc images and firmware
 *.bin
 !font/hangul_galmuri14_ksx1001_16x16.bin
+!third-ui/third_cmd_menu_ko.bin
 *.iso
 *.img
 *.cue
@@ -59,3 +60,11 @@ __pycache__/
 *.py[cod]
 .DS_Store
 Thumbs.db
+
+# 빌드 작업 폴더 (게임에서 나온 것·중간 산출물 — 절대 커밋 금지)
+work/
+
+# 릴리스 산출물은 GitHub Releases 로만 배포한다 (저장소에 담지 않음)
+release/*.xdelta
+release/*.zip
+!release/SHA256SUMS*.txt

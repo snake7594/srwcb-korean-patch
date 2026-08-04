@@ -7,12 +7,23 @@
    trailing null / audio-track region; treating the whole image as one data
    track makes them read cleanly — proven on the SRW2 standalone).
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import struct, math, shutil, hashlib, sys
-sys.path.insert(0,"D:/ps1/roms/SRWCB/korean_patch/tools")
+sys.path.insert(0, str(_P.TOOLS))
 from patch_raw_track_exes import SECTOR_SIZE, USER_DATA_OFFSET, USER_DATA_SIZE, rebuild_mode2_form1
 
-SRW3="D:/ps1/roms/SRW3"
-CBR="D:/ps1/roms/SRWCB/korean_patch/test_build/third_full/rebuilt"
+SRW3=str(_P.WORK / "srw3")
+CBR=str(_P.BUILD / "third_full" / "rebuilt")
 SRC_IMG=f"{SRW3}/Dai 3 Ji Super Robot Taisen.bin"
 OUT_DIR=f"{SRW3}/port"
 import os; os.makedirs(OUT_DIR,exist_ok=True)

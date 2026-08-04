@@ -9,10 +9,21 @@ EX 의 쌍둥이라 EX 에는 같은 문자열이 이미 번역·폭검증된 �
 (델타 후보 + 유일 검색), EX 패치본의 그 자리 바이트를 그대로 가져온다. EX 는
 제자리(같은 길이) 번역이라 TR 에도 그대로 들어간다. 크기·포인터 전부 불변.
 """
+
+# --- 이식용 부트스트랩 (자동 삽입): 저장소 어디서 실행하든 동작 ---
+import os as _os, sys as _sys
+_d = _os.path.dirname(_os.path.abspath(__file__))
+while _d != _os.path.dirname(_d) and not _os.path.exists(_os.path.join(_d, "srwcb_paths.py")):
+    _d = _os.path.dirname(_d)
+if _d not in _sys.path:
+    _sys.path.insert(0, _d)
+import srwcb_paths as _P
+_P.ensure_dirs()
+# ------------------------------------------------------------------
 import sys, struct, json
 from pathlib import Path
 
-R = "D:/ps1/roms/SRWCB/korean_patch"
+R = str(_P.WORK)
 sys.path.insert(0, f"{R}/tools")
 sys.path.insert(0, str(Path(__file__).parent))
 import audit_all as A
