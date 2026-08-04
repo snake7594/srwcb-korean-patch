@@ -126,7 +126,7 @@ python menu-align/menu_align_audit.py     # 메뉴 칸 정렬
 아티팩트 생성과 소스 점검을 함께 합니다.
 
 ```bash
-set SRWCB_XDELTA=D:	oolsÞlta3.exe
+set SRWCB_XDELTA=D:\tools\xdelta3.exe
 python make_release.py v0.10.9 --prev v0.10.8
 ```
 
