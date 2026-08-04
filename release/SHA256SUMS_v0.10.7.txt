@@ -1,12 +1,12 @@
 695d3b6dae96afc55ae9d6de983720250251ee1a0b7dd30869dad6f24bae1886  srwcb-second-third-ex-korean-v0.10.7.xdelta
-870679f6efdbbce254f8ef0aeb95d04bb753adf6456db13727431dd2e1895aec  srwcb-cb-korean-v0.10.7.cue
+304bcea81ad763527f502ef568e907c11915df69ede925e0d638941c5e3dabf3  srwcb-cb-korean-v0.10.7.cue
 f5992b5fa7fff5507af153e5f34cda49fc2fe9a6d233b33172c8160c3d8933f0  srw2-standalone-korean-v0.10.7.xdelta
 68676ab6aa79faad66a86066ae4b90f70a02334d07f24109bacf0b1a1b6da3e7  srw2-standalone-korean-v0.10.7.cue
 4e7928d8415f07cd615f000710918fbb0530c3107448e7948e9cf0e31e9c790a  srw3-standalone-korean-v0.10.7.xdelta
 74994e19e6ecbfd9414aa1154091ceb2908dab84eb21afc80ac2730ca7ce9575  srw3-standalone-korean-v0.10.7.cue
 ff7bffa327a16b4afb6be94adfa287ed95885299001d75d755ae0f14d2ee71c4  srwex-standalone-korean-v0.10.7.xdelta
 17b44fa6bb26fa4f410b3e517d9a483994cfc82f7ea9627150f06debe7d9375b  srwex-standalone-korean-v0.10.7.cue
-d4865cdb1015fbde1c063fdab37367ba4c6d2a005d8d7a031f397e88dde7f919  srwcb-cb-korean-v0.10.7-easy-apply.zip
+4ed18be41d59f2ad1ce30c06e86428d4c7d05c33fcd0deef2a2abe86a60d520f  srwcb-cb-korean-v0.10.7-easy-apply.zip
 43b1712f3660463cc32f7cb4ef74ba114a1b9255f0b30165dd8bd4c9a973d38c  srwex-standalone-korean-v0.10.7-easy-apply.zip
 
 # 패치 결과 이미지
