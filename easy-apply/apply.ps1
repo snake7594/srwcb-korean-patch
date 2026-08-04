@@ -15,8 +15,8 @@ $OUTNAME = 'Super Robot Taisen Complete Box Korean v0.10.7 (Track 1).bin'
 $CUENAME = 'Super Robot Taisen Complete Box Korean v0.10.7.cue'
 
 $EXP_SRC   = '3f25650b588774d55c3bbb5b771779beab408eaca020e9a622133ade323a0f94'
-$EXP_OUT   = '8f272288602ef39665ba0ce1babc88505a768646daed7fe29bb98e663650d72c'
-$EXP_PATCH = 'e608c8b471896fe0bb5fe792c600149f1a8d547ba9103d942d970b974eb2e1a3'
+$EXP_OUT   = 'ce02b13e9b546c5634982420257107bbb31907e5fc3be4e6e013e5447fcf430c'
+$EXP_PATCH = '695d3b6dae96afc55ae9d6de983720250251ee1a0b7dd30869dad6f24bae1886'
 
 function Get-Sha256([string]$p) {
     return (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash.ToLower()
