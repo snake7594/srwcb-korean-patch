@@ -1,20 +1,20 @@
 ﻿#requires -version 3
-# 슈퍼로봇대전 EX 단독판(별매 CD, SLPS_02529) 한글패치 v0.10.7 적용 엔진
+# 슈퍼로봇대전 EX 단독판(별매 CD, SLPS_02529) 한글패치 v0.10.8 적용 엔진
 # 이 스크립트는 "한글패치 적용하기.bat" 이 자동으로 실행합니다.
 
 $ErrorActionPreference = 'Stop'
 
 $root    = $PSScriptRoot
 $xdelta  = Join-Path $root 'xdelta.exe'
-$patch   = Join-Path $root 'srwex-standalone-korean-v0.10.7.xdelta'
+$patch   = Join-Path $root 'srwex-standalone-korean-v0.10.8.xdelta'
 
 $T1NAME  = 'Super Robot Taisen EX (J).img'
-$OUTNAME = 'Super Robot Taisen EX (Korean) v0.10.7.img'
-$CUENAME = 'Super Robot Taisen EX (Korean) v0.10.7.cue'
+$OUTNAME = 'Super Robot Taisen EX (Korean) v0.10.8.img'
+$CUENAME = 'Super Robot Taisen EX (Korean) v0.10.8.cue'
 
 $EXP_SRC   = 'd545d24873bd2ba604e7f3e9e57440da741f205d98e70827fe5653155cf953f8'
-$EXP_OUT   = 'bcb18d1cbd32bf35634b7a5490e534c1a911d264fd0cf27fa18a214430739b71'
-$EXP_PATCH = 'ff7bffa327a16b4afb6be94adfa287ed95885299001d75d755ae0f14d2ee71c4'
+$EXP_OUT   = 'f6b7f7ce95c56628d886aec62902353035dee531061048a2db908ac45703c5e4'
+$EXP_PATCH = '0d5a7d7c9c886f2b05929ce5e116a65b9291e43dc41122c39e9540b6b5427dc3'
 
 function Get-Sha256([string]$p) { return (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash.ToLower() }
 function Close-Window([int]$code) {
@@ -31,12 +31,12 @@ function Fail([string]$msg) {
 try {
     Write-Host ''
     Write-Host '============================================================'
-    Write-Host '   슈퍼로봇대전 EX 단독판(별매 CD) 한글패치 v0.10.7'
+    Write-Host '   슈퍼로봇대전 EX 단독판(별매 CD) 한글패치 v0.10.8'
     Write-Host '============================================================'
     Write-Host ''
 
     if (-not (Test-Path -LiteralPath $xdelta)) { Fail "xdelta.exe 가 없습니다. 패치 파일들을 한 폴더에 함께 두세요." }
-    if (-not (Test-Path -LiteralPath $patch))  { Fail "srwex-standalone-korean-v0.10.7.xdelta 가 없습니다." }
+    if (-not (Test-Path -LiteralPath $patch))  { Fail "srwex-standalone-korean-v0.10.8.xdelta 가 없습니다." }
 
     # --- 원본 .bin 찾기: 드래그앤드롭 인자 > 표준 파일명 > 폴더 내 유일한 .bin ---
     $src = $null
