@@ -15,8 +15,10 @@ if _d not in _sys.path:
     _sys.path.insert(0, _d)
 import srwcb_paths as _P
 _P.ensure_dirs()
-if str(_P.TOOLS) not in _sys.path:
-    _sys.path.insert(0, str(_P.TOOLS))
+for _sub in ("tools", "third-ui", "ex-ui", "tr-ui", "audit", "menu-align", "second-fixes"):
+    _p = _os.path.join(_d, _sub)
+    if _os.path.isdir(_p) and _p not in _sys.path:
+        _sys.path.append(_p)
 # ------------------------------------------------------------------
 import struct, math, shutil, hashlib, sys, os
 
