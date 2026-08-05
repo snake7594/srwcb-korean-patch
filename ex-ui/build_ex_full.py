@@ -123,6 +123,7 @@ for i in range(400):
     rec = parse_message_record(bytes(war), t); lens.append(rec.end - rec.start - 1)
 a = analyze_bmess_runtime_scratch(out_bm, tuple(lens))
 print(f"battle scratch 필요 {a['maximum_bytes']:#x} (leaf {a['maximum_leaf_count']})")
+(_P.BUILD / "ex").mkdir(parents=True, exist_ok=True)
 json.dump({"scratch": a}, open(f"{_P.BUILD}/ex/scratch_report.json", "w"), indent=1, default=str)
 
 runtime = OUT / "runtime"; (runtime / "EX").mkdir(parents=True, exist_ok=True)

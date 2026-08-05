@@ -37,10 +37,11 @@ for _sub in ("tools", "third-ui", "ex-ui", "tr-ui", "audit", "menu-align", "seco
 import json, math, pickle, struct, sys, os
 from pathlib import Path
 
-SP = os.path.dirname(os.path.abspath(__file__))
+SP = str(_P.BUILD)   # 중간 산출물(캐시·교정본)을 두는 곳
 ROOT = str(_P.WORK)
 sys.path.insert(0, str(_P.TOOLS))
 CACHE = f"{SP}/tr/second_ui_maps.pkl"
+os.makedirs(f"{SP}/tr", exist_ok=True)
 SEC_HDR, SEC_CNT = 0x24320, 107
 FONT_SEC = 0x28058
 GLYPH_BYTES, GLYPH_COUNT = 32, 2816
@@ -89,18 +90,9 @@ def build():
         INV.setdefault(ix, ch)
 
     sret = open(f"{ROOT}/extracted/SECOND/SECOND.WAR", "rb").read()
-    from extract_psx_iso import RawMode2Image, read_tree
-    IMG = (f"{ROOT}/test_build/third_full/"
-           "Super Robot Taisen Complete Box Korean v0.10.5 (Track 1).bin")
-    with RawMode2Image(Path(IMG)) as m:
-        _, E = read_tree(m)
-    e = next(x for x in E if x.path.strip("/").endswith("SECOND.WAR"))
-    SEC, UDO, UDS = 2352, 24, 2048
-    b = bytearray()
-    with open(IMG, "rb") as f:
-        for i in range(math.ceil(e.size / UDS)):
-            f.seek((e.lba + i) * SEC); b += f.read(SEC)[UDO:UDO + UDS]
-    spat = bytes(b[:e.size])
+    if SECOND_PATCHED is None:
+        raise SystemExit("제2차 패치본을 넘겨주세요 (second_ui_transplant.SECOND_PATCHED)")
+    spat = bytes(SECOND_PATCHED)
 
     def jp_text(glyphs):
         return "".join(I2C.get(i, "\uFFFD") for i in glyphs)
@@ -154,7 +146,13 @@ def build():
     return CACHE
 
 
+# 빌드 파이프라인이 넘겨주는 제2차 패치본 (이미지 대신 쓴다).
+SECOND_PATCHED = None
+
+
 def load():
+    if not os.path.exists(CACHE):
+        build()
     return pickle.load(open(CACHE, "rb"))
 
 

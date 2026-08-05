@@ -15,7 +15,16 @@
     (0xb433~0xbca7)과 저장/유닛 강화 확인 메시지가 여기 해당한다.
     번역문은 제2차에서 이미 폭 검증된 것을 재사용한다.
 """
-import json, os, re, struct
+import json, os, re, struct, sys
+
+# --- 이식용 부트스트랩 (자동 삽입) ---
+_d = os.path.dirname(os.path.abspath(__file__))
+while _d != os.path.dirname(_d) and not os.path.exists(os.path.join(_d, "srwcb_paths.py")):
+    _d = os.path.dirname(_d)
+if _d not in sys.path:
+    sys.path.insert(0, _d)
+import srwcb_paths as _P
+# ------------------------------------
 
 SP = os.path.dirname(os.path.abspath(__file__))
 

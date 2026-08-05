@@ -70,6 +70,7 @@ def main() -> None:
     ap.add_argument("--from", dest="start", type=int, default=1,
                     help="이 단계부터 시작 (1~8)")
     ap.add_argument("--only", type=int, help="이 단계만 실행")
+    ap.add_argument("--version", default="v0.11.0", help="완성 이미지 이름에 쓸 버전")
     a = ap.parse_args()
     P.ensure_dirs()
     need(P.EXTRACTED / "SECOND" / "SECOND.WAR", "추출된 게임 파일")
@@ -110,10 +111,12 @@ def main() -> None:
         run("트레이닝 UI 주입", [str(REPO / "tr-ui" / "inject_tr_ui.py")])
         run(STEPS[6], [str(REPO / "tr-ui" / "build_tr_full.py")])
     if want(7):
-        run(STEPS[7], [str(REPO / "image-build" / "build_cb_image.py")])
+        run(STEPS[7], [str(REPO / "image-build" / "build_image.py"),
+                       "--version", a.version])
     if want(8):
         run("글리프 무결성", [str(REPO / "tr-ui" / "verify_tr_glyphs.py")])
-        print("\n추가 검증은 audit/ 참고 (audit_all.py 를 임포트해 사용)")
+        run("최종 이미지 검증", [str(REPO / "audit" / "verify_image.py"),
+                          "--version", a.version])
 
     print(f"\n완료. 산출물: {P.OUT}")
 

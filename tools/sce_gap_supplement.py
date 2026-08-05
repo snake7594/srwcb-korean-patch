@@ -109,17 +109,36 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
 
     # ---------- 2) phrase substitution in script/'A records ----------
     pats = make_pats(enc_ko)
-    gaps = pickle.load(open(f"{sp_dir}/sce_gaps_retail.pkl", "rb"))
-    cand = [g[2] for g in gaps["script"]] + [0x3b9d4, 0x642b4, 0x9553c]
+    cand = _phrase_candidates(src_sce, sp_dir)
     report = {}
     for start in cand:
+        if start in sup:
+            continue
         end = _rec_end(src_sce, start)
         new = apply_phrases(src_sce[start:end], pats, idx2ch)
         if new is not None:
-            assert start not in sup
             sup[start] = new
             report[start] = True
     return sup, {"phrase_records": len(report)}
+
+def _phrase_candidates(src_sce, sp_dir):
+    """구절 치환을 시도할 레코드 시작 목록.
+
+    예전엔 작업 중 만든 pickle(`sce_gaps_retail.pkl`)에 담아 뒀는데, 그 파일이 없는
+    사람은 빌드를 할 수 없었다. 후보를 넓게 잡아도 `apply_phrases` 가 아는 구절이
+    없으면 None 을 돌려주므로, **모든 레코드 시작**을 후보로 주면 결과가 같다.
+    """
+    import os
+    pkl = f"{sp_dir}/sce_gaps_retail.pkl"
+    if os.path.exists(pkl):
+        gaps = pickle.load(open(pkl, "rb"))
+        return [g[2] for g in gaps["script"]] + [0x3b9d4, 0x642b4, 0x9553c]
+    from analyze_sce_relocation import parse_scenarios
+    out = []
+    for s in parse_scenarios(bytes(src_sce)):
+        out += [r.start for r in s.records]
+    return out
+
 
 def make_encoder(glyph_map, idx2ch):
     from second_translation_codec import normalise_for_font

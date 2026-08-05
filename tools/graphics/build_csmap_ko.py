@@ -24,7 +24,7 @@ for _sub in ("tools", "third-ui", "ex-ui", "tr-ui", "audit", "menu-align", "seco
         _sys.path.append(_p)
 # ------------------------------------------------------------------
 import struct, sys, os
-SP = os.path.dirname(os.path.abspath(__file__))
+SP = str(_P.BUILD)   # 산출물은 작업 폴더에
 sys.path.insert(0, SP)
 from srw_lz_fast import decompress
 from srw_lz_enc import compress
@@ -32,6 +32,7 @@ import menu_strips as M
 
 SRC = str(_P.EXTRACTED / "C_SMAP.BIN")
 OUT = f"{SP}/gfx/C_SMAP_ko.BIN"
+os.makedirs(f"{SP}/gfx", exist_ok=True)
 TARGET = 21
 
 

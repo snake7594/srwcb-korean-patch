@@ -90,7 +90,7 @@ for tb in json.load(open(f"{_P.TRANSLATION}/second_ui_names_overlay.json", encod
         if r.get("japanese") and r.get("korean") and str(r["korean"]).strip():
             jp2ko[r["japanese"]] = r["korean"]
 for fn in ("third_ui_translations.json", "msgpool_translations.json", "msgpool_srw_gloss.json"):
-    p = f"{SP}/{fn}"
+    p = f"{_P.TRANSLATION}/{fn}"          # 저장소 자산 (예전엔 작업 폴더를 봐서 조용히 빠졌다)
     if os.path.exists(p):
         for k, v in json.load(open(p, encoding="utf-8")).items():
             if not k.startswith("_") and v: jp2ko.setdefault(k, v)

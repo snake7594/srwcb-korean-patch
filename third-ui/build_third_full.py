@@ -56,6 +56,16 @@ for a in json.load(open((_P.TRANSLATION / "second_ui_scripts_overlay.json"), enc
 ko += [v for k, v in json.load(open(f"{_P.TRANSLATION}/third_ui_translations.json", encoding="utf-8")).items() if not k.startswith("_") and v]
 dlg_doc = json.load(open((_P.TRANSLATION / "third_translation_overlay.json"), encoding="utf-8"))["translations"]
 ko += [v for t in dlg_doc.values() for v in t["ko_parts"].values()]
+# supplemental gap translations (ledger-missed records) + system message pool
+sys.path.insert(0, SP)
+from sce_gap_translations import DIAL as _GAP_DIAL, PHRASES as _GAP_PHRASES
+ko += [s for segs in _GAP_DIAL.values() for s in segs if not (s.startswith("<") and s.endswith(">"))]
+ko += [k2 for _, k2 in _GAP_PHRASES]
+import os as _os
+if _os.path.exists(f"{_P.TRANSLATION}/msgpool_translations.json"):
+    ko += [v for v in json.load(open(f"{_P.TRANSLATION}/msgpool_translations.json", encoding="utf-8")).values() if v]
+from third_align_overrides import ALIGN_KO_TEXTS as _AKT
+ko += _AKT
 ko = [STRIP.sub("", x) for x in ko]
 base = load_safe_glyph_map()
 EXTRAS = required_extra_characters([normalise_for_font(x)[0] for x in ko], base)
@@ -72,6 +82,29 @@ src_sce = ((_P.EXTRACTED / "THIRD/3_SCE.BIN")).read_bytes()
 src_bm  = ((_P.EXTRACTED / "BMESS3.BIN")).read_bytes()
 src_dd  = ((_P.EXTRACTED / "THIRD/3_DEAD.BIN")).read_bytes()
 sce_r, bm_r, dd_r, _m = make_replacements(rows, tr, glyph_map, src_sce, src_bm, src_dd)
+# merge supplemental replacements for the 159 ledger-missed records
+from sce_gap_supplement import build_supplement
+_idx2ch = {r["glyph_index"]: (r.get("character") or "")
+           for r in json.load(open(ROOT/"research/srwcb_embedded_font_mapping_reviewed.json", encoding="utf-8"))["rows"]}
+_sup, _rep = build_supplement(glyph_map, src_sce, _idx2ch, SP)
+for _k, _v in _sup.items():
+    assert _k not in sce_r, f"supplement collides with ledger record {_k:#x}"
+    sce_r[_k] = _v
+print(f"supplemental gap records: {len(_sup)}  {_rep}")
+# global leftover pass: condition phrases in records the gap scan missed
+# (kanji-heavy records fall under the kana>=3 heuristic) or inside ledger
+# replacements -- substitute wherever the JP patterns remain
+from sce_gap_supplement import make_encoder, make_pats, apply_phrases
+_enc = make_encoder(glyph_map, _idx2ch)
+_pats = make_pats(_enc)
+_left = 0
+for _sc in R.parse_scenarios(src_sce):
+    for _r in _sc.records:
+        _base = sce_r.get(_r.start, bytes(src_sce[_r.start:_r.end]))
+        _new = apply_phrases(_base, _pats, _idx2ch)
+        if _new is not None:
+            sce_r[_r.start] = _new; _left += 1
+print(f"leftover condition records phrase-subbed: {_left}")
 out_sce, _ = rebuild_second_sce(src_sce, sce_r, strict_source=False)
 out_bm = rebuild_bmess_repack(src_bm, bm_r)
 out_dd = rebuild_dead(src_dd, dd_r)

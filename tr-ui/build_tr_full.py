@@ -32,12 +32,18 @@ import json, math, os, struct, sys, hashlib
 from pathlib import Path
 
 ROOT = str(_P.WORK)
-SP = os.path.dirname(os.path.abspath(__file__))
+SP = str(_P.BUILD)   # inject_tr_ui.py 산출물이 있는 곳
 sys.path.insert(0, str(_P.TOOLS)); sys.path.insert(0, SP)
 from extract_psx_iso import RawMode2Image, read_tree
 import tr_extra_records as XR
 
-IMG = f"{ROOT}/test_build/third_full/Super Robot Taisen Complete Box Korean v0.10.4 (Track 1).bin"
+# 재패킹된 BMESS 목차표를 가져올 곳 (예전엔 완성 이미지에서 읽었는데, 그러면
+# 이미지가 먼저 있어야 해서 처음부터 빌드할 수가 없었다)
+BMESS_SRC = {
+    "BMESS2": f"{_P.BUILD}/second_korean_v0.8.7-full-menus/rebuilt/BMESS2.BIN",
+    "BMESS3": f"{ROOT}/test_build/third_full/rebuilt/BMESS3.BIN",
+    "BMESS4": f"{ROOT}/test_build/ex_full/rebuilt/BMESS4.BIN",
+}
 PRE = f"{ROOT}/test_build/ex_full/font_extracted/TR.WAR"
 INJ = f"{ROOT}/test_build/tr_full/runtime/TR.WAR"     # inject_tr_ui.py 산출물
 OUT = f"{ROOT}/test_build/tr_full/TR_final.war"       # BMESS 표까지 얹은 최종본
@@ -53,20 +59,7 @@ TABLES = [("terrain_names", 0xbcac, 144), ("spirit_commands", 0xc17c, 94),
           ("ui_master", 0x188bc, 107), ("type_table", 0x095b4, 15)]
 
 
-def read_file(lba, size):
-    b = bytearray()
-    with open(IMG, "rb") as f:
-        for i in range(math.ceil(size / UDS)):
-            f.seek((lba + i) * SEC)
-            b += f.read(SEC)[UDO:UDO + UDS]
-    return bytes(b[:size])
-
-
 def main():
-    with RawMode2Image(Path(IMG)) as m:
-        _, entries = read_tree(m)
-    P = {e.path.strip("/").split("/")[-1]: e for e in entries}
-
     war = bytearray(open(INJ, "rb").read())
     retail = open(f"{ROOT}/extracted/TR.WAR", "rb").read()
     pre = open(PRE, "rb").read()
@@ -77,8 +70,11 @@ def main():
     for name in ("BMESS2", "BMESS3", "BMESS4"):
         old = open(f"{ROOT}/extracted/{name}.BIN", "rb").read()
         old_t = old[:struct.unpack_from("<I", old, 0)[0]]
-        e = P[name + ".BIN"]
-        new = read_file(e.lba, e.size)
+        src = Path(BMESS_SRC[name])
+        if not src.exists():
+            raise SystemExit(f"[없음] 재패킹된 {name}: {src}\n"
+                             f"  먼저 build_all.py 3~5단계를 돌리세요.")
+        new = src.read_bytes()
         new_t = new[:struct.unpack_from("<I", new, 0)[0]]
         assert old_t != new_t, f"{name}: 재패킹본 표가 레트일과 같음 (빌드 확인 필요)"
         tabs.append((name, old_t, new_t))

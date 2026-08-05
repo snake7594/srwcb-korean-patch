@@ -10,10 +10,22 @@
       (렌더러의 자동 줄바꿈 버그를 피하려면 반드시 사전 줄바꿈이 필요)
   * 앞에 스크립트 바이트가 있는 목표/조건문 -> 접두부 보존 + 평문 인코딩(짧아서 줄바꿈 불필요)
 """
-import json, re, sys, glob, os
+import json, re, sys, os
 
-SP = "C:/Users/Jay/AppData/Local/Temp/claude/D--ps1-roms-SRWCB/57133a9b-927c-4883-b4d5-bbcc7cdad986/scratchpad"
-sys.path.insert(0, SP)
+# --- 이식용 부트스트랩 (자동 삽입) ---
+_d = os.path.dirname(os.path.abspath(__file__))
+while _d != os.path.dirname(_d) and not os.path.exists(os.path.join(_d, "srwcb_paths.py")):
+    _d = os.path.dirname(_d)
+if _d not in sys.path:
+    sys.path.insert(0, _d)
+import srwcb_paths as _P
+for _sub in ("tools", "ex-ui"):
+    _p = os.path.join(_d, _sub)
+    if os.path.isdir(_p) and _p not in sys.path:
+        sys.path.append(_p)
+# ------------------------------------
+
+DATA = _P.REPO / "ex-ui" / "data"
 
 
 def _line_advs(rec):
@@ -34,22 +46,16 @@ def _line_advs(rec):
 
 
 def _load_gap_translations():
-    TASKS = f"{SP}/../tasks"
-    best = None
-    for f in glob.glob(f"{TASKS}/*.output"):
-        try:
-            doc = json.load(open(f, encoding="utf-8"))
-        except Exception:
-            continue
-        res = doc.get("result")
-        if not isinstance(res, dict): continue
-        items = res.get("items")
-        if not isinstance(items, list) or not items: continue
-        if not all(isinstance(x, dict) and set(x) <= {"jp", "ko"} for x in items[:3]): continue
-        if any("<f6>" in (x.get("jp") or "") or "の全滅" in (x.get("jp") or "") for x in items):
-            if best is None or len(items) < len(best): best = items
-    assert best, "갭 번역 결과 파일을 찾지 못했습니다"
-    return {x["jp"]: x["ko"] for x in best if x.get("ko")}
+    """갭 레코드의 '일본어 원문 -> 한국어' 대응표(저장소 자산).
+
+    값에 들어 있는 `<f6>` 는 **줄바꿈 위치를 못 박아 둔 것**이다. 렌더러의
+    자동 줄바꿈은 2바이트 글리프 선두를 잃는 버그가 있어서, 이 파이프라인은
+    줄바꿈을 미리 넣어 둔다. 그래서 번역을 고칠 때는 한 줄이 렌더러 advance
+    18(전각 9자)을 넘지 않게 `<f6>` 를 다시 배치해야 한다.
+    """
+    p = DATA / "ex_gap_translations.json"
+    assert p.exists(), f"갭 번역 파일이 없습니다: {p}"
+    return {k: v for k, v in json.loads(p.read_text(encoding="utf-8")).items() if v}
 
 
 def build_ex_supplement(glyph_map, src_sce, idx2ch):
@@ -57,8 +63,8 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
     from sce_gap_supplement import make_encoder, _tokens as _tok, _rec_end
     enc_ko = make_encoder(glyph_map, idx2ch)
     tr = _load_gap_translations()
-    real = json.load(open(f"{SP}/ex/sce_gap_real.json", encoding="utf-8"))
-    th_by_jp = json.load(open(f"{SP}/ex/third_dial_by_jp.json", encoding="utf-8"))
+    real = json.loads((DATA / "sce_gap_real.json").read_text(encoding="utf-8"))
+    th_by_jp = json.loads((DATA / "third_dial_by_jp.json").read_text(encoding="utf-8"))
 
     def is_text_glyph(rec, off, size):
         ch = (idx2ch.get(rec[off], "") if size == 1
@@ -79,9 +85,9 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
     # 이들 중 선택지·챕터 메뉴는 창 폭이 레트일 텍스트 기준으로 잡히므로
     # 줄마다 레트일 advance 이하로 줄여야 한다(넘치면 글자가 겹쳐 깨진다).
     KO_OVERRIDE = {
-        # 선택지: 「호오, 아직…」(23) / 무언으로 후려친다(8)
+        # 선택지: 폭 18 안에 들어와야 겹치지 않는다 (17 / 8)
         "マサキ「ほう,まだそんな口がきけるのか‥‥」<f6>無言ではり倒す":
-            "마사키「아직 입이 살았군‥‥」<f6>말없이 강타",
+            "마사키「입이 살았군‥‥」<f6>말없이 강타",
         # 챕터 선택 메뉴: 12 / 11 / 12
         "マサキの章(やさしい)<f6>リュ-ネの章(ふつう)<f6>シュウの章(むずかしい)":
             "마사키편(쉬움)<f6>류네편(보통)<f6>슈우편(어려움)",

@@ -68,3 +68,6 @@ work/
 release/*.xdelta
 release/*.zip
 !release/SHA256SUMS*.txt
+
+# 프로젝트 자산(생성물이 아니라 소스)
+!third-ui/third_quit_pool.bin

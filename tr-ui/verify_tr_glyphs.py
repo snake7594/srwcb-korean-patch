@@ -34,7 +34,9 @@ sys.path.insert(0, str(_P.TOOLS)); sys.path.insert(0, SP)
 import tr_extra_records as XR
 from patch_second_exe_ui import parse_second_ui_vm_record as PV
 
-WAR = f"{ROOT}/test_build/tr_full/TR_final.war"
+# 후처리(메뉴 정렬·잔여 UI 보충)까지 끝난 최종본이 있으면 그걸 검사한다.
+_fin = f"{_P.BUILD}/final/TR.WAR"
+WAR = _fin if _os.path.exists(_fin) else f"{ROOT}/test_build/tr_full/TR_final.war"
 PRE = f"{ROOT}/test_build/ex_full/font_extracted/TR.WAR"
 FONT_OFF, GLYPH_BYTES, GLYPH_COUNT = 0x1d520, 32, 2816
 TABLES = [("terrain_names", 0xbcac, 144), ("spirit_commands", 0xc17c, 94),

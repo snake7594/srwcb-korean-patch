@@ -35,7 +35,7 @@ for _sub in ("tools", "third-ui", "ex-ui", "tr-ui", "audit", "menu-align", "seco
 import json, math, os, struct, sys
 from pathlib import Path
 
-SP = os.path.dirname(os.path.abspath(__file__))
+SP = str(_P.BUILD)   # 중간 산출물(캐시·교정본)을 두는 곳
 ROOT = str(_P.WORK)
 sys.path.insert(0, str(_P.TOOLS)); sys.path.insert(0, SP)
 from patch_second_exe_ui import parse_second_ui_vm_record as PV
@@ -80,7 +80,13 @@ _mpj = json.load(open(f"{ROOT}/research/srwcb_embedded_font_mapping_reviewed.jso
 I2C = {r["glyph_index"]: (r.get("character") or "") for r in _mpj["rows"]}
 
 
+# 빌드 파이프라인이 넘겨주는 실행파일 버퍼 (이미지 대신 쓴다).
+SOURCES: dict[str, bytes] = {}
+
+
 def rd_iso(name, size_holder={}):
+    if name in SOURCES:
+        return bytearray(SOURCES[name])
     from extract_psx_iso import RawMode2Image, read_tree
     if "E" not in size_holder:
         with RawMode2Image(Path(IMG)) as m:
@@ -487,6 +493,9 @@ class Fixer:
         return not bad and stray == 0
 
 
+FIXED: dict[str, bytes] = {}
+
+
 def main():
     sec = ST.load()
     results = {}
@@ -505,8 +514,13 @@ def main():
         out = f"{SP}/tr/fix/{name}.war"
         open(out, "wb").write(bytes(fx.cur))
         results[name] = (ok, len(real_fails))
+        FIXED[name] = bytes(fx.cur)
         print(f"  -> {out}")
     print("\n요약:", {k: ("OK" if v[0] and v[1] == 0 else f"실패 {v[1]}") for k, v in results.items()})
+    bad = [k for k, v in results.items() if not v[0] or v[1]]
+    if bad:
+        raise SystemExit(f"메뉴 정렬 교정 실패: {bad}")
+    return FIXED
 
 
 if __name__ == "__main__":
