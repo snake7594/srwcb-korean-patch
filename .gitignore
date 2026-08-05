@@ -71,3 +71,7 @@ release/*.zip
 
 # 프로젝트 자산(생성물이 아니라 소스)
 !third-ui/third_quit_pool.bin
+
+# 빌드 때 원장에서 다시 만든다 (ex-ui/build_gap_inputs.py)
+ex-ui/data/sce_gap_real.json
+ex-ui/data/third_dial_by_jp.json
