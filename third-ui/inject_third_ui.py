@@ -77,7 +77,7 @@ for tb in json.load(open(f"{ROOT}/translation_v2/second_ui_tables_overlay.json",
 for tb in json.load(open(f"{ROOT}/translation_v2/second_ui_names_overlay.json",encoding="utf-8"))["tables"]:
     for r in tb["rows"]:
         if r.get("japanese") and r.get("korean") and str(r["korean"]).strip(): jp2ko[r["japanese"]]=r["korean"]
-newtr={k:v for k,v in json.load(open(f"{SP}/third_ui_translations.json",encoding="utf-8")).items() if not k.startswith("_")}
+newtr={k:v for k,v in json.load(open(f"{_P.TRANSLATION}/third_ui_translations.json",encoding="utf-8")).items() if not k.startswith("_")}
 for k,v in newtr.items():
     if v: jp2ko.setdefault(k,v)
 span_map={}

@@ -93,7 +93,7 @@ for fn in ("third_ui_translations.json", "msgpool_translations.json", "msgpool_s
         for k, v in json.load(open(p, encoding="utf-8")).items():
             if not k.startswith("_") and v: jp2ko.setdefault(k, v)
 # EX 전용 테이블/UI 번역
-for p in (f"{SP}/ex/ex_table_translations.json", f"{SP}/ex/ex_ui_translations.json"):
+for p in (f"{_P.REPO}/ex-ui/data/ex_table_translations.json", f"{_P.REPO}/ex-ui/data/ex_ui_translations.json"):
     if os.path.exists(p):
         for k, v in json.load(open(p, encoding="utf-8")).items():
             if not k.startswith("_") and v: jp2ko[k] = v
@@ -111,7 +111,7 @@ for jp, ko in jp2ko.items():
     if b and len(b) >= 2: span_map.setdefault(b, ko)
 span_map = {k: v for k, v in span_map.items() if v not in ("히라가나", "가타카나")}
 # 띄어쓰기 오버플로 제거 규칙(v0.9.4) 재사용
-_dn = f"{SP}/despace_nospace.json"
+_dn = f"{_P.TRANSLATION}/despace_nospace.json"
 if os.path.exists(_dn):
     _nm = json.load(open(_dn, encoding="utf-8"))
     _st = lambda s: s.replace(" ", "").replace("　", "")
@@ -127,7 +127,7 @@ ko_all = list(jp2ko.values()) + list(span_map.values())
 import ex_extra_records as _XR0
 ko_all += ([_XR0._ko_to_rec(v) for v in _XR0.LOCAL_KO.values()]      # '<f6>' -> '[F6]'
            + list(_XR0.IN_PLACE_EXACT.values()) + list(_XR0.KANJI2KO.values()))
-_ovp = f"{SP}/ex/ex_translation_overlay.json"
+_ovp = f"{_P.REPO}/ex-ui/data/ex_translation_overlay.json"
 if os.path.exists(_ovp):   # 대사 오버레이(없으면 UI 단독 드라이런)
     ko_all += [v for t in json.load(open(_ovp, encoding="utf-8"))["translations"].values()
                for v in t["ko_parts"].values() if v]
@@ -142,7 +142,7 @@ EXTRAS = PINNED + sorted(c for c in need if c not in PINNED)
 assert EXTRAS[:len(PINNED)] == PINNED, "extras 순서 흔들림 — 기존 게임 깨짐 위험"
 # 폰트는 build_ex_full.py 가 굽는다. 주입기 EXTRAS 가 폰트와 다르면 UI 글자가
 # 존재하지 않는 글리프를 가리켜 전부 깨진다 → 반드시 일치해야 한다.
-_fe = f"{SP}/ex/ex_final_extras.json"
+_fe = f"{_P.REPO}/ex-ui/data/ex_final_extras.json"
 if os.path.exists(_fe):
     _want = json.load(open(_fe, encoding="utf-8"))["extras"]
     assert EXTRAS == _want, (f"EXTRAS 불일치!\n  폰트: {_want}\n  주입: {EXTRAS}\n"
@@ -218,7 +218,7 @@ try:
 except Exception:
     _TH_OVR = {}
 _EX_OVR = {}
-_eo = f"{SP}/ex/ex_align_overrides.json"
+_eo = f"{_P.REPO}/ex-ui/data/ex_align_overrides.json"
 if os.path.exists(_eo): _EX_OVR = json.load(open(_eo, encoding="utf-8"))
 def _cands(jp, ko):
     """폭이 모자랄 때 시도 순서: 원문 -> 띄어쓰기 제거(v0.9.4 교훈) -> 수동 오버라이드."""
@@ -295,7 +295,7 @@ try:   # 제3차에서 폭 검증된 정신기 설명 축약형 (정신기는 �
     _SDS.update(_TH_SDS)
 except Exception:
     pass
-_sp = f"{SP}/ex/ex_spirit_desc_short.json"
+_sp = f"{_P.BUILD}/ex/ex_spirit_desc_short.json"
 if os.path.exists(_sp): _SDS.update(json.load(open(_sp, encoding="utf-8")))
 for name, ptr, cnt, bound in TABLES:
     pool_lo = ptr + 4 + 4 * cnt; recs = {}; pf = []
@@ -443,7 +443,7 @@ for i, t in anchor_t.items():
 import ex_extra_records as _XR
 print(f"  유닛 타입 테이블 {_XR.patch_unit_types(war, RETAIL, enc_ko, idx2ch)}/15 제자리 교체")
 print(f"  無有 -> 무유 {_XR.patch_yesno(war, RETAIL, enc_ko, idx2ch)}건")
-cmd_ko = open(f"{SP}/third_cmd_menu_ko.bin", "rb").read()
+cmd_ko = open(f"{_P.REPO}/third-ui/third_cmd_menu_ko.bin", "rb").read()
 assert len(cmd_ko) == 76 and war[0x974b + 76] == 0xFF, "명령 메뉴 레이아웃 이상"
 war[0x974b:0x974b + 76] = cmd_ko
 print("  명령 메뉴 @0x974b (76B) 한글")
@@ -456,7 +456,7 @@ print("  명령 메뉴 @0x974b (76B) 한글")
 #   창 자체가 그려지지 않는다(제3차 실기에서 확인된 회귀).
 import pickle as _pickle
 _TH2EX = 0xbd39          # THIRD 오프셋 - EX 오프셋
-_FOREIGN = _pickle.load(open(f"{SP}/foreign_recs.pkl", "rb"))
+_FOREIGN = _pickle.load(open(f"{_P.REPO}/third-ui/foreign_recs.pkl", "rb"))
 _THRET = open(f"{ROOT}/extracted/THIRD/THIRD.WAR", "rb").read()
 def _mid_pad(body, pad):
     if pad <= 0: return bytes(body)
@@ -503,6 +503,6 @@ print("  정렬: 모든 민감 스팬이 원본 advance 시그니처와 일치")
 out = f"{ROOT}/test_build/ex_full/runtime/EX/EX.WAR"
 open(out, "wb").write(bytes(war))
 json.dump({"extras": EXTRAS, "donor_used": arena_used, "assets": manifest},
-          open(f"{SP}/ex/ex_inject_manifest.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+          open(f"{_P.BUILD}/ex/ex_inject_manifest.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print(f"\n도너 사용 {arena_used}/{arena_total}")
 print("WROTE", out, "sha", hashlib.sha256(bytes(war)).hexdigest()[:16])

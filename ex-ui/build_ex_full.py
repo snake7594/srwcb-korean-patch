@@ -51,9 +51,9 @@ PINNED = ['×', '…', '↑', '→', '↓', '□', '△', '○', '릭', '응']
 
 # ---------- 1) Korean corpus -> PINNED extras ----------
 ko = []
-ex_overlay = json.load(open(f"{SP}/ex/ex_translation_overlay.json", encoding="utf-8"))["translations"]
+ex_overlay = json.load(open(f"{_P.REPO}/ex-ui/data/ex_translation_overlay.json", encoding="utf-8"))["translations"]
 ko += [v for t in ex_overlay.values() for v in t["ko_parts"].values() if v]
-_uip = f"{SP}/ex/ex_ui_translations.json"
+_uip = f"{_P.REPO}/ex-ui/data/ex_ui_translations.json"
 import os
 if os.path.exists(_uip):
     ko += [v for k, v in json.load(open(_uip, encoding="utf-8")).items()
@@ -71,7 +71,7 @@ print("font ->", dyn, "extra_glyph_count", font_manifest["extra_glyph_count"])
 
 # ---------- 3) dialogue archives ----------
 rows, tr, _ = validate_translation_inputs(ROOT / "research/translation_v2/ex_translation_ledger.json",
-                                          Path(f"{SP}/ex/ex_translation_overlay.json"))
+                                          Path(f"{_P.REPO}/ex-ui/data/ex_translation_overlay.json"))
 src_sce = (ROOT / "extracted/EX/E_SCE.BIN").read_bytes()
 src_bm = (ROOT / "extracted/BMESS4.BIN").read_bytes()
 src_dd = (ROOT / "extracted/EX/E_DEAD.BIN").read_bytes()
@@ -112,10 +112,10 @@ for i in range(400):
     rec = parse_message_record(bytes(war), t); lens.append(rec.end - rec.start - 1)
 a = analyze_bmess_runtime_scratch(out_bm, tuple(lens))
 print(f"battle scratch 필요 {a['maximum_bytes']:#x} (leaf {a['maximum_leaf_count']})")
-json.dump({"scratch": a}, open(f"{SP}/ex/scratch_report.json", "w"), indent=1, default=str)
+json.dump({"scratch": a}, open(f"{_P.BUILD}/ex/scratch_report.json", "w"), indent=1, default=str)
 
 runtime = OUT / "runtime"; (runtime / "EX").mkdir(parents=True, exist_ok=True)
 (runtime / "EX/EX.WAR").write_bytes(bytes(war))
 print("runtime EX.WAR sha", hashlib.sha256(bytes(war)).hexdigest()[:16])
-json.dump({"extras": EXTRAS}, open(f"{SP}/ex/ex_final_extras.json", "w", encoding="utf-8"), ensure_ascii=False)
+json.dump({"extras": EXTRAS}, open(f"{_P.REPO}/ex-ui/data/ex_final_extras.json", "w", encoding="utf-8"), ensure_ascii=False)
 print("\nNEXT: inject_ex_ui.py with SRC =", runtime / "EX/EX.WAR")

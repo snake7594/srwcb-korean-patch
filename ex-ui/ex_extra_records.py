@@ -88,9 +88,9 @@ def patch_yesno(war, retail, enc_ko, idx2ch):
 
 def relocate_pointed_records(war, retail, enc_ko, arena_alloc, verbose=True):
     """필드상대 포인터가 1개인 잔여 레코드를 번역해 도너로 옮기고 포인터 재조준."""
-    lo = json.load(open(f"{SP}/ex/ex_leftover.json", encoding="utf-8"))
-    refs = json.load(open(f"{SP}/ex/ex_leftover_refs.json", encoding="utf-8"))
-    sp = json.load(open(f"{SP}/ex/second_span_jp2ko.json", encoding="utf-8"))
+    lo = json.load(open(f"{_P.REPO}/ex-ui/data/ex_leftover.json", encoding="utf-8"))
+    refs = json.load(open(f"{_P.REPO}/ex-ui/data/ex_leftover_refs.json", encoding="utf-8"))
+    sp = json.load(open(f"{_P.REPO}/ex-ui/data/second_span_jp2ko.json", encoding="utf-8"))
     plain = lambda s: re.sub(r"<f[67]>|\[..\]|_", "", s)
     moved, skipped = 0, 0
     for x in lo:

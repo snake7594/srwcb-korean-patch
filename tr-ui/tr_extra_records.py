@@ -124,8 +124,8 @@ def relocate_pointed_records(war, retail, enc_ko, arena_alloc, verbose=True):
     가리키는 필드상대 포인터가 정확히 1개일 때만 손댄다.
     """
     ex_ret = open(f"{ROOT}/extracted/EX/EX.WAR", "rb").read()
-    lo = json.load(open(f"{SP}/ex/ex_leftover.json", encoding="utf-8"))
-    sp = json.load(open(f"{SP}/ex/second_span_jp2ko.json", encoding="utf-8"))
+    lo = json.load(open(f"{_P.REPO}/ex-ui/data/ex_leftover.json", encoding="utf-8"))
+    sp = json.load(open(f"{_P.REPO}/ex-ui/data/second_span_jp2ko.json", encoding="utf-8"))
     plain = lambda s: re.sub(r"<f[67]>|\[..\]|_", "", s)
     fidx = _field_index(retail)
 
@@ -183,7 +183,7 @@ def patch_foreign_records(war, retail, enc_ko, verbose=True):
     """
     import pickle
     ex_ret = open(f"{ROOT}/extracted/EX/EX.WAR", "rb").read()
-    F = pickle.load(open(f"{SP}/foreign_recs.pkl", "rb"))
+    F = pickle.load(open(f"{_P.REPO}/third-ui/foreign_recs.pkl", "rb"))
     TH2EX = 0xbd39
 
     def mid_pad(body, pad):

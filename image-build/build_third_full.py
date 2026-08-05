@@ -51,7 +51,7 @@ for tb in json.load(open(ROOT/"translation_v2/second_ui_names_overlay.json", enc
 for a in json.load(open(ROOT/"translation_v2/second_ui_scripts_overlay.json", encoding="utf-8"))["assets"].values():
     for r in a["records"]:
         ko += [rep["korean_text"] for rep in r.get("replacements", []) if rep.get("korean_text")]
-ko += [v for k, v in json.load(open(f"{SP}/third_ui_translations.json", encoding="utf-8")).items() if not k.startswith("_") and v]
+ko += [v for k, v in json.load(open(f"{_P.TRANSLATION}/third_ui_translations.json", encoding="utf-8")).items() if not k.startswith("_") and v]
 dlg_doc = json.load(open(ROOT/"translation_v2/third_translation_overlay.json", encoding="utf-8"))["translations"]
 ko += [v for t in dlg_doc.values() for v in t["ko_parts"].values()]
 # supplemental gap translations (ledger-missed records) + system message pool
@@ -60,8 +60,8 @@ from sce_gap_translations import DIAL as _GAP_DIAL, PHRASES as _GAP_PHRASES
 ko += [s for segs in _GAP_DIAL.values() for s in segs if not (s.startswith("<") and s.endswith(">"))]
 ko += [k2 for _, k2 in _GAP_PHRASES]
 import os as _os
-if _os.path.exists(f"{SP}/msgpool_translations.json"):
-    ko += [v for v in json.load(open(f"{SP}/msgpool_translations.json", encoding="utf-8")).values() if v]
+if _os.path.exists(f"{_P.TRANSLATION}/msgpool_translations.json"):
+    ko += [v for v in json.load(open(f"{_P.TRANSLATION}/msgpool_translations.json", encoding="utf-8")).values() if v]
 from third_align_overrides import ALIGN_KO_TEXTS as _AKT
 ko += _AKT
 ko = [STRIP.sub("", x) for x in ko]

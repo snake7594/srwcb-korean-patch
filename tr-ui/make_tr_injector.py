@@ -56,9 +56,9 @@ REPL = [
      'war[0x9747:0x9747 + 76] = cmd_ko\n'
      'print("  명령 메뉴 @0x9747 (76B) 한글")'),
     # ---- 정렬 오버라이드: TR 전용 파일 추가 ----
-    ('_eo = f"{SP}/ex/ex_align_overrides.json"\n'
+    ('_eo = f"{_P.REPO}/ex-ui/data/ex_align_overrides.json"\n'
      'if os.path.exists(_eo): _EX_OVR = json.load(open(_eo, encoding="utf-8"))',
-     'for _eo in (f"{SP}/ex/ex_align_overrides.json", f"{SP}/tr/tr_align_overrides.json"):\n'
+     'for _eo in (f"{_P.REPO}/ex-ui/data/ex_align_overrides.json", f"{_P.REPO}/tr-ui/tr_align_overrides.json"):\n'
      '    if os.path.exists(_eo):\n'
      '        for _k, _v in json.load(open(_eo, encoding="utf-8")).items():\n'
      '            _EX_OVR.setdefault(_k, []).extend(_v if isinstance(_v, list) else [_v])'),
@@ -70,7 +70,7 @@ REPL = [
      'out = f"{ROOT}/test_build/tr_full/runtime/TR.WAR"\n'
      'os.makedirs(os.path.dirname(out), exist_ok=True)'),
     ('json.dump({"extras": EXTRAS, "donor_used": arena_used, "assets": manifest},\n'
-     '          open(f"{SP}/ex/ex_inject_manifest.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)',
+     '          open(f"{_P.BUILD}/ex/ex_inject_manifest.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)',
      'os.makedirs(f"{SP}/tr", exist_ok=True)\n'
      'json.dump({"extras": EXTRAS, "donor_used": arena_used, "assets": manifest},\n'
      '          open(f"{SP}/tr/tr_inject_manifest.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)'),

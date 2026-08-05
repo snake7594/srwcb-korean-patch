@@ -51,7 +51,7 @@ for tb in json.load(open(ROOT/"translation_v2/second_ui_names_overlay.json", enc
 for a in json.load(open(ROOT/"translation_v2/second_ui_scripts_overlay.json", encoding="utf-8"))["assets"].values():
     for r in a["records"]:
         ko += [rep["korean_text"] for rep in r.get("replacements", []) if rep.get("korean_text")]
-ko += [v for k, v in json.load(open(f"{SP}/third_ui_translations.json", encoding="utf-8")).items() if not k.startswith("_") and v]
+ko += [v for k, v in json.load(open(f"{_P.TRANSLATION}/third_ui_translations.json", encoding="utf-8")).items() if not k.startswith("_") and v]
 dlg_doc = json.load(open(ROOT/"translation_v2/third_translation_overlay.json", encoding="utf-8"))["translations"]
 ko += [v for t in dlg_doc.values() for v in t["ko_parts"].values()]
 ko = [STRIP.sub("", x) for x in ko]
