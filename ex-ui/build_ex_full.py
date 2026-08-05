@@ -83,6 +83,15 @@ sce_r, bm_r, dd_r, _m = make_replacements(rows, tr, glyph_map, src_sce, src_bm, 
 _idx2ch = {r["glyph_index"]: (r.get("character") or "")
            for r in json.load(open(ROOT / "research/srwcb_embedded_font_mapping_reviewed.json",
                                    encoding="utf-8"))["rows"]}
+# 보충 입력(sce_gap_real / third_dial_by_jp)이 없으면 여기서 만든다.
+# 예전엔 작업 중 만든 중간 파일에 의존해서, 그 파일이 없는 사람은 빌드가 막혔다.
+_gap_dir = _P.REPO / "ex-ui" / "data"
+if not ((_gap_dir / "sce_gap_real.json").exists()
+        and (_gap_dir / "third_dial_by_jp.json").exists()):
+    import build_gap_inputs as _BGI
+    _BGI.OUT.mkdir(parents=True, exist_ok=True)
+    print(f"보충 입력 생성: gap {_BGI.build_sce_gap_real():,} / "
+          f"제3차 색인 {_BGI.build_third_dial_by_jp():,}")
 from ex_gap_apply import build_ex_supplement
 _sup, _rep = build_ex_supplement(glyph_map, src_sce, _idx2ch)
 _rep.pop("over_width_lines", None)
