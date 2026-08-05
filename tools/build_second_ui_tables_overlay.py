@@ -35,10 +35,10 @@ from typing import Any
 
 
 ROOT = _P.WORK
-INVENTORY = ROOT / "korean_patch/research/second_exe_ui_full_inventory.json"
-GLOSSARY = ROOT / "korean_patch/research/translation_v2/glossary_candidates.json"
-DIALOGUE_OVERLAY = ROOT / "korean_patch/translation_v2/second_translation_overlay.json"
-OUTPUT = ROOT / "korean_patch/translation_v2/second_ui_tables_overlay.json"
+INVENTORY = (_P.WORK / "research" / "second_exe_ui_full_inventory.json")
+GLOSSARY = (_P.LEDGER / "glossary_candidates.json")
+DIALOGUE_OVERLAY = (_P.TRANSLATION / "second_translation_overlay.json")
+OUTPUT = (_P.TRANSLATION / "second_ui_tables_overlay.json")
 
 TARGET_TABLES = (
     "terrain_combinations",

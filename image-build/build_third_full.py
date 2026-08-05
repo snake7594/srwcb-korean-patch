@@ -44,17 +44,17 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 # ---------- 1) FINAL extras ----------
 ko = []
-for x in json.load(open(ROOT/"translation_v2/second_ui_map_labels_overlay.json", encoding="utf-8"))["records"]:
+for x in json.load(open((_P.TRANSLATION / "second_ui_map_labels_overlay.json"), encoding="utf-8"))["records"]:
     if x.get("korean_text"): ko.append(x["korean_text"])
-for tb in json.load(open(ROOT/"translation_v2/second_ui_tables_overlay.json", encoding="utf-8"))["tables"]:
+for tb in json.load(open((_P.TRANSLATION / "second_ui_tables_overlay.json"), encoding="utf-8"))["tables"]:
     ko += [e["korean_text"] for e in tb["entries"] if e.get("korean_text")]
-for tb in json.load(open(ROOT/"translation_v2/second_ui_names_overlay.json", encoding="utf-8"))["tables"]:
+for tb in json.load(open((_P.TRANSLATION / "second_ui_names_overlay.json"), encoding="utf-8"))["tables"]:
     ko += [r["korean"] for r in tb["rows"] if r.get("korean")]
-for a in json.load(open(ROOT/"translation_v2/second_ui_scripts_overlay.json", encoding="utf-8"))["assets"].values():
+for a in json.load(open((_P.TRANSLATION / "second_ui_scripts_overlay.json"), encoding="utf-8"))["assets"].values():
     for r in a["records"]:
         ko += [rep["korean_text"] for rep in r.get("replacements", []) if rep.get("korean_text")]
 ko += [v for k, v in json.load(open(f"{_P.TRANSLATION}/third_ui_translations.json", encoding="utf-8")).items() if not k.startswith("_") and v]
-dlg_doc = json.load(open(ROOT/"translation_v2/third_translation_overlay.json", encoding="utf-8"))["translations"]
+dlg_doc = json.load(open((_P.TRANSLATION / "third_translation_overlay.json"), encoding="utf-8"))["translations"]
 ko += [v for t in dlg_doc.values() for v in t["ko_parts"].values()]
 # supplemental gap translations (ledger-missed records) + system message pool
 sys.path.insert(0, SP)
@@ -76,11 +76,11 @@ glyph_map, font_manifest, dyn = build_dynamic_font(EXTRAS, OUT)
 print("font ->", dyn, "extra_glyph_count", font_manifest["extra_glyph_count"])
 
 # ---------- 3) dialogue archives ----------
-rows, tr, _ = validate_translation_inputs(ROOT/"research/translation_v2/third_translation_ledger.json",
-                                          ROOT/"translation_v2/third_translation_overlay.json")
-src_sce = (ROOT/"extracted/THIRD/3_SCE.BIN").read_bytes()
-src_bm  = (ROOT/"extracted/BMESS3.BIN").read_bytes()
-src_dd  = (ROOT/"extracted/THIRD/3_DEAD.BIN").read_bytes()
+rows, tr, _ = validate_translation_inputs((_P.LEDGER / "third_translation_ledger.json"),
+                                          (_P.TRANSLATION / "third_translation_overlay.json"))
+src_sce = ((_P.EXTRACTED / "THIRD/3_SCE.BIN")).read_bytes()
+src_bm  = ((_P.EXTRACTED / "BMESS3.BIN")).read_bytes()
+src_dd  = ((_P.EXTRACTED / "THIRD/3_DEAD.BIN")).read_bytes()
 sce_r, bm_r, dd_r, _m = make_replacements(rows, tr, glyph_map, src_sce, src_bm, src_dd)
 # merge supplemental replacements for the 159 ledger-missed records
 from sce_gap_supplement import build_supplement

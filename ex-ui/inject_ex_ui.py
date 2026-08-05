@@ -81,11 +81,11 @@ def enc_jp(t):
 
 # ---------------- 번역 사전 ----------------
 jp2ko = {}
-for tb in json.load(open(f"{ROOT}/translation_v2/second_ui_tables_overlay.json", encoding="utf-8"))["tables"]:
+for tb in json.load(open(f"{_P.TRANSLATION}/second_ui_tables_overlay.json", encoding="utf-8"))["tables"]:
     for e in tb["entries"]:
         if e.get("source_text") and e.get("korean_text") and str(e["korean_text"]).strip():
             jp2ko[e["source_text"]] = e["korean_text"]
-for tb in json.load(open(f"{ROOT}/translation_v2/second_ui_names_overlay.json", encoding="utf-8"))["tables"]:
+for tb in json.load(open(f"{_P.TRANSLATION}/second_ui_names_overlay.json", encoding="utf-8"))["tables"]:
     for r in tb["rows"]:
         if r.get("japanese") and r.get("korean") and str(r["korean"]).strip():
             jp2ko[r["japanese"]] = r["korean"]
@@ -103,7 +103,7 @@ for p in (f"{_P.REPO}/ex-ui/data/ex_table_translations.json", f"{_P.REPO}/ex-ui/
 for _k in ("ひらがな", "カタカナ"): jp2ko.pop(_k, None)
 
 span_map = {}
-for a in json.load(open(f"{ROOT}/translation_v2/second_ui_scripts_overlay.json", encoding="utf-8"))["assets"].values():
+for a in json.load(open(f"{_P.TRANSLATION}/second_ui_scripts_overlay.json", encoding="utf-8"))["assets"].values():
     for r in a["records"]:
         for rep in r.get("replacements", []):
             if rep.get("korean_text"):
@@ -481,7 +481,7 @@ print(f"  외래 맵/시스템 레코드 {_fn}개 제자리 번역 (중간패딩
 
 # ---------------- 맵 라벨 힙: 바이트-정확 제자리 ----------------
 LABEL_DELTA = 0x484      # EX (THIRD는 0x2dc) — source_hex 유일매칭으로 실측
-_labels = json.load(open(f"{ROOT}/translation_v2/second_ui_map_labels_overlay.json", encoding="utf-8"))["records"]
+_labels = json.load(open(f"{_P.TRANSLATION}/second_ui_map_labels_overlay.json", encoding="utf-8"))["records"]
 _lok = _lskip = _llong = 0
 for _x in _labels:
     _src = bytes.fromhex(_x["source_hex"].replace(" ", "")); _ko = _x.get("korean_text")

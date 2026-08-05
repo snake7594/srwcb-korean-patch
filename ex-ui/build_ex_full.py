@@ -72,11 +72,11 @@ glyph_map, font_manifest, dyn = build_dynamic_font(EXTRAS, OUT)
 print("font ->", dyn, "extra_glyph_count", font_manifest["extra_glyph_count"])
 
 # ---------- 3) dialogue archives ----------
-rows, tr, _ = validate_translation_inputs(ROOT / "research/translation_v2/ex_translation_ledger.json",
+rows, tr, _ = validate_translation_inputs((_P.LEDGER / "ex_translation_ledger.json"),
                                           Path(f"{_P.REPO}/ex-ui/data/ex_translation_overlay.json"))
-src_sce = (ROOT / "extracted/EX/E_SCE.BIN").read_bytes()
-src_bm = (ROOT / "extracted/BMESS4.BIN").read_bytes()
-src_dd = (ROOT / "extracted/EX/E_DEAD.BIN").read_bytes()
+src_sce = ((_P.EXTRACTED / "EX/E_SCE.BIN")).read_bytes()
+src_bm = ((_P.EXTRACTED / "BMESS4.BIN")).read_bytes()
+src_dd = ((_P.EXTRACTED / "EX/E_DEAD.BIN")).read_bytes()
 sce_r, bm_r, dd_r, _m = make_replacements(rows, tr, glyph_map, src_sce, src_bm, src_dd)
 # 원장이 놓친 레코드 보충(조건문 구문치환 + 순수 텍스트 전체 교체).
 # 미번역으로 남으면 한글 폰트 때문에 일본어가 깨진 한글로 렌더된다.

@@ -73,17 +73,17 @@ def enc_jp(t):
 
 # ---------------- translations ----------------
 jp2ko={}
-for tb in json.load(open(f"{ROOT}/translation_v2/second_ui_tables_overlay.json",encoding="utf-8"))["tables"]:
+for tb in json.load(open(f"{_P.TRANSLATION}/second_ui_tables_overlay.json",encoding="utf-8"))["tables"]:
     for e in tb["entries"]:
         if e.get("source_text") and e.get("korean_text") and str(e["korean_text"]).strip(): jp2ko[e["source_text"]]=e["korean_text"]
-for tb in json.load(open(f"{ROOT}/translation_v2/second_ui_names_overlay.json",encoding="utf-8"))["tables"]:
+for tb in json.load(open(f"{_P.TRANSLATION}/second_ui_names_overlay.json",encoding="utf-8"))["tables"]:
     for r in tb["rows"]:
         if r.get("japanese") and r.get("korean") and str(r["korean"]).strip(): jp2ko[r["japanese"]]=r["korean"]
 newtr={k:v for k,v in json.load(open(f"{_P.TRANSLATION}/third_ui_translations.json",encoding="utf-8")).items() if not k.startswith("_")}
 for k,v in newtr.items():
     if v: jp2ko.setdefault(k,v)
 span_map={}
-for a in json.load(open(f"{ROOT}/translation_v2/second_ui_scripts_overlay.json",encoding="utf-8"))["assets"].values():
+for a in json.load(open(f"{_P.TRANSLATION}/second_ui_scripts_overlay.json",encoding="utf-8"))["assets"].values():
     for r in a["records"]:
         for rep in r.get("replacements",[]):
             if rep.get("korean_text"): span_map[bytes.fromhex(rep["source_hex"].replace(" ",""))]=rep["korean_text"]
@@ -91,11 +91,11 @@ for jp,ko in jp2ko.items():
     b=enc_jp(jp)
     if b and len(b)>=2: span_map.setdefault(b,ko)
 maxspan=max(len(b) for b in span_map)
-labels=json.load(open(f"{ROOT}/translation_v2/second_ui_map_labels_overlay.json",encoding="utf-8"))["records"]
+labels=json.load(open(f"{_P.TRANSLATION}/second_ui_map_labels_overlay.json",encoding="utf-8"))["records"]
 
 # ---------------- final glyph map + donor slots ----------------
 ko_all=list(jp2ko.values())+list(span_map.values())+[x["korean_text"] for x in labels if x.get("korean_text")]
-ko_all+=[v for t in json.load(open(f"{ROOT}/translation_v2/third_translation_overlay.json",encoding="utf-8"))["translations"].values() for v in t["ko_parts"].values()]
+ko_all+=[v for t in json.load(open(f"{_P.TRANSLATION}/third_translation_overlay.json",encoding="utf-8"))["translations"].values() for v in t["ko_parts"].values()]
 import re as _re0
 _STRIP=_re0.compile(r"\[F[6-9A-Ea-e]\]")
 ko_all=[_STRIP.sub("", x) for x in ko_all]
