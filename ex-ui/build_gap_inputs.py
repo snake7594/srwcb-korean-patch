@@ -86,6 +86,9 @@ def build_sce_gap_real() -> int:
             if len(body) < 2:
                 continue
             n = len(JPRE.findall(body))
+            # 문턱을 너무 높이면 'キ-ン(ニ-‥‥)' 처럼 장음·괄호가 많은 짧은 대사가
+            # 새 나간다(가나 3 / 길이 9 = 0.33). 장음부호도 일본어로 친다.
+            n += body.count("-") + body.count("ー")
             if n < 1 or n / len(body) < 0.34:
                 continue
             out.append({"off": rec.start, "jp": jp})
