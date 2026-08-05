@@ -82,3 +82,24 @@ def require(path: Path | None, what: str) -> Path:
 
 def disc() -> Path:
     return require(DISC, "컴플리트 박스 Track 1 .bin")
+
+
+FINAL = BUILD / "final"
+
+
+def final(iso_path: str, fallback: "Path | str | None" = None) -> Path:
+    """7단계(build_image.py)가 남긴 **후처리까지 끝난** 파일.
+
+    단독판 이식은 이걸 써야 한다. 주입 직후 파일(`rebuilt/`, `runtime/`)을 쓰면
+    브리핑 프리즈·전투 대사 밀림·메뉴 정렬 같은 교정이 빠진 채로 이식된다.
+    아직 7단계를 안 돌렸으면 fallback 을 쓴다.
+    """
+    p = FINAL / iso_path.replace("/", "_")
+    if p.exists():
+        return p
+    if fallback is None:
+        raise SystemExit(
+            f"[없음] 후처리 결과 {p}\n"
+            f"  먼저 `python build_all.py --only 7` 로 이미지 조립까지 돌리세요."
+        )
+    return Path(fallback)

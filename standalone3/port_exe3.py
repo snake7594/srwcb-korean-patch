@@ -24,7 +24,8 @@ for _sub in ("tools", "third-ui", "ex-ui", "tr-ui", "audit", "menu-align", "seco
 import struct, json, bisect, hashlib
 ROOT=str(_P.WORK)
 rs=open(f"{ROOT}/extracted/THIRD/THIRD.WAR","rb").read()               # retail THIRD.WAR
-ps=open(f"{ROOT}/test_build/third_full/runtime/THIRD/THIRD.WAR","rb").read()  # patched
+ps=open(_P.final("THIRD/THIRD.WAR",
+                 f"{ROOT}/test_build/third_full/runtime/THIRD/THIRD.WAR"),"rb").read()  # patched
 sr=open(str(_P.WORK / "srw3" / "extracted") + "/SLPS_025.30","rb").read()          # retail standalone
 zones=json.load(open(str(_P.WORK / "srw3" / "extracted") + "/delta_map3.json")); zstarts=[z[0] for z in zones]
 FZ=zstarts[0]; SEC_LEN=len(rs); SLPS_LEN=len(sr); LAST_DELTA=zones[-1][2]

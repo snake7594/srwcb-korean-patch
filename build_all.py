@@ -14,8 +14,9 @@
     4. 제3차 빌드
     5. EX 빌드
     6. 트레이닝 모드 빌드
-    7. 디스크 이미지 조립
+    7. 후처리 + 디스크 이미지 조립
     8. 검증(감사)
+    9. 단독판 3종 (별매 CD 를 가진 사람만; setup_standalone.py 로 준비)
 
 원장은 게임의 일본어 원문이라 저장소에 넣지 않는다. 각자 자기 디스크에서
 1~2단계로 만든다. 한국어 번역·도구는 전부 저장소에 있다.
@@ -60,15 +61,16 @@ STEPS = {
     4: "제3차 빌드",
     5: "EX 빌드",
     6: "트레이닝 모드 빌드",
-    7: "디스크 이미지 조립",
+    7: "후처리 + 디스크 이미지 조립",
     8: "검증",
+    9: "단독판 3종 (별매 CD, 선택)",
 }
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--from", dest="start", type=int, default=1,
-                    help="이 단계부터 시작 (1~8)")
+                    help="이 단계부터 시작 (1~9)")
     ap.add_argument("--only", type=int, help="이 단계만 실행")
     ap.add_argument("--version", default="v0.11.0", help="완성 이미지 이름에 쓸 버전")
     a = ap.parse_args()
@@ -117,6 +119,21 @@ def main() -> None:
         run("글리프 무결성", [str(REPO / "tr-ui" / "verify_tr_glyphs.py")])
         run("최종 이미지 검증", [str(REPO / "audit" / "verify_image.py"),
                           "--version", a.version])
+    if want(9):
+        # 별매 CD 를 가진 사람만. 먼저 setup_standalone.py 로 준비한다.
+        for key, steps in (
+            ("srw2", [("제2차 단독판", REPO / "standalone" / "build_standalone.py")]),
+            ("srw3", [("제3차 단독판 실행파일", REPO / "standalone3" / "port_exe3.py"),
+                      ("제3차 단독판 이미지", REPO / "standalone3" / "patch_iso3.py")]),
+            ("srwex", [("EX 단독판 실행파일", REPO / "standalone_ex" / "port_exe_ex.py"),
+                       ("EX 단독판 이미지", REPO / "standalone_ex" / "patch_iso_ex.py")]),
+        ):
+            if not (P.WORK / key / "extracted").exists():
+                print(f"\n=== {key} 건너뜀 (setup_standalone.py 로 준비하세요)")
+                continue
+            for desc, script in steps:
+                run(desc, [str(script)])
+        run("단독판 검증", [str(REPO / "audit" / "verify_standalone.py")])
 
     print(f"\n완료. 산출물: {P.OUT}")
 

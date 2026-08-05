@@ -26,7 +26,8 @@ from pathlib import Path
 CB_ROOT = _P.WORK
 CB_BUILD = CB_ROOT / "test_build" / "second_korean_v0.8.7-full-menus"
 CB_RETAIL_SECOND = CB_ROOT / "extracted" / "SECOND" / "SECOND.WAR"
-CB_PATCHED_SECOND = CB_BUILD / "font_extracted" / "SECOND" / "SECOND.WAR"
+CB_PATCHED_SECOND = _P.final("SECOND/SECOND.WAR",
+                            CB_BUILD / "font_extracted" / "SECOND" / "SECOND.WAR")
 CB_REBUILT = CB_BUILD / "rebuilt"
 CB_INVENTORY = CB_ROOT / "research" / "second_exe_ui_full_inventory.json"
 

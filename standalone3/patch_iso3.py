@@ -38,9 +38,9 @@ RETAIL_EXE=f"{SRW3}/extracted/SLPS_025.30"
 
 # (iso_name, retail_size, patched_path)   -- retail_size = standalone dir old_size for the assert
 INPLACE=[("SLPS_025.30;1", RETAIL_EXE, PATCHED_EXE)]
-RELOC=[("3_SCE.BIN;1", 684344, f"{CBR}/THIRD/3_SCE.BIN"),
-       ("BMESS3.BIN;1", 582354, f"{CBR}/BMESS3.BIN"),
-       ("3_DEAD.BIN;1", 5754,   f"{CBR}/THIRD/3_DEAD.BIN")]
+RELOC=[("3_SCE.BIN;1", 684344, str(_P.final("THIRD/3_SCE.BIN", f"{CBR}/THIRD/3_SCE.BIN"))),
+       ("BMESS3.BIN;1", 582354, str(_P.final("BMESS3.BIN", f"{CBR}/BMESS3.BIN"))),
+       ("3_DEAD.BIN;1", 5754,   str(_P.final("THIRD/3_DEAD.BIN", f"{CBR}/THIRD/3_DEAD.BIN")))]
 FREE_START=232755; FREE_END=246105
 
 def bcd(v): return ((v//10)<<4)|(v%10)

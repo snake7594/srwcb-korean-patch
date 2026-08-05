@@ -35,9 +35,9 @@ PATCHED_EXE = f"{SRWEX}/extracted/SLPS_025.29.patched"
 RETAIL_EXE = f"{SRWEX}/extracted/SLPS_025.29"
 
 INPLACE = [("SLPS_025.29;1", RETAIL_EXE, PATCHED_EXE)]
-RELOC = [("E_SCE.BIN;1", 777512, f"{EXB}/rebuilt/EX/E_SCE.BIN"),
-         ("BMESS4.BIN;1", 657036, f"{EXB}/rebuilt/BMESS4.BIN"),
-         ("E_DEAD.BIN;1", 4828, f"{EXB}/rebuilt/EX/E_DEAD.BIN")]
+RELOC = [("E_SCE.BIN;1", 777512, str(_P.final("EX/E_SCE.BIN", f"{EXB}/rebuilt/EX/E_SCE.BIN"))),
+         ("BMESS4.BIN;1", 657036, str(_P.final("BMESS4.BIN", f"{EXB}/rebuilt/BMESS4.BIN"))),
+         ("E_DEAD.BIN;1", 4828, str(_P.final("EX/E_DEAD.BIN", f"{EXB}/rebuilt/EX/E_DEAD.BIN")))]
 FREE_START, FREE_END = 232784, 246284      # NULL.DA 영역 (이미지 끝 246284 섹터)
 
 def bcd(v): return ((v // 10) << 4) | (v % 10)

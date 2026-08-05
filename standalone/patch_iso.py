@@ -12,6 +12,7 @@ import struct, math, shutil, hashlib, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config
+import srwcb_paths as _P
 sys.path.insert(0, str(config.TOOLS))
 from patch_raw_track_exes import SECTOR_SIZE, USER_DATA_OFFSET, USER_DATA_SIZE, rebuild_mode2_form1
 
@@ -22,7 +23,7 @@ EX=str(config.SRW2_EXTRACTED)+"/"
 
 # (iso_name, retail_source, patched_file)
 INPLACE=[("SLPS_024.06;1", EX+"SLPS_024.06", str(config.PATCHED_EXE))]
-RELOC=[(iso, EX+src, CBR+pat) for iso,src,pat in config.RELOC_FILES]
+RELOC=[(iso, EX+src, str(_P.final(pat, CBR+pat))) for iso,src,pat in config.RELOC_FILES]
 FREE_START=config.NULL_DA_FREE_START
 FREE_END=config.NULL_DA_FREE_END
 

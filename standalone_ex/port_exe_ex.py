@@ -23,7 +23,8 @@ for _sub in ("tools", "third-ui", "ex-ui", "tr-ui", "audit", "menu-align", "seco
 import struct, json, bisect, hashlib
 ROOT=str(_P.WORK)
 rs=open(f"{ROOT}/extracted/EX/EX.WAR","rb").read()               # retail EX.WAR
-ps=open(f"{ROOT}/test_build/ex_full/runtime/EX/EX.WAR","rb").read()  # patched
+ps=open(_P.final("EX/EX.WAR",
+                 f"{ROOT}/test_build/ex_full/runtime/EX/EX.WAR"),"rb").read()  # patched
 sr=open(str(_P.WORK / "srwex" / "extracted") + "/SLPS_025.29","rb").read()          # retail standalone
 zones=json.load(open(str(_P.WORK / "srwex" / "extracted") + "/delta_map_ex.json")); zstarts=[z[0] for z in zones]
 FZ=zstarts[0]; SEC_LEN=len(rs); SLPS_LEN=len(sr); LAST_DELTA=zones[-1][2]

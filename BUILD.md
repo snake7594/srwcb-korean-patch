@@ -50,6 +50,7 @@ python build_all.py
 | 6 | 트레이닝 모드 빌드 |
 | 7 | 후처리 + 디스크 이미지 조립 |
 | 8 | 검증 |
+| 9 | 단독판 3종 (별매 CD 를 가진 사람만) |
 
 오래 걸리는 앞 단계를 건너뛰려면 `--from 3`, 한 단계만 돌리려면 `--only 3`.
 완성 이미지 이름에 쓸 버전은 `--version v0.11.0` 으로 바꿉니다.
@@ -85,13 +86,21 @@ set SRWCB_WORK=D:\srwcb-build
 set SRWCB_DISC=D:\games\Super Robot Taisen Complete Box (Track 1).bin
 ```
 
-단독판까지 만들 때는 각자 이미지 경로도 지정합니다.
+## 단독판(별매 CD)까지 만들기
+
+《제2차》《제3차》《EX》는 따로 나온 CD 도 있습니다. 같은 한글패치를 그 쪽 오프셋
+으로 옮겨 심을 수 있습니다. 이미지는 각자 준비해야 합니다.
 
 ```bash
 set SRWCB_SRW2_IMG=D:\games\Super Robot Taisen 2.img
 set SRWCB_SRW3_BIN=D:\games\Dai 3 Ji Super Robot Taisen.bin
 set SRWCB_SRWEX_IMG=D:\games\Super Robot Taisen EX (J).img
+python setup_standalone.py
+python build_all.py --only 9
 ```
+
+결과는 `work/srw2|srw3|srwex/port/` 에 생깁니다. 9단계는 CB 7단계가 남긴
+**후처리까지 끝난 파일**을 옮겨 심고, 끝나면 CB 와 같은 기준으로 다시 검사합니다.
 
 ```
 work/
