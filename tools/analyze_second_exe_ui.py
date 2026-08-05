@@ -19,6 +19,8 @@ if _d not in _sys.path:
     _sys.path.insert(0, _d)
 import srwcb_paths as _P
 _P.ensure_dirs()
+if str(_P.TOOLS) not in _sys.path:
+    _sys.path.insert(0, str(_P.TOOLS))
 # ------------------------------------
 
 

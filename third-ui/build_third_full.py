@@ -17,12 +17,14 @@ if _d not in _sys.path:
     _sys.path.insert(0, _d)
 import srwcb_paths as _P
 _P.ensure_dirs()
+if str(_P.TOOLS) not in _sys.path:
+    _sys.path.insert(0, str(_P.TOOLS))
 # ------------------------------------------------------------------
 import json, struct, sys, re, shutil, hashlib
 from pathlib import Path
 ROOT = _P.WORK
 SP = str(_P.BUILD)
-sys.path.insert(0, str(ROOT / "tools"))
+sys.path.insert(0, str(_P.TOOLS))
 
 import rebuild_second_sce as R
 R.EXPECTED_POINTER_COUNT = 142; R.EXPECTED_SCENARIO_COUNT = 71

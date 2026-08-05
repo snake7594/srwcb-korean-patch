@@ -14,11 +14,13 @@ if _d not in _sys.path:
     _sys.path.insert(0, _d)
 import srwcb_paths as _P
 _P.ensure_dirs()
+if str(_P.TOOLS) not in _sys.path:
+    _sys.path.insert(0, str(_P.TOOLS))
 # ------------------------------------------------------------------
 import sys, struct, hashlib, math
 from pathlib import Path
 ROOT = _P.WORK
-sys.path.insert(0, str(ROOT / "tools"))
+sys.path.insert(0, str(_P.TOOLS))
 from relocate_expanded_iso_files import relocate_files
 from patch_raw_track_exes import (EXE_LAYOUT, SECTOR_SIZE, USER_DATA_OFFSET, USER_DATA_SIZE,
                                    patch_one_executable)
