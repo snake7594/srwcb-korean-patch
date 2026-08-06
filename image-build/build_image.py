@@ -176,6 +176,14 @@ def step_menu(files):
         files[iso] = fixed[key]
 
 
+def step_third_ui(files):
+    """제3차에 남아 있던 UI 잔재 (제보 #5)."""
+    import fix_third_ui_leftovers as F3
+    out, n, menu = F3.apply(files["THIRD/THIRD.WAR"])
+    files["THIRD/THIRD.WAR"] = out
+    print(f"  한자 잔재 제자리 교체 {n}곳 / 맵 명령 메뉴: {menu}")
+
+
 def step_leftover(files):
     """전면 재검증에서 찾은 잔여 미번역 UI 보충."""
     import audit_leftover as AL
@@ -209,6 +217,7 @@ def main():
     print("[5/8] 메뉴 칸 정렬")
     step_menu(files)
     print("[6/8] 잔여 미번역 UI")
+    step_third_ui(files)
     if a.skip_leftover:
         print("  건너뜀")
     else:
