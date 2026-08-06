@@ -8,8 +8,7 @@
     2. 종료(전원끄기) 메시지 한글 주입 — SECOND.WAR / THIRD.WAR
     3. 이벤트 스크립트 포인터 재조준 — 2_SCE / 3_SCE / E_SCE
        (안 하면 브리핑에서 멈춘다)
-    4. 전투/사망 대사 사전 줄바꿈 제거 — BMESS2/3/4, *_DEAD
-       (전투 대사 폭은 40인데 대사 코덱이 18로 미리 끊어 놔서 줄이 밀렸다)
+    4. 전투/사망 대사 줄바꿈 재정렬 — BMESS2/3/4, *_DEAD (실측 폭 29)
     5. 메뉴 칸 정렬 교정 — THIRD.WAR / EX.WAR / TR.WAR (제2차 기준)
     6. 잔여 미번역 UI 보충 — TR 은 EX 에서 이식, 나머지는 도너 재배치
     7. 게임 선택 화면 그래픽(C_SMAP) 한글판
@@ -113,19 +112,36 @@ def step_quit(files):
         print(f"  {name}: 종료 메시지 {len(rep)}개 주입")
 
 
+def _same_record_split(ko: bytes, jp: bytes, name: str) -> None:
+    """레코드 경계가 레트일과 같은지.
+
+    B1/B3/B4 는 뒤에 2바이트 피연산자를 달고 다니는데, 레코드를 훑는 문법은 그걸
+    모른다. 재조준으로 그 피연산자에 0xFF 가 생기면 거기서 레코드가 끊긴 것처럼
+    보이고, 그 뒤 레코드 번호가 통째로 밀려 조건문·대사가 엉뚱하게 나온다.
+    """
+    from analyze_sce_relocation import parse_scenarios
+    a, b = parse_scenarios(jp), parse_scenarios(ko)
+    bad = [i for i, (x, y) in enumerate(zip(a, b)) if len(x.records) != len(y.records)]
+    if bad:
+        raise SystemExit(
+            f"{name}: 레코드 경계가 레트일과 달라진 시나리오 {bad}\n"
+            f"  재조준된 포인터 피연산자에 0xFF 가 생겼을 수 있습니다.")
+
+
 def step_sce(files):
     import fix_sce_event_refs as FX
     for name, jp_path in RETAIL.items():
         jp = need(jp_path, name).read_bytes()
-        fixed, need_n, probs = FX.retarget(files[name], jp, apply=False, verbose=False)
+        _same_record_split(files[name], jp, name)
+        _, need_n, probs = FX.retarget(files[name], jp, apply=False, verbose=False)
         if probs:
             raise SystemExit(f"{name}: 재조준 불가 {len(probs)}건")
-        if need_n:
-            fixed, _, _ = FX.retarget(files[name], jp, apply=True, verbose=False)
-            bad = FX._verify(fixed, jp)
-            if bad:
-                raise SystemExit(f"{name}: 재조준 후에도 스테일 참조 {bad}건")
-            files[name] = fixed
+        fixed, _, _ = FX.retarget(files[name], jp, apply=True, verbose=False)
+        bad = FX._verify(fixed, jp)
+        if bad:
+            raise SystemExit(f"{name}: 재조준 후에도 스테일 참조 {bad}건")
+        files[name] = fixed
+        _same_record_split(files[name], jp, name)
         print(f"  {name}: 이벤트 참조 재조준 {need_n}곳")
 
 
@@ -134,13 +150,13 @@ def step_battle(files):
     for name in BMESS:
         fixed, recs, rm, over = FB.fix_bmess(files[name])
         if over:
-            raise SystemExit(f"{name}: 재래핑 후에도 폭 40 초과 {len(over)}건")
+            raise SystemExit(f"{name}: 재래핑 후에도 폭 29 초과 {len(over)}건")
         files[name] = fixed
         print(f"  {name}: 레코드 {recs:,} / 잘못된 줄바꿈 {rm:,}B 제거")
     for name in DEAD:
         fixed, recs, rm, over = FB.fix_dead(files[name])
         if over:
-            raise SystemExit(f"{name}: 재래핑 후에도 폭 40 초과 {len(over)}건")
+            raise SystemExit(f"{name}: 재래핑 후에도 폭 29 초과 {len(over)}건")
         files[name] = fixed
         print(f"  {name}: 레코드 {recs:,} / {rm:,}B 제거")
 

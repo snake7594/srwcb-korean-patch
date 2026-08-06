@@ -46,6 +46,9 @@ MAX_LINE_CELLS = 20
 # at <= this width so the game never auto-wraps a dialogue record.
 MAX_LINE_ADVANCE = 18
 MAX_PAGE_LINES = 3
+# 제어코드가 뒤에 데리고 오는 인자 바이트 수
+CONTROL_ARGUMENT_BYTES = {0xF6: 0, 0xF7: 0, 0xF8: 1, 0xF9: 1, 0xFA: 0,
+                          0xFB: 2, 0xFC: 2, 0xFD: 2, 0xFE: 1}
 
 
 def glyph_advance(index: int, phase: int) -> tuple[int, int]:
@@ -181,6 +184,10 @@ def add_extra_glyph_mapping(glyph_map: dict[str, int], characters: Iterable[str]
 @dataclass
 class LayoutState:
     glyph_map: dict[str, int]
+    # 대사 상자 크기. 레트일 레코드가 실제로 쓴 값을 넣어 준다 — 게임의 상자는
+    # 장면마다 크기가 달라서(폭 16~32, 페이지당 1~3줄) 고정값을 쓰면 넘친다.
+    max_advance: int = MAX_LINE_ADVANCE
+    max_lines: int = MAX_PAGE_LINES
     data: bytearray = field(default_factory=bytearray)
     pages: list[list[str]] = field(default_factory=lambda: [[""]])
     page_cell_counts: list[list[int]] = field(default_factory=lambda: [[0]])
@@ -220,7 +227,7 @@ class LayoutState:
 
     def _new_line_or_page(self) -> None:
         self.phase = 0  # the renderer resets the wide phase at every F6/F7 break
-        if len(self.pages[-1]) < MAX_PAGE_LINES:
+        if len(self.pages[-1]) < self.max_lines:
             self.data.append(0xF6)
             self.pages[-1].append("")
             self.page_cell_counts[-1].append(0)
@@ -244,14 +251,14 @@ class LayoutState:
 
     def _emit_spaces(self, count: int) -> None:
         for _ in range(count):
-            if self.current_advance + 1 > MAX_LINE_ADVANCE:
+            if self.current_advance + 1 > self.max_advance:
                 self._new_line_or_page()
             self._emit_char(" ")
 
     def _emit_word(self, word: str) -> None:
         for char in word:
             advance, _ = glyph_advance(self.glyph_map[char], self.phase)
-            if self.current_advance and self.current_advance + advance > MAX_LINE_ADVANCE:
+            if self.current_advance and self.current_advance + advance > self.max_advance:
                 self._new_line_or_page()
             self._emit_char(char)
 
@@ -264,7 +271,7 @@ class LayoutState:
             if self.pending_spaces:
                 # spaces advance one unit each (low glyph, no phase change)
                 needed = self.pending_spaces + self._span_advance(token)
-                if self.current_advance and self.current_advance + needed > MAX_LINE_ADVANCE:
+                if self.current_advance and self.current_advance + needed > self.max_advance:
                     # A layout break is the visible separator at a word
                     # boundary; no lexical space is deleted within a line.
                     self._new_line_or_page()
@@ -311,9 +318,9 @@ class LayoutState:
         if self.pending_spaces:
             self._emit_spaces(self.pending_spaces)
             self.pending_spaces = 0
-        if any(adv > MAX_LINE_ADVANCE for page in self.page_advances for adv in page):
+        if any(adv > self.max_advance for page in self.page_advances for adv in page):
             raise AssertionError("layout exceeded line-advance (box width) limit")
-        if any(len(page) > MAX_PAGE_LINES for page in self.pages):
+        if any(len(page) > self.max_lines for page in self.pages):
             raise AssertionError("layout exceeded lines-per-page limit")
         self.data.append(0xFF)
         return bytes(self.data), {
@@ -328,12 +335,55 @@ class LayoutState:
         }
 
 
+def record_geometry(raw: bytes) -> tuple[int, int]:
+    """레트일 레코드가 실제로 쓴 (줄 폭, 페이지당 줄수).
+
+    일본어 원문은 그 장면의 상자 안에 들어가도록 쓰여 있으니, 거기서 읽은 값은
+    '이만큼은 확실히 들어간다'는 하한이다. 한국어를 이 안에 맞추면 넘칠 일이 없다.
+    """
+    adv = 0
+    max_adv = 0
+    lines = 1
+    max_lines = 1
+    phase = 0
+    p = 0
+    n = len(raw)
+    while p < n:
+        b = raw[p]
+        if b == 0xFF:
+            break
+        if b < 0xEB:
+            index = b
+            p += 1
+        elif b <= 0xF5:
+            index = (b - 0xEB) << 8 | raw[p + 1]
+            p += 2
+        else:
+            if b in (0xF6, 0xF7):
+                max_adv = max(max_adv, adv)
+                adv = 0
+                phase = 0
+                if b == 0xF6:
+                    lines += 1
+                    max_lines = max(max_lines, lines)
+                else:
+                    lines = 1
+            p += 1 + CONTROL_ARGUMENT_BYTES.get(b, 0)
+            continue
+        step, phase = glyph_advance(index, phase)
+        adv += step
+    max_adv = max(max_adv, adv)
+    return max_adv, max_lines
+
+
 def assemble_translated_record(
     translation_parts: list[dict[str, Any]],
     ko_parts: dict[str, str],
     glyph_map: dict[str, int],
+    geometry: tuple[int, int] | None = None,
 ) -> tuple[bytes, dict[str, Any]]:
-    state = LayoutState(glyph_map)
+    adv, lines = geometry or (MAX_LINE_ADVANCE, MAX_PAGE_LINES)
+    state = LayoutState(glyph_map, max_advance=adv, max_lines=lines)
     normalisation: list[dict[str, Any]] = []
     original_controls: list[str] = []
     for part in translation_parts:

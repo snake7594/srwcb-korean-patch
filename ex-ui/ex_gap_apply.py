@@ -59,7 +59,7 @@ def _load_gap_translations():
 
 
 def build_ex_supplement(glyph_map, src_sce, idx2ch):
-    from second_translation_codec import normalise_for_font, LayoutState
+    from second_translation_codec import normalise_for_font, LayoutState, record_geometry
     from sce_gap_supplement import make_encoder, _tokens as _tok, _rec_end
     enc_ko = make_encoder(glyph_map, idx2ch)
     tr = _load_gap_translations()
@@ -143,7 +143,8 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             for _i, (_r, _n) in enumerate(zip(_line_advs(rec), _line_advs(sup[off]))):
                 if _n > _r: stat["wide"].append((off, f"line{_i}", _n, _r))
         else:
-            st = LayoutState(glyph_map)
+            _w, _l = record_geometry(rec)
+            st = LayoutState(glyph_map, max_advance=max(_w, MAXLINE), max_lines=_l)
             for s in segs:
                 if s == "<f6>":
                     st.pending_spaces = 0; st._new_line_or_page()

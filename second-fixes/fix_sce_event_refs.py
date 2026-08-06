@@ -123,6 +123,95 @@ def retarget(ko_bytes, jp_bytes, *, apply=False, verbose=True):
     return bytes(ko), fixed, problems
 
 
+def _bad_operand_targets(buf, scn):
+    """피연산자에 0xFF 가 들어간 유효 포인터의 타깃 목록.
+
+    B1/B3/B4 는 뒤에 2바이트 변위를 달고 다니는데, 레코드를 훑는 문법은 그 두
+    바이트도 글리프로 읽는다. 거기에 0xFF 가 있으면 레코드가 거기서 끝난 것처럼
+    보여 뒤쪽 레코드 번호가 통째로 밀린다(작전목적의 승리/패배조건이 엉뚱하게
+    나오던 원인). 레트일에는 이런 자리가 없다.
+    """
+    starts = {r.start for r in scn.records}
+    out = set()
+    for off in range(scn.pool_start, scn.record_data_end - 2):
+        if buf[off] not in TEXT_POINTER_OPCODES:
+            continue
+        if 0xFF not in buf[off + 1:off + 3]:
+            continue
+        tgt = (off + 1) + struct.unpack_from("<H", buf, off + 1)[0]
+        if tgt in starts:
+            out.add(tgt)
+    return out
+
+
+def harden_against_ff_operands(src, replacements, rebuild, *, rounds=12, verbose=True):
+    """레코드 경계가 레트일과 똑같이 나오는 배치가 될 때까지 다시 빌드한다.
+
+    작전목적 화면은 조건문을 **레코드 순번**으로 집어 온다. 그런데 B1/B3/B4 의
+    2바이트 변위에 0xFF 가 끼면 레코드를 훑는 쪽에서는 거기서 레코드가 끝난 것처럼
+    보여 그 뒤 순번이 통째로 밀린다(승리조건 자리에 엉뚱한 글이 나오던 원인).
+
+    풀에 여유 바이트가 없어 다 만든 뒤에는 밀 수가 없다. 그래서 어긋난 자리 **앞
+    레코드를 한 칸 늘려**(줄 끝 공백 하나) 처음부터 다시 배치하고, 경계가 레트일과
+    같아질 때까지 되풀이한다.
+    """
+    repl = dict(replacements)
+    added = 0
+    for _ in range(rounds):
+        out, _meta = rebuild(src, repl)
+        fixed, _, _ = retarget(out, src, apply=True, verbose=False)
+        sj = parse_scenarios(src)
+        sk = parse_scenarios(fixed)
+        grow = []
+        for a, b in zip(sj, sk):
+            if len(a.records) == len(b.records):
+                continue
+            # 처음으로 길이가 어긋난 레코드를 찾아 그 '앞' 레코드를 늘린다
+            k = next((i for i, (x, y) in enumerate(zip(a.records, b.records))
+                      if (x.end - x.start) != (y.end - y.start)), 0)
+            grow.append(a.records[max(k - 1, 0)])
+        if not grow:
+            if verbose:
+                print(f"  레코드 경계 안정화: 앞 레코드 늘림 {added}개")
+            return repl, out
+        for rec in grow:
+            cur = repl.get(rec.start) or bytes(src[rec.start:rec.end])
+            repl[rec.start] = cur[:-1] + bytes(1) + cur[-1:]
+            added += 1
+    raise SystemExit("레코드 경계를 레트일과 맞추지 못했습니다")
+
+
+def nudge_ff_operands(ko_bytes, jp_bytes, *, rounds=8, verbose=True):
+    """0xFF 변위가 생긴 타깃을 한 바이트 뒤로 밀어 재조준한다.
+
+    앞 레코드의 종결자 바로 앞에 0x00(반각 공백)을 하나 끼우면 타깃이 1바이트
+    뒤로 가고 변위가 달라진다. 줄 끝 공백이라 화면에는 표가 안 난다.
+    """
+    ko = bytearray(ko_bytes)
+    moved = 0
+    for _ in range(rounds):
+        ko = bytearray(retarget(bytes(ko), jp_bytes, apply=True, verbose=False)[0])
+        scns = parse_scenarios(bytes(ko))
+        todo = []
+        for scn in scns:
+            for tgt in _bad_operand_targets(ko, scn):
+                if scn.record_data_end + 1 > scn.pool_end:
+                    continue                      # 풀에 여유가 없다
+                todo.append((scn, tgt))
+        if not todo:
+            break
+        # 뒤에서부터 끼워 넣어야 앞쪽 오프셋이 안 흔들린다
+        for scn, tgt in sorted(todo, key=lambda x: -x[1]):
+            ko[tgt:tgt] = bytes(1)
+            del ko[scn.pool_end - 1]              # 풀 꼬리 패딩 한 바이트를 뺀다
+            moved += 1
+    ko = bytearray(retarget(bytes(ko), jp_bytes, apply=True, verbose=False)[0])
+    left = sum(len(_bad_operand_targets(ko, s)) for s in parse_scenarios(bytes(ko)))
+    if verbose:
+        print(f"  0xFF 변위 회피: {moved}곳 밀어냄, 남은 것 {left}")
+    return bytes(ko), moved, left
+
+
 def _verify(ko_bytes, jp_bytes):
     """재조준 후: 모든 이벤트 참조가 배포본 레코드 시작을 가리키는지."""
     bj = parse_scenarios(jp_bytes)

@@ -105,7 +105,10 @@ for _sc in R.parse_scenarios(src_sce):
         if _new is not None:
             sce_r[_r.start] = _new; _left += 1
 print(f"leftover condition records phrase-subbed: {_left}")
-out_sce, _ = rebuild_second_sce(src_sce, sce_r, strict_source=False)
+import fix_sce_event_refs as _FX
+sce_r, out_sce = _FX.harden_against_ff_operands(
+    src_sce, sce_r,
+    lambda s, r: rebuild_second_sce(s, r, strict_source=False))
 out_bm = rebuild_bmess_repack(src_bm, bm_r)
 out_dd = rebuild_dead(src_dd, dd_r)
 reb = OUT/"rebuilt"; (reb/"THIRD").mkdir(parents=True, exist_ok=True)

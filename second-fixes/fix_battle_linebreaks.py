@@ -39,7 +39,7 @@ from second_translation_codec import glyph_advance
 ARG = {0xF6: 0, 0xF7: 0, 0xF8: 1, 0xF9: 1, 0xFA: 0, 0xFB: 2, 0xFC: 2, 0xFD: 2, 0xFE: 1}
 
 
-def _rewrap_one(out, start, end, W=40):
+def _rewrap_one(out, start, end, W=29):
     """out[start:end) 의 잉여 F6/F7 을 걷어내고, 배틀 박스 폭 W 로 다시 줄을 나눈다.
 
     18유닛 pre-break 를 제거하면 대부분 대사가 1줄(≤W)로 복원된다. W 를 넘는
@@ -123,7 +123,7 @@ def _max_line_adv(buf, start, end):
     return max(mx, adv)
 
 
-def fix_bmess(data, box_width=40):
+def fix_bmess(data, box_width=29):
     ar = parse_bmess(data)
     out = bytearray(data)
     seen = set(); recs = 0; f6_removed = 0; over = []
@@ -135,7 +135,7 @@ def fix_bmess(data, box_width=40):
                 continue                          # alias(같은 레코드 공유) 중복 방지
             seen.add(s)
             e = blk.file_start + 15 + rec.end
-            f6_removed += _rewrap_one(out, s, e)
+            f6_removed += _rewrap_one(out, s, e, box_width)
             recs += 1
             adv = _max_line_adv(out, s, e)
             if adv > box_width:
@@ -143,7 +143,7 @@ def fix_bmess(data, box_width=40):
     return bytes(out), recs, f6_removed, over
 
 
-def fix_dead(data, box_width=40):
+def fix_dead(data, box_width=29):
     da = parse_dead(data)
     out = bytearray(data)
     recs = 0; f6_removed = 0; over = []

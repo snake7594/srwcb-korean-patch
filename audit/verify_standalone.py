@@ -28,18 +28,18 @@ from extract_psx_iso import RawMode2Image, read_tree  # noqa: E402
 
 GAMES = [
     ("제2차 단독판", _P.WORK / "srw2" / "port" / "Super Robot Taisen 2 (Korean).img",
-     A.PINNED, ("2_SCE.BIN", "BMESS2.BIN", "2_DEAD.BIN")),
+     A.PINNED, ("2_SCE.BIN", "BMESS2.BIN", "2_DEAD.BIN"), "SECOND/2_SCE.BIN"),
     ("제3차 단독판", _P.WORK / "srw3" / "port" / "Dai 3 Ji Super Robot Taisen (Korean).bin",
-     A.PINNED, ("3_SCE.BIN", "BMESS3.BIN", "3_DEAD.BIN")),
+     A.PINNED, ("3_SCE.BIN", "BMESS3.BIN", "3_DEAD.BIN"), "THIRD/3_SCE.BIN"),
     ("EX 단독판", _P.WORK / "srwex" / "port" / "Super Robot Taisen EX (Korean).img",
-     A.EX15, ("E_SCE.BIN", "BMESS4.BIN", "E_DEAD.BIN")),
+     A.EX15, ("E_SCE.BIN", "BMESS4.BIN", "E_DEAD.BIN"), "EX/E_SCE.BIN"),
 ]
 
 
 def main() -> None:
     rows = []
     checked = 0
-    for tag, img, extras, (sce, bm, dead) in GAMES:
+    for tag, img, extras, (sce, bm, dead), retail_sce in GAMES:
         if not img.exists():
             print(f"[건너뜀] {tag}: {img.name} 없음")
             continue
@@ -48,11 +48,16 @@ def main() -> None:
             _, entries = read_tree(m)
         where = {e.path.strip("/").split("/")[-1]: e.path.strip("/") for e in entries}
         tbl = A.ko_table(extras)
-        for name, kind, w, lines in ((sce, "대사", 18, 3), (bm, "전투", 40, 0),
-                                     (dead, "사망", 40, 0)):
+        for name, kind, w, lines in ((sce, "대사", 0, 0),
+                                     (bm, "전투", V.BATTLE_BOX_ADVANCE, 0),
+                                     (dead, "사망", V.BATTLE_BOX_ADVANCE, 0)):
             d = A.read_iso(str(img), where[name])
             if kind == "대사":
-                recs = [r for r in V.sce_dialogue(d) if not V.is_choice(d, r[-2], tbl)]
+                j = (_P.EXTRACTED / retail_sce).read_bytes()
+                ko_recs, jp_recs = V._paired(d, j, tbl)
+                V.check_pages(f"{tag} {kind}", d, j, ko_recs, jp_recs, tbl,
+                              V.SCE_BOX_ADVANCE, rows)
+                continue
             elif kind == "전투":
                 recs = A.bmess_records(d)
             else:

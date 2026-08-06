@@ -84,6 +84,34 @@ GAMES = [
 ]
 
 
+# 레트일이 실제로 채운 최대치 (전 시나리오/전 아카이브 실측)
+SCE_BOX_ADVANCE = 32
+BATTLE_BOX_ADVANCE = 29
+
+
+def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
+    """페이지당 줄수는 **레트일 레코드가 쓰던 만큼**을 넘으면 안 된다.
+
+    상자 높이는 장면마다 다르다(1~3줄). 3줄로 못박으면 2줄짜리 상자에서 세 번째
+    줄이 넘쳐 다음 대사가 밀리고 문장 중간부터 그려진다.
+    """
+    jp_over = wide = broke = 0
+    for (s, e), (sj, ej) in zip(recs_ko, recs_jp):
+        try:
+            txt = A.decode(ko, s, e, tbl)
+            ws, pages, _ = A.line_widths(ko, s, e)
+            _, jpages, _ = A.line_widths(jp, sj, ej)
+        except Exception:
+            broke += 1
+            continue
+        n, tot = A.jp_ratio(txt)
+        if n >= 3 and tot and n / tot >= 0.5:
+            jp_over += 1
+        if (ws and max(ws) > box) or (pages and jpages and max(pages) > max(jpages)):
+            wide += 1
+    out.append((name, len(recs_ko), jp_over, wide, broke))
+
+
 def check(name, data, recs, tbl, width, lines, out):
     jp = wide = broke = 0
     for row in recs:
@@ -108,6 +136,23 @@ def check(name, data, recs, tbl, width, lines, out):
     out.append((name, len(recs), jp, wide, broke))
 
 
+def _paired(ko, jp, tbl):
+    """같은 순번의 (패치본 대사, 레트일 대사) 짝. 선택지·메뉴는 뺀다."""
+    a = A.ASR.parse_scenarios(jp)
+    b = A.ASR.parse_scenarios(ko)
+    ko_out, jp_out = [], []
+    for x, y in zip(a, b):
+        if len(x.records) != len(y.records):
+            continue
+        refs = {r.target for r in x.references}
+        for rx, ry in zip(x.records, y.records):
+            if rx.start not in refs or is_choice(ko, ry.start, tbl):
+                continue
+            ko_out.append((ry.start, ry.end))
+            jp_out.append((rx.start, rx.end))
+    return ko_out, jp_out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--version", default="v0.11.0")
@@ -123,12 +168,13 @@ def main():
     for game, sce, bmess, dead, extras in GAMES:
         tbl = A.ko_table(extras)
         d = A.read_iso(img, sce)
-        check(f"{game} 대사", d, [r for r in sce_dialogue(d)
-                                if not is_choice(d, r[-2], tbl)], tbl, 18, 3, rows)
+        j = (_P.EXTRACTED / sce).read_bytes()
+        ko_recs, jp_recs = _paired(d, j, tbl)
+        check_pages(f"{game} 대사", d, j, ko_recs, jp_recs, tbl, SCE_BOX_ADVANCE, rows)
         d = A.read_iso(img, bmess)
-        check(f"{game} 전투", d, A.bmess_records(d), tbl, 40, 0, rows)
+        check(f"{game} 전투", d, A.bmess_records(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
         d = A.read_iso(img, dead)
-        check(f"{game} 사망", d, dead_live(d), tbl, 40, 0, rows)
+        check(f"{game} 사망", d, dead_live(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
 
     print(f"\n{'항목':12} {'레코드':>8} {'미번역':>7} {'폭/줄초과':>9} {'깨짐':>6}")
     bad = 0

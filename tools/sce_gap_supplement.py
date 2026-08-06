@@ -93,9 +93,11 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
     # Same path as the main pipeline: auto-wrap at MAX_LINE_ADVANCE=18 (the renderer's
     # buggy auto-wrap must never fire), <=3 lines/page with automatic F7 paging.
     # '<f6>' = explicit line break (choice rows / intended splits), '<f7>' = page break.
-    from second_translation_codec import LayoutState
+    from second_translation_codec import LayoutState, record_geometry
     for off, segs in DIAL.items():
-        st = LayoutState(glyph_map)
+        # 상자 크기는 레트일 레코드가 쓰던 그대로 (고정 18x3 이면 넘친다)
+        _w, _l = record_geometry(bytes(src_sce[off:_rec_end(src_sce, off)]))
+        st = LayoutState(glyph_map, max_advance=max(_w, 18), max_lines=_l)
         for s in segs:
             if s == "<f6>":
                 st.pending_spaces = 0          # break itself is the separator

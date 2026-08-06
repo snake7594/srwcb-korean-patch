@@ -79,9 +79,11 @@ from patch_second_exe_ui import (  # noqa: E402
 )
 from second_translation_codec import (  # noqa: E402
     EXTRA_GLYPH_START,
+    MAX_LINE_ADVANCE,
     STRUCTURAL_GLYPH_INDICES,
     add_extra_glyph_mapping,
     assemble_translated_record,
+    record_geometry,
     load_safe_glyph_map,
     normalise_for_font,
     required_extra_characters,
@@ -584,6 +586,14 @@ def make_replacements(
         "death_quote": source_dead,
     }
 
+    # ---- 대사 상자 크기 ----------------------------------------------------
+    # 상자는 장면마다 크기가 다르다(시나리오 대사 폭 16~32·페이지당 1~3줄,
+    # 전투 대사 폭 ~29·2줄). 고정 18×3 으로 짜 넣으면 줄이 넘쳐 다음 대사가
+    # 밀리거나 문장 중간부터 그려진다. 그래서 **레트일 원문이 실제로 쓴 크기**를
+    # 그대로 따라간다: 폭은 같은 시나리오 안에서 가장 넓었던 줄, 페이지당 줄수는
+    # 그 레코드가 쓰던 줄수. 일본어가 들어갔던 크기라면 한국어도 확실히 들어간다.
+    geo = _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources)
+
     for row in rows:
         kind = row["kind"]
         source = sources[kind]
@@ -591,7 +601,8 @@ def make_replacements(
         key = row["translation_memory_key"]
         ko_parts = translations[key]["ko_parts"]
         encoded, layout = assemble_translated_record(
-            row["japanese"]["translation_parts"], ko_parts, glyph_map
+            row["japanese"]["translation_parts"], ko_parts, glyph_map,
+            geometry=geo(kind, row["source"]["offset"], old_raw),
         )
         offset = row["source"]["offset"]
         if kind == "scenario":
@@ -798,6 +809,42 @@ def create_and_verify_xdelta(
     }
 
 
+
+# 시나리오 대사 상자: 레트일이 실제로 채운 최대 폭(전 시나리오 실측 32)
+SCENARIO_BOX_ADVANCE = 32
+NARROW_WINDOW_ADVANCE = 24
+
+
+def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
+    """(kind, offset, retail_raw) -> (줄 폭, 페이지당 줄수)."""
+    # 전투·사망: 상자가 하나뿐이니 아카이브 전체 최대치를 쓴다
+    def archive_max(kind):
+        w = h = 1
+        for row in rows:
+            if row["kind"] != kind:
+                continue
+            raw = verify_source_row(row, sources[kind])
+            a, b = record_geometry(bytes(raw))
+            w, h = max(w, a), max(h, b)
+        return w, h
+
+    battle = archive_max("battle_message")
+    death = archive_max("death_quote")
+
+    def get(kind, offset, raw):
+        if kind == "scenario":
+            width, lines = record_geometry(bytes(raw))
+            # 원문이 줄을 바꾼 지점을 전부 모아 보면 어느 시나리오든 24~32 에서
+            # 꺾인다. 즉 시나리오 대사 상자는 어디서나 최소 32 는 들어간다. 그보다
+            # 훨씬 이른 곳에서 줄을 바꾼 여러 줄짜리는 좁은 창일 수 있으니 그때만
+            # 원문 폭을 지킨다.
+            if lines > 1 and width < NARROW_WINDOW_ADVANCE:
+                return max(width, MAX_LINE_ADVANCE), lines
+            return SCENARIO_BOX_ADVANCE, lines
+        return battle if kind == "battle_message" else death
+
+    return get
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--ledger", type=Path, default=LEDGER)
@@ -891,6 +938,9 @@ def main() -> int:
             }
         )
 
+    import fix_sce_event_refs as _FX
+    sce_repl, _ = _FX.harden_against_ff_operands(
+        source_sce, sce_repl, rebuild_second_sce)
     rebuilt_sce, sce_manifest = rebuild_second_sce(source_sce, sce_repl)
     rebuilt_bmess = rebuild_bmess_repack(source_bmess, bm_repl)
     rebuilt_dead = rebuild_dead(source_dead, dead_repl)

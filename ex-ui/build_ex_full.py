@@ -99,7 +99,10 @@ _dup = [k for k in _sup if k in sce_r]
 assert not _dup, f"보충이 원장 레코드와 충돌: {[hex(x) for x in _dup[:5]]}"
 sce_r.update(_sup)
 print(f"E_SCE 보충: {_rep}  (총 {len(_sup)} 레코드)")
-out_sce, _ = rebuild_second_sce(src_sce, sce_r, strict_source=False)
+import fix_sce_event_refs as _FX
+sce_r, out_sce = _FX.harden_against_ff_operands(
+    src_sce, sce_r,
+    lambda s, r: rebuild_second_sce(s, r, strict_source=False))
 out_bm = rebuild_bmess_repack(src_bm, bm_r)
 out_dd = rebuild_dead(src_dd, dd_r)
 reb = OUT / "rebuilt"; (reb / "EX").mkdir(parents=True, exist_ok=True)
