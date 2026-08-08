@@ -93,12 +93,13 @@ BATTLE_BOX_ADVANCE = 29
 def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
     """대사 상자를 넘지 않는지.
 
-    원문 대사에는 F7(쪽 나눔)이 한 개도 없다 — 레코드 하나가 곧 한 화면이다.
-    원문이 쓴 줄수는 최대 3 이므로 그게 상자 높이다. 폭도 원문이 실제로 채운
-    최대치(32)를 넘으면 안 된다.
+    상자 크기는 **같은 장면에서 원문이 실제로 보여 준 만큼**이다. 원문이 줄을
+    바꾼 가장 넓은 지점이 폭이고, 원문이 쓴 가장 많은 줄수가 높이다. 어떤 장면은
+    상자가 좁고(폭 20 남짓) 어떤 장면은 넓은데, 고정 상수(폭 32·3줄)를 들이대면
+    좁은 창에서 옆으로 넘치는 걸 놓친다 — 화면에서 글자가 잘려 보이는 그 증상이다.
     """
     jp_over = wide = broke = 0
-    for (s, e), (sj, ej) in zip(recs_ko, recs_jp):
+    for (s, e, bw, bh), (sj, ej) in zip(recs_ko, recs_jp):
         try:
             txt = A.decode(ko, s, e, tbl)
             ws, pages, _ = A.line_widths(ko, s, e)
@@ -109,8 +110,8 @@ def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
         n, tot = A.jp_ratio(txt)
         if n >= 3 and tot and n / tot >= 0.5:
             jp_over += 1
-        cap = max(max(jpages) if jpages else 1, SCE_MAX_LINES)
-        wcap = max(max(jw) if jw else 0, box)
+        cap = max(max(jpages) if jpages else 1, bh)
+        wcap = max(max(jw) if jw else 0, bw)
         if (ws and max(ws) > wcap) or (pages and max(pages) > cap):
             wide += 1
     out.append((name, len(recs_ko), jp_over, wide, broke))
@@ -154,19 +155,29 @@ def _is_dialogue(buf, s, e, tbl):
 
 
 def _paired(ko, jp, tbl):
-    """같은 순번의 (패치본 대사, 레트일 대사) 짝. 선택지·메뉴는 뺀다."""
+    """같은 순번의 (패치본 대사, 레트일 대사) 짝 + 그 장면의 상자 크기."""
     a = A.ASR.parse_scenarios(jp)
     b = A.ASR.parse_scenarios(ko)
     ko_out, jp_out = [], []
     for x, y in zip(a, b):
         if len(x.records) != len(y.records):
             continue
+        # 이 장면의 상자: 원문이 줄을 바꾼 가장 넓은 지점 / 가장 많은 줄수
+        bw = bh = 0
+        for r in x.records:
+            try:
+                ws, _pg, _mx = A.line_widths(jp, r.start, r.end)
+            except Exception:
+                continue
+            if len(ws) > 1:
+                bw = max(bw, max(ws[:-1]))
+            bh = max(bh, len(ws))
         for rx, ry in zip(x.records, y.records):
             # 참조 레코드만 보면 안 된다 — 풀 안 이벤트 스크립트가 가리키는 대사가
             # 그만큼 더 있고, 예전엔 그쪽이 통째로 검사에서 빠져 있었다.
             if is_choice(ko, ry.start, tbl) or not _is_dialogue(ko, ry.start, ry.end, tbl):
                 continue
-            ko_out.append((ry.start, ry.end))
+            ko_out.append((ry.start, ry.end, bw, bh))
             jp_out.append((rx.start, rx.end))
     return ko_out, jp_out
 

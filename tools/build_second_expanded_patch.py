@@ -816,6 +816,29 @@ SCENARIO_BOX_ADVANCE = 32
 NARROW_WINDOW_ADVANCE = 24
 
 
+def _retail_line_advances(raw: bytes) -> list[int]:
+    """원문 레코드의 줄별 advance (F6/F7 로 나눔)."""
+    from second_translation_codec import glyph_advance, CONTROL_ARGUMENT_BYTES
+    out, adv, phase, p = [], 0, 0, 0
+    while p < len(raw):
+        b = raw[p]
+        if b == 0xFF:
+            break
+        if b < 0xEB:
+            idx = b; p += 1
+        elif b <= 0xF5:
+            idx = (b - 0xEB) << 8 | raw[p + 1]; p += 2
+        else:
+            if b in (0xF6, 0xF7):
+                out.append(adv); adv = 0; phase = 0
+            p += 1 + CONTROL_ARGUMENT_BYTES.get(b, 0)
+            continue
+        step, phase = glyph_advance(idx, phase)
+        adv += step
+    out.append(adv)
+    return out
+
+
 def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
     """(kind, offset, retail_raw) -> (줄 폭, 페이지당 줄수)."""
     # 전투·사망: 상자가 하나뿐이니 아카이브 전체 최대치를 쓴다
@@ -832,21 +855,31 @@ def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
     battle = archive_max("battle_message")
     death = archive_max("death_quote")
 
+    # 시나리오별 '원문이 실제로 줄을 바꾼 가장 넓은 지점' = 그 장면 상자의 폭.
+    # 원문이 한 줄로 끝난 레코드는 상자 크기를 알려 주지 않으므로, 같은 시나리오
+    # 에서 관측된 줄바꿈 폭을 쓴다. 관측이 없으면 그 레코드의 폭 그대로.
+    from analyze_sce_relocation import parse_scenarios
+    wrap_of = {}
+    for scn in parse_scenarios(bytes(source_sce)):
+        widest = tallest = 0
+        for rec in scn.records:
+            ws = _retail_line_advances(bytes(source_sce[rec.start:rec.end]))
+            if len(ws) > 1:
+                widest = max(widest, max(ws[:-1]))
+            tallest = max(tallest, len(ws))
+        for rec in scn.records:
+            wrap_of[rec.start] = (widest, tallest)
+
     def get(kind, offset, raw):
         if kind == "scenario":
+            # 상자 크기는 **원문 레코드가 실제로 쓴 그대로**다. 바닥값(폭 32·3줄)을
+            # 두면 좁은 창·2줄 창에서 넘치고, 그러면 렌더러가 스스로 줄을 접다가
+            # 두 바이트 글자의 앞바이트를 잃는다 — 화면이 단어 중간부터 시작하고
+            # 첫 글자가 깨지는 그 증상이다. 원문이 들어갔던 크기면 한국어도 들어간다.
+            # 대사에는 F7(쪽 나눔)을 쓰지 않는다(원문에 한 개도 없다).
             width, lines = record_geometry(bytes(raw))
-            # 원문이 줄을 바꾼 지점을 전부 모아 보면 어느 시나리오든 24~32 에서
-            # 꺾인다. 즉 시나리오 대사 상자는 어디서나 최소 32 는 들어간다. 그보다
-            # 훨씬 이른 곳에서 줄을 바꾼 여러 줄짜리는 좁은 창일 수 있으니 그때만
-            # 원문 폭을 지킨다.
-            # 대사에는 F7 을 쓰지 않는다 (원문에 한 개도 없다). 줄수 상한은
-            # 원문 최대치 3 으로 두되, 넘겨도 F6 로만 이어 붙인다.
-            if lines > 1 and width < NARROW_WINDOW_ADVANCE:
-                return max(width, MAX_LINE_ADVANCE), max(lines, MAX_PAGE_LINES), False
-            # 창은 장면마다 다르다 — 원문이 폭 60 을 쓰는 넓은 창도 있다. 32 로
-            # 일괄해 좁히면 줄이 배로 늘어 상자를 넘친다. **원문이 실제로 쓴 폭**
-            # 아래로는 절대 좁히지 않는다.
-            return max(width, SCENARIO_BOX_ADVANCE), max(lines, MAX_PAGE_LINES), False
+            box_w, box_h = wrap_of.get(offset, (0, 0))
+            return max(width, box_w, 8), max(lines, box_h, 1), False
         w, h = battle if kind == "battle_message" else death
         return w, h, True
 

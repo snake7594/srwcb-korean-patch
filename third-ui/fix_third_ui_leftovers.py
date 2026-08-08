@@ -157,12 +157,20 @@ def _arena(war: bytes, pre: bytes):
             runs[-1][1] = a + GB
         else:
             runs.append([a, a + GB])
+    # 폰트 꼬리(번호가 가장 큰 글리프)부터 쓴다. 한글은 0x101~0xA2E 에만 있어
+    # 꼬리 쪽은 아무도 안 그린다 — 앞쪽 빈칸은 남은 일본어가 쓸 수도 있다.
+    runs.sort(key=lambda r: r[0], reverse=True)
     return runs
 
 
 def fix_map_menu(war: bytearray, pre: bytes, ko_ch2idx: dict) -> str:
-    """맵 명령 메뉴를 도너로 옮겨 전체 이름으로 되돌린다."""
-    # ui_master 레코드는 UI-VM 문법이라 대사 문법으로 끝을 찾으면 안 된다
+    """맵 명령 메뉴를 제2차와 같은 전체 이름으로 되돌린다.
+
+    레트일 레코드가 짧아 `부대/반격/목적/정신` 두 글자로 잘려 있었다. 늘리면
+    14바이트가 더 필요한데 레코드 안 여유는 9바이트뿐이라 **도너 자리로 옮기고
+    포인터를 다시 겨눈다**. 레코드는 UI-VM 문법이라(0xF0~0xF5 가 옵코드다)
+    끝을 찾을 때 대사 문법으로 자르면 안 된다 — PV 로 뜬다.
+    """
     from patch_second_exe_ui import parse_second_ui_vm_record as PV
     tag = b"".join(_enc_idx(ko_ch2idx[c]) for c in "페이즈")
     slot = s = e = None
@@ -181,15 +189,18 @@ def fix_map_menu(war: bytearray, pre: bytes, ko_ch2idx: dict) -> str:
     if slot is None:
         return "메뉴를 찾지 못함"
     old = bytes(war[s:e])
-    # 앞뒤 제어 바이트는 그대로 두고 글자 구간만 새로 쓴다
-    toks = _tokens(war, s, e)
-    first = next((i for i, t in enumerate(toks) if t[2] == 'g'), None)
-    last = max(i for i, t in enumerate(toks) if t[2] == 'g')
-    body = b"\xF6".join(b"".join(_enc_idx(ko_ch2idx[c]) for c in w) for w in MAP_MENU)
-    new = old[:toks[first][0] - s] + body + old[toks[last][0] + toks[last][1] - s:]
+    new = old
+    for short, full in (("부대", "부대표"), ("반격", "반격명령"),
+                        ("목적", "작전목적"), ("정신", "정신검색")):
+        a = b"".join(_enc_idx(ko_ch2idx[c]) for c in short)
+        b = b"".join(_enc_idx(ko_ch2idx[c]) for c in full)
+        # 줄 구분자(F6) 사이에 홀로 있는 항목만 바꾼다
+        br = bytes([0xF6])
+        if br + a + br not in new:
+            return f"항목 '{short}' 을 찾지 못함"
+        new = new.replace(br + a + br, br + b + br, 1)
     if len(new) <= len(old):
         war[s:s + len(new)] = new
-        war[s + len(new):e] = bytes(e - s - len(new))
         return f"제자리 ({len(new)}/{len(old)}B)"
     for a, b in _arena(bytes(war), pre):
         if b - a >= len(new):
@@ -201,16 +212,13 @@ def fix_map_menu(war: bytearray, pre: bytes, ko_ch2idx: dict) -> str:
 
 def apply(war_bytes: bytes) -> tuple:
     war = bytearray(war_bytes)
-    pre = (_P.WORK / "test_build" / "third_full" / "font_extracted" /
-           "THIRD" / "THIRD.WAR").read_bytes()
+    pre = (_P.EXTRACTED / "THIRD" / "THIRD.WAR").read_bytes()
     rows = json.loads(_P.FONT_MAPPING.read_text(encoding="utf-8"))["rows"]
     jp_idx2ch = {r["glyph_index"]: (r.get("character") or "") for r in rows}
     ko = add_extra_glyph_mapping(load_safe_glyph_map(), PINNED)
     n = substitute_kanji(war, jp_idx2ch, ko)
     n += substitute_kanji_ui(war, jp_idx2ch, ko)
-    # 맵 명령 메뉴를 도너로 늘리는 건 UI-VM 레코드를 통째로 다시 써야 해서
-    # (대사 문법으로 자르면 옵코드가 깨진다) 아직 보류한다.
-    menu = "보류 (VM 레코드 재작성 필요)"
+    menu = fix_map_menu(war, pre, ko)
     if len(war) != len(war_bytes):
         raise SystemExit("THIRD.WAR 크기가 변했습니다")
     return bytes(war), n, menu

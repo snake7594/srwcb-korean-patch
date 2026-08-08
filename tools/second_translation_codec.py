@@ -46,6 +46,8 @@ MAX_LINE_CELLS = 20
 # at <= this width so the game never auto-wraps a dialogue record.
 MAX_LINE_ADVANCE = 18
 MAX_PAGE_LINES = 3
+# 어떤 낱말도 들어가는 넓이 (마지막 수단)
+SAFE_FALLBACK_ADVANCE = 32
 # 제어코드가 뒤에 데리고 오는 인자 바이트 수
 CONTROL_ARGUMENT_BYTES = {0xF6: 0, 0xF7: 0, 0xF8: 1, 0xF9: 1, 0xFA: 0,
                           0xFB: 2, 0xFC: 2, 0xFD: 2, 0xFE: 1}
@@ -201,6 +203,7 @@ class LayoutState:
     inserted_page_breaks: int = 0
     preserved_page_breaks: int = 0
     whitespace_wraps: int = 0
+    strict_width: bool = True
 
     @property
     def current_line(self) -> str:
@@ -282,7 +285,7 @@ class LayoutState:
                 else:
                     self._emit_spaces(self.pending_spaces)
                 self.pending_spaces = 0
-            elif self.current_advance and self.current_advance + self._span_advance(token) > MAX_LINE_ADVANCE:
+            elif self.current_advance and self.current_advance + self._span_advance(token) > self.max_advance:
                 # There was no legal word boundary.  Split a long token rather
                 # than alter or truncate it.
                 self._new_line_or_page()
@@ -290,13 +293,13 @@ class LayoutState:
 
     def emit_control(self, raw: bytes, visible_cells: int = 0) -> None:
         if self.pending_spaces:
-            if self.current_advance and self.current_advance + self.pending_spaces + visible_cells > MAX_LINE_ADVANCE:
+            if self.current_advance and self.current_advance + self.pending_spaces + visible_cells > self.max_advance:
                 self._new_line_or_page()
                 self.whitespace_wraps += 1
             else:
                 self._emit_spaces(self.pending_spaces)
             self.pending_spaces = 0
-        if visible_cells and self.current_advance and self.current_advance + visible_cells > MAX_LINE_ADVANCE:
+        if visible_cells and self.current_advance and self.current_advance + visible_cells > self.max_advance:
             self._new_line_or_page()
         self.data.extend(raw)
         label = "⟦" + raw.hex(" ").upper() + "⟧"
@@ -321,13 +324,15 @@ class LayoutState:
         if self.pending_spaces:
             self._emit_spaces(self.pending_spaces)
             self.pending_spaces = 0
-        if any(adv > self.max_advance for page in self.page_advances for adv in page):
+        if self.strict_width and any(
+                adv > self.max_advance for page in self.page_advances for adv in page):
             raise AssertionError("layout exceeded line-advance (box width) limit")
         if self.allow_page_break and any(len(page) > self.max_lines for page in self.pages):
             raise AssertionError("layout exceeded lines-per-page limit")
         self.data.append(0xFF)
         return bytes(self.data), {
             "pages": self.pages,
+            "page_advances": self.page_advances,
             "page_cell_counts": self.page_cell_counts,
             "page_count": len(self.pages),
             "inserted_line_breaks": self.inserted_line_breaks,
@@ -387,19 +392,34 @@ def assemble_translated_record(
 ) -> tuple[bytes, dict[str, Any]]:
     adv, lines, page_break = (geometry or (MAX_LINE_ADVANCE, MAX_PAGE_LINES, True))
     if not page_break:
-        # 대사는 쪽을 나눌 수 없으니 상자 줄수를 넘기면 안 된다. 넘치면 축약보다
-        # **띄어쓰기 제거**를 먼저 시도한다(사용자 방침).
+        # 대사 상자는 원문이 쓴 크기다. 그 안에 못 넣으면 순서대로 물러선다:
+        #   ① 띄어쓰기 제거(축약은 하지 않는다 — 사용자 방침)
+        #   ② 상자 폭을 조금씩 넓혀 본다(원문이 짧은 한 줄이라 상자를 과소평가한
+        #      경우가 있다. 한 낱말이 상자보다 길면 아예 배치가 안 된다)
+        #   ③ 그래도 안 되면 그때만 쪽을 나눈다
         first = None
-        for squeeze in (0, 1, 2):
-            enc, man = _assemble(translation_parts, ko_parts, glyph_map,
-                                 adv, lines, page_break, squeeze)
-            if first is None:
-                first = (enc, man)
-            if max(len(pg) for pg in man["pages"]) <= lines:
-                return enc, man
-        # 띄어쓰기를 다 빼도 상자에 안 들어가는 긴 대사(약 1%)는 어쩔 수 없이
-        # 쪽을 나눈다. 넘쳐서 다음 대사를 밀어내는 것보다는 낫다.
-        return _assemble(translation_parts, ko_parts, glyph_map, adv, lines, True, 0)
+        for w in (adv, max(adv, 16), max(adv, 20), max(adv, 24), max(adv, 32)):
+            for squeeze in (0, 1, 2):
+                enc, man = _assemble(translation_parts, ko_parts, glyph_map,
+                                     w, lines, page_break, squeeze)
+                widest = max((a for pg in man["page_advances"] for a in pg), default=0)
+                if first is None:
+                    first = (enc, man)
+                if widest <= adv and max(len(pg) for pg in man["pages"]) <= lines:
+                    return enc, man
+        # 여기까지 왔으면 원문 크기 안에는 도저히 안 들어간다(1% 미만).
+        # 한 낱말이 상자보다 긴 경우도 있어 폭을 지킬 수가 없다 — 넓은 상자로
+        # 쪽을 나눠 배치한다.
+        # 쪽을 나눠도 되면 상자 폭은 지킬 수 있다. 낱말이 상자보다 길면 낱말
+        # 가운데서 줄을 바꾼다 — 한국어는 그래도 읽힌다. 그래도 넘치면(제어
+        # 토큰이 자리를 잡아먹는 드문 경우) 넓은 상자로 물러선다.
+        enc, man = _assemble(translation_parts, ko_parts, glyph_map,
+                             adv, lines, True, 1, strict=False)
+        widest = max((a for pg in man["page_advances"] for a in pg), default=0)
+        if widest <= adv:
+            return enc, man
+        return _assemble(translation_parts, ko_parts, glyph_map,
+                         max(adv, SAFE_FALLBACK_ADVANCE), lines, True, 1)
     return _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, 0)
 
 
@@ -411,9 +431,10 @@ def _squeeze(text: str, level: int) -> str:
     return text.replace(" ", "")
 
 
-def _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, squeeze):
+def _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, squeeze,
+              strict=True):
     state = LayoutState(glyph_map, max_advance=adv, max_lines=lines,
-                        allow_page_break=page_break)
+                        allow_page_break=page_break, strict_width=strict)
     normalisation: list[dict[str, Any]] = []
     original_controls: list[str] = []
     for part in translation_parts:
