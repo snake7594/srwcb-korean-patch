@@ -102,7 +102,7 @@ def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
         try:
             txt = A.decode(ko, s, e, tbl)
             ws, pages, _ = A.line_widths(ko, s, e)
-            _, jpages, _ = A.line_widths(jp, sj, ej)
+            jw, jpages, _ = A.line_widths(jp, sj, ej)
         except Exception:
             broke += 1
             continue
@@ -110,7 +110,8 @@ def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
         if n >= 3 and tot and n / tot >= 0.5:
             jp_over += 1
         cap = max(max(jpages) if jpages else 1, SCE_MAX_LINES)
-        if (ws and max(ws) > box) or (pages and max(pages) > cap):
+        wcap = max(max(jw) if jw else 0, box)
+        if (ws and max(ws) > wcap) or (pages and max(pages) > cap):
             wide += 1
     out.append((name, len(recs_ko), jp_over, wide, broke))
 
@@ -139,6 +140,19 @@ def check(name, data, recs, tbl, width, lines, out):
     out.append((name, len(recs), jp, wide, broke))
 
 
+_KO_SYL = __import__("re").compile(r"[가-힣]")
+
+
+def _is_dialogue(buf, s, e, tbl):
+    """사람이 읽는 한국어 대사인가 (스크립트 바이트 덩어리를 걸러낸다)."""
+    try:
+        t = A.decode(buf, s, e, tbl)
+    except Exception:
+        return False
+    k = len(_KO_SYL.findall(t))
+    return k >= 6 and k / max(len(t), 1) >= 0.45
+
+
 def _paired(ko, jp, tbl):
     """같은 순번의 (패치본 대사, 레트일 대사) 짝. 선택지·메뉴는 뺀다."""
     a = A.ASR.parse_scenarios(jp)
@@ -147,9 +161,10 @@ def _paired(ko, jp, tbl):
     for x, y in zip(a, b):
         if len(x.records) != len(y.records):
             continue
-        refs = {r.target for r in x.references}
         for rx, ry in zip(x.records, y.records):
-            if rx.start not in refs or is_choice(ko, ry.start, tbl):
+            # 참조 레코드만 보면 안 된다 — 풀 안 이벤트 스크립트가 가리키는 대사가
+            # 그만큼 더 있고, 예전엔 그쪽이 통째로 검사에서 빠져 있었다.
+            if is_choice(ko, ry.start, tbl) or not _is_dialogue(ko, ry.start, ry.end, tbl):
                 continue
             ko_out.append((ry.start, ry.end))
             jp_out.append((rx.start, rx.end))

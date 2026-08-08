@@ -842,8 +842,11 @@ def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
             # 대사에는 F7 을 쓰지 않는다 (원문에 한 개도 없다). 줄수 상한은
             # 원문 최대치 3 으로 두되, 넘겨도 F6 로만 이어 붙인다.
             if lines > 1 and width < NARROW_WINDOW_ADVANCE:
-                return max(width, MAX_LINE_ADVANCE), MAX_PAGE_LINES, False
-            return SCENARIO_BOX_ADVANCE, MAX_PAGE_LINES, False
+                return max(width, MAX_LINE_ADVANCE), max(lines, MAX_PAGE_LINES), False
+            # 창은 장면마다 다르다 — 원문이 폭 60 을 쓰는 넓은 창도 있다. 32 로
+            # 일괄해 좁히면 줄이 배로 늘어 상자를 넘친다. **원문이 실제로 쓴 폭**
+            # 아래로는 절대 좁히지 않는다.
+            return max(width, SCENARIO_BOX_ADVANCE), max(lines, MAX_PAGE_LINES), False
         w, h = battle if kind == "battle_message" else death
         return w, h, True
 
