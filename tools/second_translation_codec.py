@@ -188,6 +188,9 @@ class LayoutState:
     # 장면마다 크기가 달라서(폭 16~32, 페이지당 1~3줄) 고정값을 쓰면 넘친다.
     max_advance: int = MAX_LINE_ADVANCE
     max_lines: int = MAX_PAGE_LINES
+    # 시나리오 대사 원문에는 F7(쪽 나눔)이 **한 개도 없다**. 우리가 넣은 F7 이
+    # 대사를 밀리게 만든다. 대사에서는 False 로 두고 F6 만 쓴다.
+    allow_page_break: bool = True
     data: bytearray = field(default_factory=bytearray)
     pages: list[list[str]] = field(default_factory=lambda: [[""]])
     page_cell_counts: list[list[int]] = field(default_factory=lambda: [[0]])
@@ -227,7 +230,7 @@ class LayoutState:
 
     def _new_line_or_page(self) -> None:
         self.phase = 0  # the renderer resets the wide phase at every F6/F7 break
-        if len(self.pages[-1]) < self.max_lines:
+        if len(self.pages[-1]) < self.max_lines or not self.allow_page_break:
             self.data.append(0xF6)
             self.pages[-1].append("")
             self.page_cell_counts[-1].append(0)
@@ -320,7 +323,7 @@ class LayoutState:
             self.pending_spaces = 0
         if any(adv > self.max_advance for page in self.page_advances for adv in page):
             raise AssertionError("layout exceeded line-advance (box width) limit")
-        if any(len(page) > self.max_lines for page in self.pages):
+        if self.allow_page_break and any(len(page) > self.max_lines for page in self.pages):
             raise AssertionError("layout exceeded lines-per-page limit")
         self.data.append(0xFF)
         return bytes(self.data), {
@@ -382,8 +385,35 @@ def assemble_translated_record(
     glyph_map: dict[str, int],
     geometry: tuple[int, int] | None = None,
 ) -> tuple[bytes, dict[str, Any]]:
-    adv, lines = geometry or (MAX_LINE_ADVANCE, MAX_PAGE_LINES)
-    state = LayoutState(glyph_map, max_advance=adv, max_lines=lines)
+    adv, lines, page_break = (geometry or (MAX_LINE_ADVANCE, MAX_PAGE_LINES, True))
+    if not page_break:
+        # 대사는 쪽을 나눌 수 없으니 상자 줄수를 넘기면 안 된다. 넘치면 축약보다
+        # **띄어쓰기 제거**를 먼저 시도한다(사용자 방침).
+        first = None
+        for squeeze in (0, 1, 2):
+            enc, man = _assemble(translation_parts, ko_parts, glyph_map,
+                                 adv, lines, page_break, squeeze)
+            if first is None:
+                first = (enc, man)
+            if max(len(pg) for pg in man["pages"]) <= lines:
+                return enc, man
+        # 띄어쓰기를 다 빼도 상자에 안 들어가는 긴 대사(약 1%)는 어쩔 수 없이
+        # 쪽을 나눈다. 넘쳐서 다음 대사를 밀어내는 것보다는 낫다.
+        return _assemble(translation_parts, ko_parts, glyph_map, adv, lines, True, 0)
+    return _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, 0)
+
+
+def _squeeze(text: str, level: int) -> str:
+    if level == 0:
+        return text
+    if level == 1:                      # 조사 앞뒤가 아닌 곳부터: 두 칸 이상만
+        return re.sub(r"  +", " ", text)
+    return text.replace(" ", "")
+
+
+def _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, squeeze):
+    state = LayoutState(glyph_map, max_advance=adv, max_lines=lines,
+                        allow_page_break=page_break)
     normalisation: list[dict[str, Any]] = []
     original_controls: list[str] = []
     for part in translation_parts:
@@ -392,7 +422,7 @@ def assemble_translated_record(
             part_id = part["part_id"]
             if part_id not in ko_parts or not isinstance(ko_parts[part_id], str):
                 raise ValueError(f"missing Korean text part {part_id}")
-            value, changes = normalise_for_font(ko_parts[part_id])
+            value, changes = normalise_for_font(_squeeze(ko_parts[part_id], squeeze))
             normalisation.extend({"part_id": part_id, **change} for change in changes)
             state.emit_text(value)
         elif kind == "page_break":

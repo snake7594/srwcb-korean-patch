@@ -80,6 +80,7 @@ from patch_second_exe_ui import (  # noqa: E402
 from second_translation_codec import (  # noqa: E402
     EXTRA_GLYPH_START,
     MAX_LINE_ADVANCE,
+    MAX_PAGE_LINES,
     STRUCTURAL_GLYPH_INDICES,
     add_extra_glyph_mapping,
     assemble_translated_record,
@@ -838,10 +839,13 @@ def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
             # 꺾인다. 즉 시나리오 대사 상자는 어디서나 최소 32 는 들어간다. 그보다
             # 훨씬 이른 곳에서 줄을 바꾼 여러 줄짜리는 좁은 창일 수 있으니 그때만
             # 원문 폭을 지킨다.
+            # 대사에는 F7 을 쓰지 않는다 (원문에 한 개도 없다). 줄수 상한은
+            # 원문 최대치 3 으로 두되, 넘겨도 F6 로만 이어 붙인다.
             if lines > 1 and width < NARROW_WINDOW_ADVANCE:
-                return max(width, MAX_LINE_ADVANCE), lines
-            return SCENARIO_BOX_ADVANCE, lines
-        return battle if kind == "battle_message" else death
+                return max(width, MAX_LINE_ADVANCE), MAX_PAGE_LINES, False
+            return SCENARIO_BOX_ADVANCE, MAX_PAGE_LINES, False
+        w, h = battle if kind == "battle_message" else death
+        return w, h, True
 
     return get
 

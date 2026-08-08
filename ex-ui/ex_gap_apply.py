@@ -144,16 +144,22 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
                 if _n > _r: stat["wide"].append((off, f"line{_i}", _n, _r))
         else:
             _w, _l = record_geometry(rec)
-            st = LayoutState(glyph_map, max_advance=max(_w, MAXLINE), max_lines=_l)
-            for s in segs:
-                if s == "<f6>":
-                    st.pending_spaces = 0; st._new_line_or_page()
-                elif s == "<f7>":
-                    st.preserve_page_break(b"\xF7")
-                else:
-                    if adv(s) > MAXLINE and len(segs) > 1: stat["wide"].append((off, s, adv(s)))
-                    st.emit_text(normalise_for_font(s)[0])
-            enc, _m = st.finish()          # finish()가 FF까지 붙임
+            # 원문 대사에는 F7(쪽 나눔)이 한 개도 없다. 3줄 안에 들어가면 F6 만
+            # 쓰고, 도저히 안 되는 긴 대사만 쪽을 나눈다.
+            enc = None
+            for _pb in (False, True):
+                st = LayoutState(glyph_map, max_advance=max(_w, 32), max_lines=3,
+                                 allow_page_break=_pb)
+                for s in segs:
+                    if s == "<f6>":
+                        st.pending_spaces = 0; st._new_line_or_page()
+                    elif s == "<f7>":
+                        st.preserve_page_break(b"\xF7")
+                    else:
+                        st.emit_text(normalise_for_font(s)[0])
+                enc, _m = st.finish()      # finish()가 FF까지 붙임
+                if max(len(pg) for pg in _m["pages"]) <= 3:
+                    break
             sup[off] = bytes(enc)
             stat["layout"] += 1
     return sup, stat

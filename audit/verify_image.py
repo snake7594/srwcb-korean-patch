@@ -86,14 +86,16 @@ GAMES = [
 
 # 레트일이 실제로 채운 최대치 (전 시나리오/전 아카이브 실측)
 SCE_BOX_ADVANCE = 32
+SCE_MAX_LINES = 3      # 원문이 쓴 최대 줄수 = 상자 높이
 BATTLE_BOX_ADVANCE = 29
 
 
 def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
-    """페이지당 줄수는 **레트일 레코드가 쓰던 만큼**을 넘으면 안 된다.
+    """대사 상자를 넘지 않는지.
 
-    상자 높이는 장면마다 다르다(1~3줄). 3줄로 못박으면 2줄짜리 상자에서 세 번째
-    줄이 넘쳐 다음 대사가 밀리고 문장 중간부터 그려진다.
+    원문 대사에는 F7(쪽 나눔)이 한 개도 없다 — 레코드 하나가 곧 한 화면이다.
+    원문이 쓴 줄수는 최대 3 이므로 그게 상자 높이다. 폭도 원문이 실제로 채운
+    최대치(32)를 넘으면 안 된다.
     """
     jp_over = wide = broke = 0
     for (s, e), (sj, ej) in zip(recs_ko, recs_jp):
@@ -107,7 +109,8 @@ def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
         n, tot = A.jp_ratio(txt)
         if n >= 3 and tot and n / tot >= 0.5:
             jp_over += 1
-        if (ws and max(ws) > box) or (pages and jpages and max(pages) > max(jpages)):
+        cap = max(max(jpages) if jpages else 1, SCE_MAX_LINES)
+        if (ws and max(ws) > box) or (pages and max(pages) > cap):
             wide += 1
     out.append((name, len(recs_ko), jp_over, wide, broke))
 

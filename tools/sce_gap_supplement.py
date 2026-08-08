@@ -97,7 +97,8 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
     for off, segs in DIAL.items():
         # 상자 크기는 레트일 레코드가 쓰던 그대로 (고정 18x3 이면 넘친다)
         _w, _l = record_geometry(bytes(src_sce[off:_rec_end(src_sce, off)]))
-        st = LayoutState(glyph_map, max_advance=max(_w, 18), max_lines=_l)
+        st = LayoutState(glyph_map, max_advance=max(_w, 32), max_lines=3,
+                         allow_page_break=False)
         for s in segs:
             if s == "<f6>":
                 st.pending_spaces = 0          # break itself is the separator

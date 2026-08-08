@@ -144,7 +144,7 @@ def _bad_operand_targets(buf, scn):
     return out
 
 
-def harden_against_ff_operands(src, replacements, rebuild, *, rounds=12, verbose=True):
+def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose=True):
     """레코드 경계가 레트일과 똑같이 나오는 배치가 될 때까지 다시 빌드한다.
 
     작전목적 화면은 조건문을 **레코드 순번**으로 집어 온다. 그런데 B1/B3/B4 의
@@ -157,20 +157,37 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=12, verbose
     """
     repl = dict(replacements)
     added = 0
+    stuck: dict[int, int] = {}          # 안 풀리는 시나리오는 더 앞 레코드를 늘려 본다
     for _ in range(rounds):
         out, _meta = rebuild(src, repl)
         fixed, _, _ = retarget(out, src, apply=True, verbose=False)
         sj = parse_scenarios(src)
         sk = parse_scenarios(fixed)
         grow = []
-        for a, b in zip(sj, sk):
+        pre = parse_scenarios(out)      # 재조준 전 (경계가 레트일과 같은 상태)
+        for a, b, c in zip(sj, sk, pre):
             if len(a.records) == len(b.records):
                 continue
-            # 처음으로 길이가 어긋난 레코드를 찾아 그 '앞' 레코드를 늘린다
+            # 어긋남을 만든 포인터의 **타깃**을 찾아, 그 바로 앞 레코드를 늘린다.
+            # 레코드 0 처럼 포인터가 스무 개씩 든 스크립트 레코드를 통째로 늘리면
+            # 그 안의 변위가 한꺼번에 움직여 서로를 깨뜨려 영영 안 맞는다.
+            starts = [r.start for r in c.records]
+            picked = False
+            for tgt in sorted(_bad_operand_targets(fixed, c)):
+                if tgt in starts:
+                    i = starts.index(tgt)
+                    if i:
+                        grow.append(a.records[i - 1])
+                        picked = True
+            if picked:
+                continue
             k = next((i for i, (x, y) in enumerate(zip(a.records, b.records))
                       if (x.end - x.start) != (y.end - y.start)), 0)
-            grow.append(a.records[max(k - 1, 0)])
+            back = stuck.get(a.index, 0)
+            stuck[a.index] = back + 1
+            grow.append(a.records[max(k - 1 - back, 0)])
         if not grow:
+            stuck.clear()
             if verbose:
                 print(f"  레코드 경계 안정화: 앞 레코드 늘림 {added}개")
             return repl, out
