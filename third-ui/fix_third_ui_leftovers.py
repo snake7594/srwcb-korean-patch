@@ -114,13 +114,22 @@ def substitute_kanji_ui(war: bytearray, jp_idx2ch: dict, ko_ch2idx: dict) -> int
             _e, toks = PV(bytes(war), t)
         except Exception:
             continue
-        for x in toks:
-            if x.kind != 'glyph' or len(x.raw) != 2:
-                continue
+        wide = [i for i, x in enumerate(toks)
+                if x.kind == 'glyph' and len(x.raw) == 2]
+        for pos, i in enumerate(wide):
+            x = toks[i]
             g = ((x.raw[0] - 0xEB) << 8) | x.raw[1]
-            if g in want:
-                war[x.start:x.start + 2] = _enc_idx(ko_ch2idx[want[g]])
-                n += 1
+            if g not in want:
+                continue
+            # 한글 폰트에서 이 번호들은 이미 한글 글자다(機=481 -> '꼽' 등).
+            # 번역된 단어 한가운데를 바꾸면 멀쩡한 한글이 깨진다. 앞뒤가 모두
+            # 전각이 아닌 **외톨이 글자**일 때만 미번역 잔재로 보고 바꾼다.
+            prev_adj = pos and wide[pos - 1] == i - 1
+            next_adj = pos + 1 < len(wide) and wide[pos + 1] == i + 1
+            if prev_adj or next_adj:
+                continue
+            war[x.start:x.start + 2] = _enc_idx(ko_ch2idx[want[g]])
+            n += 1
     return n
 
 
