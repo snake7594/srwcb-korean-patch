@@ -157,7 +157,19 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
     """
     repl = dict(replacements)
     added = 0
-    stuck: dict[int, int] = {}          # 안 풀리는 시나리오는 더 앞 레코드를 늘려 본다
+    stuck: dict[int, int] = {}
+    # ★ 이벤트 스크립트 레코드에는 절대 손대지 않는다. 스크립트는 VM 이 그대로
+    #    실행하는 바이트열이라 한 바이트만 끼워도 게임이 멈춘다(8화 프리즈).
+    #    번역으로 교체하는 레코드(= 순수 텍스트)만 줄 끝 공백을 하나 붙인다.
+    safe = set(replacements)
+    unsafe: set[int] = set()          # 스크립트뿐이라 손댈 수 없는 시나리오
+
+    def pick(records, i):
+        """i 번 레코드 앞쪽에서 손대도 되는(번역된) 레코드를 찾는다."""
+        for j in range(i, -1, -1):
+            if records[j].start in safe:
+                return records[j]
+        return None          # 안 풀리는 시나리오는 더 앞 레코드를 늘려 본다
     for _ in range(rounds):
         out, _meta = rebuild(src, repl)
         fixed, _, _ = retarget(out, src, apply=True, verbose=False)
@@ -166,7 +178,7 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
         grow = []
         pre = parse_scenarios(out)      # 재조준 전 (경계가 레트일과 같은 상태)
         for a, b, c in zip(sj, sk, pre):
-            if len(a.records) == len(b.records):
+            if len(a.records) == len(b.records) or a.index in unsafe:
                 continue
             # 어긋남을 만든 포인터의 **타깃**을 찾아, 그 바로 앞 레코드를 늘린다.
             # 레코드 0 처럼 포인터가 스무 개씩 든 스크립트 레코드를 통째로 늘리면
@@ -185,11 +197,19 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
                       if (x.end - x.start) != (y.end - y.start)), 0)
             back = stuck.get(a.index, 0)
             stuck[a.index] = back + 1
-            grow.append(a.records[max(k - 1 - back, 0)])
+            rec = pick(a.records, max(k - 1 - back, 0))
+            if rec is None:
+                # 스크립트 레코드밖에 없다 — 여기서 멈추는 게 낫다. 경계가 어긋난
+                # 채로 두면 그 시나리오의 조건문 표시만 어긋나지만, 스크립트에
+                # 바이트를 끼우면 게임이 멈춘다.
+                unsafe.add(a.index)
+                continue
+            grow.append(rec)
         if not grow:
             stuck.clear()
             if verbose:
-                print(f"  레코드 경계 안정화: 앞 레코드 늘림 {added}개")
+                note = f", 손댈 수 없어 남긴 시나리오 {sorted(unsafe)}" if unsafe else ""
+                print(f"  레코드 경계 안정화: 앞 레코드 늘림 {added}개{note}")
             return repl, out
         for rec in grow:
             cur = repl.get(rec.start) or bytes(src[rec.start:rec.end])

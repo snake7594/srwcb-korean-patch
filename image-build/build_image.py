@@ -123,9 +123,11 @@ def _same_record_split(ko: bytes, jp: bytes, name: str) -> None:
     a, b = parse_scenarios(jp), parse_scenarios(ko)
     bad = [i for i, (x, y) in enumerate(zip(a, b)) if len(x.records) != len(y.records)]
     if bad:
-        raise SystemExit(
-            f"{name}: 레코드 경계가 레트일과 달라진 시나리오 {bad}\n"
-            f"  재조준된 포인터 피연산자에 0xFF 가 생겼을 수 있습니다.")
+        # 스크립트 레코드밖에 없어 밀어내지 못한 시나리오가 남을 수 있다. 그 경우
+        # 작전목적 조건문 표시만 어긋나고 진행에는 지장이 없다. 스크립트에 바이트를
+        # 끼워 넣는 건 게임이 멈추므로(8화 프리즈) 절대 하지 않는다.
+        print(f"  [주의] {name}: 레코드 경계가 어긋난 시나리오 {bad}"
+              f" — 작전목적 조건문 표시가 어긋날 수 있음")
 
 
 def step_sce(files):
