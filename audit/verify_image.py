@@ -84,35 +84,61 @@ GAMES = [
 ]
 
 
-# 레트일이 실제로 채운 최대치 (전 시나리오/전 아카이브 실측)
+# 대사창 상자. 세 게임 전 시나리오의 참조 대사 레코드를 다 훑어 잰 값이다 —
+# 줄을 바꾼 지점은 16~32 에 몰려 있고 32 를 넘는 줄이 하나도 없다. 한 쪽은 3줄까지.
+# 긴 대사는 원문도 F7 로 쪽을 나눈다(쪽 나눔은 정상이다).
 SCE_BOX_ADVANCE = 32
-SCE_MAX_LINES = 3      # 원문이 쓴 최대 줄수 = 상자 높이
+SCE_MAX_LINES = 3
 BATTLE_BOX_ADVANCE = 29
 
 
-def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
-    """대사 상자를 넘지 않는지.
+def _pages(buf, s, e):
+    """레코드를 쪽(F7)·줄(F6)로 갈라 줄별 advance 를 돌려준다."""
+    from second_translation_codec import glyph_advance, CONTROL_ARGUMENT_BYTES as CA
+    pages, phase, p = [[0]], 0, s
+    while p < e:
+        b = buf[p]
+        if b == 0xFF:
+            break
+        if b < 0xEB:
+            idx, p = b, p + 1
+        elif b <= 0xF5:
+            idx, p = ((b - 0xEB) << 8) | buf[p + 1], p + 2
+        else:
+            if b == 0xF6:
+                pages[-1].append(0); phase = 0
+            elif b == 0xF7:
+                pages.append([0]); phase = 0
+            p += 1 + CA.get(b, 0)
+            continue
+        step, phase = glyph_advance(idx, phase)
+        pages[-1][-1] += step
+    return pages
 
-    상자 크기는 **같은 장면에서 원문이 실제로 보여 준 만큼**이다. 원문이 줄을
-    바꾼 가장 넓은 지점이 폭이고, 원문이 쓴 가장 많은 줄수가 높이다. 어떤 장면은
-    상자가 좁고(폭 20 남짓) 어떤 장면은 넓은데, 고정 상수(폭 32·3줄)를 들이대면
-    좁은 창에서 옆으로 넘치는 걸 놓친다 — 화면에서 글자가 잘려 보이는 그 증상이다.
+
+def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
+    """대사가 상자를 넘지 않는지 — 줄 폭 <= 32, 한 쪽 <= 3줄.
+
+    쪽(F7)을 줄로 세면 안 된다. 원문도 긴 대사는 쪽을 나눠 쓴다. 예전 검사는
+    시나리오 안에서 상자를 유추했는데, 같은 시나리오에 폭 276 짜리 특수 레코드가
+    섞여 있어 상자가 통째로 부풀었고 그래서 넘침을 0 으로 보고했다.
     """
     jp_over = wide = broke = 0
-    for (s, e, bw, bh), (sj, ej) in zip(recs_ko, recs_jp):
+    for (s, e, _bw, _bh), (sj, ej) in zip(recs_ko, recs_jp):
         try:
             txt = A.decode(ko, s, e, tbl)
-            ws, pages, _ = A.line_widths(ko, s, e)
-            jw, jpages, _ = A.line_widths(jp, sj, ej)
+            kp = _pages(ko, s, e)
+            jpg = _pages(jp, sj, ej)
         except Exception:
             broke += 1
             continue
         n, tot = A.jp_ratio(txt)
         if n >= 3 and tot and n / tot >= 0.5:
             jp_over += 1
-        cap = max(max(jpages) if jpages else 1, bh)
-        wcap = max(max(jw) if jw else 0, bw)
-        if (ws and max(ws) > wcap) or (pages and max(pages) > cap):
+        # 원문이 상자보다 크게 쓴 드문 레코드는 원문이 쓴 만큼까지 허용
+        wcap = max(box, max(max(pg) for pg in jpg))
+        cap = max(SCE_MAX_LINES, max(len(pg) for pg in jpg))
+        if any(max(pg) > wcap or len(pg) > cap for pg in kp):
             wide += 1
     out.append((name, len(recs_ko), jp_over, wide, broke))
 

@@ -164,11 +164,61 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
     safe = set(replacements)
     unsafe: set[int] = set()          # 스크립트뿐이라 손댈 수 없는 시나리오
 
+    def _pad_byte(raw):
+        """레코드를 한 바이트 늘릴 때 **화면을 안 건드리는** 바이트를 고른다.
+
+        예전엔 무조건 반각 공백을 끝에 붙였다. 그런데 그 줄이 이미 상자(32칸)를
+        꽉 채웠으면 33칸이 되어 화면에서 마지막 글자가 잘린다. 쪽에 줄 여유가
+        있으면 빈 줄(F6)을 붙이는 게 낫다 — 폭을 전혀 안 건드린다.
+        """
+        from second_translation_codec import glyph_advance, CONTROL_ARGUMENT_BYTES as CA
+        adv = mx = 0
+        lines = 1
+        maxlines = 1
+        phase = 0
+        q = 0
+        while q < len(raw):
+            b = raw[q]
+            if b == 0xFF:
+                break
+            if b < 0xEB:
+                idx, q = b, q + 1
+            elif b <= 0xF5:
+                idx, q = ((b - 0xEB) << 8) | raw[q + 1], q + 2
+            else:
+                if b in (0xF6, 0xF7):
+                    mx = max(mx, adv); adv = 0; phase = 0
+                    if b == 0xF6:
+                        lines += 1
+                        maxlines = max(maxlines, lines)
+                    else:
+                        lines = 1
+                q += 1 + CA.get(b, 0)
+                continue
+            step, phase = glyph_advance(idx, phase)
+            adv += step
+        mx = max(mx, adv)
+        if maxlines < 3:
+            return bytes([0xF6])   # 빈 줄 — 폭이 안 늘어난다
+        if mx < 32:
+            return bytes(1)      # 줄 끝 공백 — 상자 안에 여유가 있을 때만
+        return None              # 이 레코드는 건드리면 화면이 깨진다
+
+    def _has_room(rec):
+        """이 레코드를 한 바이트 늘려도 화면이 안 깨지는가."""
+        raw = repl.get(rec.start)
+        return raw is not None and _pad_byte(raw) is not None
+
     def pick(records, i):
-        """i 번 레코드 앞쪽에서 손대도 되는(번역된) 레코드를 찾는다."""
-        for j in range(i, -1, -1):
-            if records[j].start in safe:
-                return records[j]
+        """i 번 레코드 앞쪽에서 손대도 되는(번역된) 레코드를 찾는다.
+
+        상자에 여유가 있는 레코드를 먼저 고른다 — 여유가 없는 레코드를 늘리면
+        그 줄이 상자를 한 칸 넘어 화면에서 글자가 잘린다.
+        """
+        for want_room in (True, False):
+            for j in range(i, -1, -1):
+                if records[j].start in safe and (not want_room or _has_room(records[j])):
+                    return records[j]
         return None          # 안 풀리는 시나리오는 더 앞 레코드를 늘려 본다
     for _ in range(rounds):
         out, _meta = rebuild(src, repl)
@@ -213,7 +263,7 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
             return repl, out
         for rec in grow:
             cur = repl.get(rec.start) or bytes(src[rec.start:rec.end])
-            repl[rec.start] = cur[:-1] + bytes(1) + cur[-1:]
+            repl[rec.start] = cur[:-1] + (_pad_byte(cur) or bytes(1)) + cur[-1:]
             added += 1
     raise SystemExit("레코드 경계를 레트일과 맞추지 못했습니다")
 

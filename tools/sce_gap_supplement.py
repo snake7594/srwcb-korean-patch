@@ -94,27 +94,13 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
     # buggy auto-wrap must never fire), <=3 lines/page with automatic F7 paging.
     # '<f6>' = explicit line break (choice rows / intended splits), '<f7>' = page break.
     from second_translation_codec import LayoutState, record_geometry
-    from build_second_expanded_patch import _retail_line_advances
-    from analyze_sce_relocation import parse_scenarios
-    # 장면 상자 = 그 시나리오에서 원문이 실제로 줄을 바꾼 가장 넓은 지점 / 가장
-    # 많은 줄수. 여기만 옛 바닥값(폭 32·3줄)을 쓰고 있어서 좁은 창에서 넘쳤다.
-    _box = {}
-    for _scn in parse_scenarios(bytes(src_sce)):
-        _bw = _bh = 0
-        for _r in _scn.records:
-            _ws = _retail_line_advances(bytes(src_sce[_r.start:_r.end]))
-            if len(_ws) > 1:
-                _bw = max(_bw, max(_ws[:-1]))
-            _bh = max(_bh, len(_ws))
-        for _r in _scn.records:
-            _box[_r.start] = (_bw, _bh)
     for off, segs in DIAL.items():
         # 상자 크기는 레트일 레코드가 쓰던 그대로 (고정 18x3 이면 넘친다)
+        # 대사창은 폭 32 x 쪽당 3줄 (전 시나리오 실측). 원문이 그보다 크게 쓴
+        # 드문 레코드는 그 레코드가 쓴 만큼. 긴 대사는 원문처럼 F7 로 쪽을 나눈다.
         _w, _l = record_geometry(bytes(src_sce[off:_rec_end(src_sce, off)]))
-        _bw, _bh = _box.get(off, (0, 0))
-        st = LayoutState(glyph_map, max_advance=max(_w, _bw, 8),
-                         max_lines=max(_l, _bh, 1),
-                         allow_page_break=False, strict_width=False)
+        st = LayoutState(glyph_map, max_advance=max(_w, 32), max_lines=max(_l, 3),
+                         allow_page_break=True)
         for s in segs:
             if s == "<f6>":
                 st.pending_spaces = 0          # break itself is the separator

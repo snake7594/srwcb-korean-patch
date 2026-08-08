@@ -321,9 +321,9 @@ class LayoutState:
         self.preserved_page_breaks += 1
 
     def finish(self) -> tuple[bytes, dict[str, Any]]:
-        if self.pending_spaces:
-            self._emit_spaces(self.pending_spaces)
-            self.pending_spaces = 0
+        # 끝에 남은 공백은 버린다. 화면에는 안 보이면서 줄 폭만 잡아먹어
+        # 상자를 한 칸 넘기게 만든다.
+        self.pending_spaces = 0
         if self.strict_width and any(
                 adv > self.max_advance for page in self.page_advances for adv in page):
             raise AssertionError("layout exceeded line-advance (box width) limit")
@@ -391,33 +391,15 @@ def assemble_translated_record(
     geometry: tuple[int, int] | None = None,
 ) -> tuple[bytes, dict[str, Any]]:
     adv, lines, page_break = (geometry or (MAX_LINE_ADVANCE, MAX_PAGE_LINES, True))
-    if not page_break:
-        # 대사 상자는 원문이 쓴 크기다. 그 안에 못 넣으면 순서대로 물러선다:
-        #   ① 띄어쓰기 제거(축약은 하지 않는다 — 사용자 방침)
-        #   ② 상자 폭을 조금씩 넓혀 본다(원문이 짧은 한 줄이라 상자를 과소평가한
-        #      경우가 있다. 한 낱말이 상자보다 길면 아예 배치가 안 된다)
-        #   ③ 그래도 안 되면 그때만 쪽을 나눈다
-        first = None
-        for w in (adv, max(adv, 16), max(adv, 20), max(adv, 24), max(adv, 32)):
-            for squeeze in (0, 1, 2):
-                enc, man = _assemble(translation_parts, ko_parts, glyph_map,
-                                     w, lines, page_break, squeeze)
-                widest = max((a for pg in man["page_advances"] for a in pg), default=0)
-                if first is None:
-                    first = (enc, man)
-                if widest <= adv and max(len(pg) for pg in man["pages"]) <= lines:
-                    return enc, man
-        # 여기까지 왔으면 원문 크기 안에는 도저히 안 들어간다(1% 미만).
-        # 한 낱말이 상자보다 긴 경우도 있어 폭을 지킬 수가 없다 — 넓은 상자로
-        # 쪽을 나눠 배치한다.
-        # 쪽을 나눠도 되면 상자 폭은 지킬 수 있다. 낱말이 상자보다 길면 낱말
-        # 가운데서 줄을 바꾼다 — 한국어는 그래도 읽힌다. 그래도 넘치면(제어
-        # 토큰이 자리를 잡아먹는 드문 경우) 넓은 상자로 물러선다.
-        enc, man = _assemble(translation_parts, ko_parts, glyph_map,
-                             adv, lines, True, 1, strict=False)
-        widest = max((a for pg in man["page_advances"] for a in pg), default=0)
-        if widest <= adv:
-            return enc, man
+    if page_break:
+        # 쪽을 나눌 수 있으면 상자 폭·줄수를 다 지킬 수 있다. 그래도 안 되면
+        # (제어 토큰이 자리를 잡아먹는 드문 경우) 띄어쓰기를 지워 본다.
+        for squeeze in (0, 1, 2):
+            enc, man = _assemble(translation_parts, ko_parts, glyph_map,
+                                 adv, lines, True, squeeze, strict=False)
+            widest = max((a for pg in man["page_advances"] for a in pg), default=0)
+            if widest <= adv:
+                return enc, man
         return _assemble(translation_parts, ko_parts, glyph_map,
                          max(adv, SAFE_FALLBACK_ADVANCE), lines, True, 1)
     return _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, 0)

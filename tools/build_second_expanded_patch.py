@@ -109,6 +109,9 @@ UI_COMMON_OVERLAY = _P.TRANSLATION / "second_ui_common_master_overlay.json"
 UI_PREVIEW_OVERLAY = _P.TRANSLATION / "second_ui_preview_overlay.json"
 UI_MAP_LABEL_OVERLAY = _P.TRANSLATION / "second_ui_map_labels_overlay.json"
 SCE_CONDITIONS_OVERLAY = _P.TRANSLATION / "second_sce_conditions_overlay.json"
+# 대사창 상자 (전 시나리오 참조 대사 실측: 줄 폭 <=32, 쪽당 줄수 <=3)
+MAX_SCENE_ADVANCE = 32
+MAX_SCENE_LINES = 3
 BUILD_LABEL = "v0.8.7-full-menus"
 DEFAULT_OUTPUT = _P.BUILD / f"second_korean_{BUILD_LABEL}"
 XDELTA = ROOT / "xdelta.exe"
@@ -855,31 +858,21 @@ def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
     battle = archive_max("battle_message")
     death = archive_max("death_quote")
 
-    # 시나리오별 '원문이 실제로 줄을 바꾼 가장 넓은 지점' = 그 장면 상자의 폭.
-    # 원문이 한 줄로 끝난 레코드는 상자 크기를 알려 주지 않으므로, 같은 시나리오
-    # 에서 관측된 줄바꿈 폭을 쓴다. 관측이 없으면 그 레코드의 폭 그대로.
-    from analyze_sce_relocation import parse_scenarios
-    wrap_of = {}
-    for scn in parse_scenarios(bytes(source_sce)):
-        widest = tallest = 0
-        for rec in scn.records:
-            ws = _retail_line_advances(bytes(source_sce[rec.start:rec.end]))
-            if len(ws) > 1:
-                widest = max(widest, max(ws[:-1]))
-            tallest = max(tallest, len(ws))
-        for rec in scn.records:
-            wrap_of[rec.start] = (widest, tallest)
-
     def get(kind, offset, raw):
         if kind == "scenario":
-            # 상자 크기는 **원문 레코드가 실제로 쓴 그대로**다. 바닥값(폭 32·3줄)을
-            # 두면 좁은 창·2줄 창에서 넘치고, 그러면 렌더러가 스스로 줄을 접다가
-            # 두 바이트 글자의 앞바이트를 잃는다 — 화면이 단어 중간부터 시작하고
-            # 첫 글자가 깨지는 그 증상이다. 원문이 들어갔던 크기면 한국어도 들어간다.
-            # 대사에는 F7(쪽 나눔)을 쓰지 않는다(원문에 한 개도 없다).
+            # 대사창은 **폭 32칸 · 한 쪽 3줄**이다. 세 게임 전 시나리오의 참조 대사
+            # 레코드를 다 훑어 확인했다 — 줄을 바꾼 지점은 16~32 에 몰려 있고 32 를
+            # 넘는 줄이 하나도 없다. 쪽당 줄수도 3 이 상한이다.
+            #
+            # 시나리오 안에서 상자를 유추하려 들면 안 된다. 같은 시나리오에 폭 276
+            # 짜리 특수 레코드가 섞여 있어서, 그걸 상자로 잡으면 대사가 한 줄로
+            # 늘어지고 렌더러가 스스로 줄을 접다가 2바이트 글자의 앞바이트를 잃는다
+            # (화면이 낱말 중간부터 시작하고 첫 글자가 깨지는 그 증상).
+            #
+            # 원문이 32x3 을 넘게 쓴 드문 레코드는 그 레코드가 쓴 만큼을 상자로 본다.
+            # 긴 대사는 원문이 그러듯 F7 로 쪽을 나눈다.
             width, lines = record_geometry(bytes(raw))
-            box_w, box_h = wrap_of.get(offset, (0, 0))
-            return max(width, box_w, 8), max(lines, box_h, 1), False
+            return max(width, MAX_SCENE_ADVANCE), max(lines, MAX_SCENE_LINES), True
         w, h = battle if kind == "battle_message" else death
         return w, h, True
 

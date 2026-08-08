@@ -139,9 +139,25 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
                 else: body += enc_ko(s)
             sup[off] = head + body + tail
             stat["prefix_kept"] += 1
-            # 평문 경로에는 자동 줄바꿈이 없다 → 줄마다 레트일 폭을 넘지 않는지 확인.
+            # 이 경로는 번역문을 그대로 붙이기만 해서 자동 줄바꿈이 없다. 줄이 상자
+            # (폭 32)를 넘으면 화면에서 잘리므로, 넘칠 때만 본문을 다시 배치한다.
+            _w, _l = record_geometry(rec)
+            _cap = max(_w, 32)
+            if any(a > _cap for a in _line_advs(sup[off])):
+                st = LayoutState(glyph_map, max_advance=_cap, max_lines=max(_l, 3),
+                                 allow_page_break=True)
+                for s in segs:
+                    if s == "<f6>":
+                        st.pending_spaces = 0; st._new_line_or_page()
+                    elif s == "<f7>":
+                        st.preserve_page_break(b"\xF7")
+                    else:
+                        st.emit_text(normalise_for_font(s)[0])
+                _enc, _m = st.finish()          # finish()가 FF까지 붙인다
+                sup[off] = head + bytes(_enc)[:-1] + tail
+                stat["rewrapped"] = stat.get("rewrapped", 0) + 1
             for _i, (_r, _n) in enumerate(zip(_line_advs(rec), _line_advs(sup[off]))):
-                if _n > _r: stat["wide"].append((off, f"line{_i}", _n, _r))
+                if _n > max(_r, 32): stat["wide"].append((off, f"line{_i}", _n, _r))
         else:
             _w, _l = record_geometry(rec)
             # 원문 대사에는 F7(쪽 나눔)이 한 개도 없다. 3줄 안에 들어가면 F6 만
