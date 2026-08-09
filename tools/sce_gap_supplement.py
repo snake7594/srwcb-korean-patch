@@ -94,22 +94,59 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
     # buggy auto-wrap must never fire), <=3 lines/page with automatic F7 paging.
     # '<f6>' = explicit line break (choice rows / intended splits), '<f7>' = page break.
     from second_translation_codec import LayoutState, record_geometry
+    from second_translation_codec import _squeeze
+
+    def _lay(segs, adv, lines, pb, drop_breaks, squeeze=0):
+        st = LayoutState(glyph_map, max_advance=adv, max_lines=lines,
+                         allow_page_break=pb, strict_width=False)
+        for s in segs:
+            if s in ("<f6>", "<f7>"):
+                if drop_breaks:
+                    st.pending_spaces = max(st.pending_spaces, 1)
+                    continue
+                if s == "<f7>" and pb:
+                    st.preserve_page_break(bytes([0xF7]))
+                else:
+                    st.pending_spaces = 0
+                    st._new_line_or_page()
+            else:
+                st.emit_text(normalise_for_font(_squeeze(s, squeeze))[0])
+        return st.finish()
+
+    # 시나리오 앞머리의 작전목적(승리/패배조건) 블록은 원문 줄 수를 지켜야 한다.
+    from analyze_sce_relocation import objective_block_records as _OBJ
+    _strict = _OBJ(bytes(src_sce))
+
     for off, segs in DIAL.items():
         # 상자 크기는 레트일 레코드가 쓰던 그대로 (고정 18x3 이면 넘친다)
-        # 대사창은 폭 32 x 쪽당 3줄 (전 시나리오 실측). 원문이 그보다 크게 쓴
-        # 드문 레코드는 그 레코드가 쓴 만큼. 긴 대사는 원문처럼 F7 로 쪽을 나눈다.
-        _w, _l = record_geometry(bytes(src_sce[off:_rec_end(src_sce, off)]))
-        st = LayoutState(glyph_map, max_advance=max(_w, 32), max_lines=max(_l, 3),
-                         allow_page_break=True)
-        for s in segs:
-            if s == "<f6>":
-                st.pending_spaces = 0          # break itself is the separator
-                st._new_line_or_page()
-            elif s == "<f7>":
-                st.preserve_page_break(b"\xF7")
+        _raw = bytes(src_sce[off:_rec_end(src_sce, off)])
+        _w, _l = record_geometry(_raw)
+        from build_second_expanded_patch import _has_page_break
+        _pb = _has_page_break(_raw)
+        _adv = max(_w, 32)
+        _lines = _l if off in _strict else max(_l, 3)
+        # 번역 데이터에 박아 둔 <f6> 를 그대로 쓰면 줄이 넘칠 수 있다.
+        # 넘치면 그 줄바꿈은 버리고 상자에 맞춰 다시 흘린다.
+        # 레코드 바이트 길이는 원문과 같아야 한다(제3차는 어긋나면 대사가 밀린다).
+        # 들어갈 때까지 단계적으로 줄인다: 띄어쓰기 → 말줄임표 → 축약 → 화자 이름.
+        # 대사는 바이트 예산 없이 자유롭게 커진다. 다만 작전목적 블록은 레트일
+        # 배치를 지켜야 해서 예산도 함께 본다(안 그러면 뒤에서 잘린다).
+        import os as _oss
+        _cap = (len(_raw) if off in _strict
+                and _oss.environ.get("SRWCB_PIN_OBJECTIVE") == "1" else None)
+        enc = man = None
+        for _sq in (0, 1, 2, 3, 4, 5):
+            for _drop in (False, True):
+                e, m = _lay(segs, _adv, _lines, _pb, _drop, _sq)
+                if enc is None:
+                    enc, man = e, m
+                if (max(len(pg) for pg in m["pages"]) <= _lines
+                        and (_cap is None or len(e) <= _cap)):
+                    enc, man = e, m
+                    break
             else:
-                st.emit_text(normalise_for_font(s)[0])
-        enc, _m = st.finish()          # finish() already appends the FF terminator
+                continue
+            break
         sup[off] = bytes(enc)
 
     # ---------- 2) phrase substitution in script/'A records ----------

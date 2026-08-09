@@ -77,6 +77,7 @@ from patch_second_exe_ui import (  # noqa: E402
     patch_second_executable_ui,
     patch_shared_executable_ui,
 )
+from second_translation_codec import CONTROL_ARGUMENT_BYTES as CONTROL_ARG  # noqa: E402
 from second_translation_codec import (  # noqa: E402
     EXTRA_GLYPH_START,
     MAX_LINE_ADVANCE,
@@ -111,6 +112,7 @@ UI_MAP_LABEL_OVERLAY = _P.TRANSLATION / "second_ui_map_labels_overlay.json"
 SCE_CONDITIONS_OVERLAY = _P.TRANSLATION / "second_sce_conditions_overlay.json"
 # 대사창 상자 (전 시나리오 참조 대사 실측: 줄 폭 <=32, 쪽당 줄수 <=3)
 MAX_SCENE_ADVANCE = 32
+from analyze_sce_relocation import parse_scenarios as _relocation_scenarios
 MAX_SCENE_LINES = 3
 BUILD_LABEL = "v0.8.7-full-menus"
 DEFAULT_OUTPUT = _P.BUILD / f"second_korean_{BUILD_LABEL}"
@@ -563,6 +565,17 @@ def patch_second_battle_scratch(
     }
 
 
+def _box_overrides() -> dict[str, str]:
+    """대사창에 도저히 안 들어가 문장을 다시 쓴 대사 (레코드 id -> 한국어)."""
+    path = _P.TRANSLATION / "dialogue_box_overrides.json"
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8")).get("records", {})
+
+
+_EXACT_CUTS: list = []
+
+
 def make_replacements(
     rows: list[dict[str, Any]],
     translations: dict[str, dict[str, Any]],
@@ -597,6 +610,7 @@ def make_replacements(
     # 그대로 따라간다: 폭은 같은 시나리오 안에서 가장 넓었던 줄, 페이지당 줄수는
     # 그 레코드가 쓰던 줄수. 일본어가 들어갔던 크기라면 한국어도 확실히 들어간다.
     geo = _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources)
+    overrides = _box_overrides()
 
     for row in rows:
         kind = row["kind"]
@@ -604,10 +618,40 @@ def make_replacements(
         old_raw = verify_source_row(row, source)
         key = row["translation_memory_key"]
         ko_parts = translations[key]["ko_parts"]
+        # 대사창에 도저히 안 들어가 문장을 다시 쓴 대사 (뜻은 그대로, 표현만 짧게)
+        ovr = overrides.get(row["id"])
+        if isinstance(ovr, dict):                 # 쪽이 나뉜 대사는 파트별로
+            ko_parts = {k: ovr.get(k, v) for k, v in ko_parts.items()}
+        elif isinstance(ovr, str) and len(ko_parts) == 1:
+            only = next(iter(ko_parts))
+            ko_parts = {only: ovr}
+        _g = geo(kind, row["source"]["offset"], old_raw)
         encoded, layout = assemble_translated_record(
             row["japanese"]["translation_parts"], ko_parts, glyph_map,
-            geometry=geo(kind, row["source"]["offset"], old_raw),
+            geometry=_g[:3], max_bytes=_g[3],
         )
+        if kind == "scenario" and _os.environ.get("SRWCB_EXACT_LEN", "") not in ("", "0"):
+            if len(encoded) > len(old_raw):
+                _EXACT_CUTS.append((row["id"], row["source"]["offset"],
+                                    len(old_raw), len(encoded) - len(old_raw),
+                                    " / ".join(ko_parts.values())))
+            # 진단용: 레코드를 원문과 **정확히 같은 바이트 길이**로 (자르거나 공백 채움)
+            want = len(old_raw)
+            enc = bytearray(encoded)
+            if len(enc) > want:
+                keep = 0; q = 0
+                while q < len(enc) - 1:
+                    b = enc[q]
+                    if b == 0xFF:
+                        break
+                    ln = 1 if b < 0xEB else (2 if b <= 0xF5 else 1 + CONTROL_ARG.get(b, 0))
+                    if q + ln > want - 1:
+                        break
+                    q += ln; keep = q
+                enc = bytearray(enc[:keep]) + bytes([0xFF])
+            if len(enc) < want:
+                enc = bytearray(enc[:-1]) + bytes(want - len(enc)) + bytes([0xFF])
+            encoded = bytes(enc)
         offset = row["source"]["offset"]
         if kind == "scenario":
             if offset in sce_replacements:
@@ -819,6 +863,25 @@ SCENARIO_BOX_ADVANCE = 32
 NARROW_WINDOW_ADVANCE = 24
 
 
+def _has_page_break(raw: bytes) -> bool:
+    """원문 레코드가 F7(쪽 나눔)을 쓰는가. 제어 토큰으로 정확히 훑는다."""
+    from second_translation_codec import CONTROL_ARGUMENT_BYTES
+    p = 0
+    while p < len(raw):
+        b = raw[p]
+        if b == 0xFF:
+            return False
+        if b < 0xEB:
+            p += 1
+        elif b <= 0xF5:
+            p += 2
+        else:
+            if b == 0xF7:
+                return True
+            p += 1 + CONTROL_ARGUMENT_BYTES.get(b, 0)
+    return False
+
+
 def _retail_line_advances(raw: bytes) -> list[int]:
     """원문 레코드의 줄별 advance (F6/F7 로 나눔)."""
     from second_translation_codec import glyph_advance, CONTROL_ARGUMENT_BYTES
@@ -858,6 +921,26 @@ def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
     battle = archive_max("battle_message")
     death = archive_max("death_quote")
 
+    # 시나리오 앞머리의 작전목적(승리/패배조건) 블록은 **원문이 쓴 줄 수 그대로**
+    # 여야 한다. 줄을 하나라도 더 넣으면 작전목적 창이 깨지고 게임이 멈춘다
+    # (2026-08-09 제보, 제3차 8화). 대사는 상자(3줄)를 다 써도 된다.
+    from analyze_sce_relocation import objective_block_records as _OBJ
+    _strict_lines = _OBJ(bytes(source_sce))
+    # 작전목적 블록을 레트일 배치로 못박는 건 **제3차만** 필요하다. 제2차·EX 는
+    # 이 블록이 원문보다 길어져도 작전목적 화면이 멀쩡하다(실사용 확인). 굳이
+    # 못박으면 조건문만 잘려 손해다.
+    _PIN_OBJECTIVE = _os.environ.get("SRWCB_PIN_OBJECTIVE") == "1"
+
+    # 대사 레코드의 **바이트** 상한. 엔진은 한 쪽(최대 3줄)을 실행파일 안 버퍼로
+    # 복사하는데 그 버퍼가 원문 기준으로 잡혀 있다. 원문이 만든 적 없는 길이를
+    # 넣으면 앞부분이 밀려 나가 화자가 사라지고 문장 중간부터 보인다.
+    sce_byte_cap = 1
+    for row in rows:
+        if row["kind"] != "scenario":
+            continue
+        raw = verify_source_row(row, sources["scenario"])
+        sce_byte_cap = max(sce_byte_cap, len(bytes(raw)))
+
     def get(kind, offset, raw):
         if kind == "scenario":
             # 대사창은 **폭 32칸 · 한 쪽 3줄**이다. 세 게임 전 시나리오의 참조 대사
@@ -870,11 +953,35 @@ def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
             # (화면이 낱말 중간부터 시작하고 첫 글자가 깨지는 그 증상).
             #
             # 원문이 32x3 을 넘게 쓴 드문 레코드는 그 레코드가 쓴 만큼을 상자로 본다.
-            # 긴 대사는 원문이 그러듯 F7 로 쪽을 나눈다.
+            #
+            # ★ 쪽 나눔(F7)은 **원문이 그 레코드에서 쓴 경우에만** 쓴다.
+            #   대사창(참조 대사) 레코드에는 원문이 F7 을 한 개도 안 쓴다
+            #   (제3차 2,540개 중 0개, EX 3,653개 중 0개). 대사창 경로는 F7 을
+            #   처리하지 못해서, 넣으면 대사가 꼬이다가 멈춘다(제3차 8화).
+            #   이벤트 스크립트가 부르는 레코드에는 원문도 F7 을 쓴다 — 거기만 허용.
+            # ★ 줄 수는 **상자 높이(3줄)** 까지 쓸 수 있다.
+            #   한때 '원문 레코드가 쓴 줄 수 그대로' 로 묶어 뒀는데, 그건 제3차
+            #   대사 밀림(포인터 `B6 00` 미재조준)을 줄 수 탓으로 오해한 결과였다.
+            #   포매터(0x800CB808)는 3번째 F6/F7 에서 멈추고 소비한 바이트만큼
+            #   포인터를 옮겨 준다 — 즉 우리 데이터를 실제로 훑는다. 원문이 1줄인
+            #   레코드를 1줄로 묶으면 한국어가 안 들어가 축약이 5단계까지 올라가서
+            #   띄어쓰기가 사라지고 화자 이름까지 지워진다(2026-08-09 제보).
             width, lines = record_geometry(bytes(raw))
-            return max(width, MAX_SCENE_ADVANCE), max(lines, MAX_SCENE_LINES), True
+            # 바이트 상한은 **걸지 않는다.** 한때 원문 길이로 묶었지만, 그건
+            # 대사 포인터 `B6 00 <변위16>` 을 재조준하지 못하던 걸 우회하려던
+            # 미봉책이었고 (2026-08-09 수정), 그 대가로 축약 단계가 과하게 올라가
+            # 띄어쓰기가 사라지고 화자 이름까지 지워졌다. 이제 레코드는 자유롭게
+            # 커질 수 있으니 **상자에만 맞추면 된다.**
+            # 작전목적 블록은 레트일 배치를 그대로 지켜야 하므로 **바이트 예산**도
+            # 건다. 그래야 축약 단계가 먼저 돌고, 뒤에서 pin_objective_block 이
+            # 자를 일이 거의 없다. 대사는 예산 없이 자유롭게 커진다.
+            strict = offset in _strict_lines and _PIN_OBJECTIVE
+            box_lines = lines if strict else max(lines, MAX_PAGE_LINES)
+            return (max(width, MAX_SCENE_ADVANCE), box_lines,
+                    _has_page_break(bytes(raw)),
+                    len(bytes(raw)) if strict else None)
         w, h = battle if kind == "battle_message" else death
-        return w, h, True
+        return w, h, True, None
 
     return get
 

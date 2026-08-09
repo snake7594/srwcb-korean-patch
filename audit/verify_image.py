@@ -124,7 +124,7 @@ def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
     섞여 있어 상자가 통째로 부풀었고 그래서 넘침을 0 으로 보고했다.
     """
     jp_over = wide = broke = 0
-    for (s, e, _bw, _bh), (sj, ej) in zip(recs_ko, recs_jp):
+    for (s, e, _bw, _bh, isref), (sj, ej) in zip(recs_ko, recs_jp):
         try:
             txt = A.decode(ko, s, e, tbl)
             kp = _pages(ko, s, e)
@@ -138,7 +138,10 @@ def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
         # 원문이 상자보다 크게 쓴 드문 레코드는 원문이 쓴 만큼까지 허용
         wcap = max(box, max(max(pg) for pg in jpg))
         cap = max(SCE_MAX_LINES, max(len(pg) for pg in jpg))
-        if any(max(pg) > wcap or len(pg) > cap for pg in kp):
+        # ★ 원문이 안 쓴 쪽 나눔(F7)을 우리가 넣으면 안 된다. 대사창 경로는 F7 을
+        #   처리하지 못해서 대사가 꼬이다가 게임이 멈춘다(제3차 8화).
+        if (any(max(pg) > wcap or len(pg) > cap for pg in kp)
+                or (isref and len(kp) > len(jpg))):
             wide += 1
     out.append((name, len(recs_ko), jp_over, wide, broke))
 
@@ -181,7 +184,7 @@ def _is_dialogue(buf, s, e, tbl):
 
 
 def _paired(ko, jp, tbl):
-    """같은 순번의 (패치본 대사, 레트일 대사) 짝 + 그 장면의 상자 크기."""
+    """같은 순번의 (패치본 대사, 레트일 대사) 짝 + 상자 크기 + 대사창 여부."""
     a = A.ASR.parse_scenarios(jp)
     b = A.ASR.parse_scenarios(ko)
     ko_out, jp_out = [], []
@@ -189,6 +192,7 @@ def _paired(ko, jp, tbl):
         if len(x.records) != len(y.records):
             continue
         # 이 장면의 상자: 원문이 줄을 바꾼 가장 넓은 지점 / 가장 많은 줄수
+        _refs = {r.target for r in x.references}
         bw = bh = 0
         for r in x.records:
             try:
@@ -203,9 +207,78 @@ def _paired(ko, jp, tbl):
             # 그만큼 더 있고, 예전엔 그쪽이 통째로 검사에서 빠져 있었다.
             if is_choice(ko, ry.start, tbl) or not _is_dialogue(ko, ry.start, ry.end, tbl):
                 continue
-            ko_out.append((ry.start, ry.end, bw, bh))
+            ko_out.append((ry.start, ry.end, bw, bh, rx.start in _refs))
             jp_out.append((rx.start, rx.end))
     return ko_out, jp_out
+
+
+def check_wrap_width():
+    """레이아웃 엔진이 **주어진 상자 폭까지** 채우는지 확인한다.
+
+    v0.11.7 까지 emit_text/emit_control 이 상자 폭(self.max_advance) 대신 모듈
+    상수 MAX_LINE_ADVANCE(18) 를 보고 줄을 접었다. 대사가 두 배 줄 수로 부풀어
+    3줄 상자를 넘쳤고, 제3차 대사창 레코드는 F7(쪽 나눔)을 쓸 수 없어 그대로
+    깨졌다(화자가 사라지고 문장 중간부터 나오는 그 증상). 제2차·EX 는 원문이
+    F7 을 쓰는 레코드가 많아 쪽이 하나 더 생기고 마는 정도라 눈에 덜 띄었다.
+    """
+    sys.path.append(str(_P.REPO / "tools"))
+    from second_translation_codec import (LayoutState, load_safe_glyph_map,
+                                          normalise_for_font)
+    gm = load_safe_glyph_map()
+    st = LayoutState(gm, max_advance=32, max_lines=3, allow_page_break=False)
+    st.emit_text(normalise_for_font("가나다라마바사아자차카타파하거너더러머버서어저처")[0])
+    _enc, man = st.finish()
+    first = man["page_advances"][0][0]
+    if first <= 18:
+        raise SystemExit(
+            f"[회귀] 레이아웃이 폭 32 상자를 {first} 칸에서 접었습니다 — "
+            "emit_text/emit_control 이 self.max_advance 대신 상수를 보고 있습니다")
+    return first
+
+
+def check_objective_block(name, ko, jp, tbl, out):
+    """작전목적(승리/패배조건) 블록에 줄을 더 넣지 않았는지.
+
+    시나리오 앞머리의 이 레코드들은 작전목적 화면이 읽는데, 줄(F6)이 하나라도
+    늘면 창이 깨지고 게임이 멈춘다(2026-08-09 제보, 제3차 8화). 대사창과 달리
+    여기는 **원문이 쓴 줄 수 그대로** 여야 한다.
+    """
+    sys.path.append(str(_P.REPO / "tools"))
+    from analyze_sce_relocation import parse_scenarios, objective_block_records
+
+    def _lines(buf, s, e):
+        n, i = 1, s
+        while i < e:
+            x = buf[i]
+            if x == 0xFF:
+                break
+            if x < 0xEB:
+                i += 1
+            elif x < 0xF6:
+                i += 2
+            else:
+                if x in (0xF6, 0xF7):
+                    n += 1
+                i += 1 + {0xF8: 1, 0xF9: 1, 0xFA: 0, 0xFB: 2,
+                          0xFC: 2, 0xFD: 2, 0xFE: 1}.get(x, 0)
+        return n
+
+    block = objective_block_records(jp)
+    bad = 0
+    for a, b in zip(parse_scenarios(jp), parse_scenarios(ko)):
+        if len(a.records) != len(b.records):
+            continue
+        for ra, rb in zip(a.records, b.records):
+            if ra.start not in block:
+                continue
+            # 스크립트(바이트코드) 레코드는 '줄'이 의미가 없다. 재조준된 변위
+            # 바이트가 우연히 0xF6 이 되면 줄이 는 것처럼 보일 뿐이다.
+            if not _is_dialogue(jp, ra.start, ra.end, tbl):
+                continue
+            if _lines(ko, rb.start, rb.end) > _lines(jp, ra.start, ra.end):
+                bad += 1
+    if bad:
+        out.append((f"{name} 작전목적", len(block), 0, bad, 0))
 
 
 def main():
@@ -218,6 +291,7 @@ def main():
     if not img.exists():
         raise SystemExit(f"[없음] 이미지: {img}")
     img = str(img)
+    print(f"  레이아웃 폭 자체검사: 상자 32 중 {check_wrap_width()} 칸 채움 (>18 이어야 정상)")
 
     rows = []
     for game, sce, bmess, dead, extras in GAMES:
@@ -226,6 +300,7 @@ def main():
         j = (_P.EXTRACTED / sce).read_bytes()
         ko_recs, jp_recs = _paired(d, j, tbl)
         check_pages(f"{game} 대사", d, j, ko_recs, jp_recs, tbl, SCE_BOX_ADVANCE, rows)
+        check_objective_block(game, d, j, tbl, rows)
         d = A.read_iso(img, bmess)
         check(f"{game} 전투", d, A.bmess_records(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
         d = A.read_iso(img, dead)

@@ -97,6 +97,8 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
         # 튜토리얼 성공 메시지(10)
         "成功!<f6>つぎいってみよう!!": "성공!<f6>다음 가자!!",
     }
+    from analyze_sce_relocation import objective_block_records as _OBJ
+    _objective = _OBJ(bytes(src_sce))
     sup = {}
     stat = {"layout": 0, "prefix_kept": 0, "reused_third": 0, "skipped": 0, "wide": []}
     # 반복되는 승리/패배 조건문 (번역 배치에 넣지 않았던 것들). 제2차·제3차 표기와 동일.
@@ -143,9 +145,11 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             # (폭 32)를 넘으면 화면에서 잘리므로, 넘칠 때만 본문을 다시 배치한다.
             _w, _l = record_geometry(rec)
             _cap = max(_w, 32)
-            if any(a > _cap for a in _line_advs(sup[off])):
+            _lines_now = 1 + sum(1 for b in sup[off] if b in (0xF6, 0xF7))
+            if any(a > _cap for a in _line_advs(sup[off])) or _lines_now > max(_l, 3):
+                from build_second_expanded_patch import _has_page_break as _HPB
                 st = LayoutState(glyph_map, max_advance=_cap, max_lines=max(_l, 3),
-                                 allow_page_break=True)
+                                 allow_page_break=_HPB(rec), strict_width=False)
                 for s in segs:
                     if s == "<f6>":
                         st.pending_spaces = 0; st._new_line_or_page()
@@ -162,20 +166,35 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             _w, _l = record_geometry(rec)
             # 원문 대사에는 F7(쪽 나눔)이 한 개도 없다. 3줄 안에 들어가면 F6 만
             # 쓰고, 도저히 안 되는 긴 대사만 쪽을 나눈다.
-            enc = None
-            for _pb in (False, True):
-                st = LayoutState(glyph_map, max_advance=max(_w, 32), max_lines=3,
-                                 allow_page_break=_pb)
+            # 쪽 나눔은 원문이 쓴 레코드에서만 (대사창 경로는 F7 을 처리 못 한다)
+            from build_second_expanded_patch import _has_page_break
+            _pb = _has_page_break(rec)
+            # 작전목적(승리/패배조건) 블록은 원문 줄 수를 지켜야 한다 — 줄을 더
+            # 넣으면 작전목적 창이 깨지고 게임이 멈춘다.
+            _adv = max(_w, 32)
+            _lines = _l if off in _objective else max(_l, 3)
+
+            def _lay(drop_breaks):
+                st = LayoutState(glyph_map, max_advance=_adv, max_lines=_lines,
+                                 allow_page_break=_pb, strict_width=False)
                 for s in segs:
-                    if s == "<f6>":
-                        st.pending_spaces = 0; st._new_line_or_page()
-                    elif s == "<f7>":
-                        st.preserve_page_break(b"\xF7")
+                    if s in ("<f6>", "<f7>"):
+                        if drop_breaks:
+                            st.pending_spaces = max(st.pending_spaces, 1)
+                            continue
+                        if s == "<f7>" and _pb:
+                            st.preserve_page_break(bytes([0xF7]))
+                        else:
+                            st.pending_spaces = 0
+                            st._new_line_or_page()
                     else:
                         st.emit_text(normalise_for_font(s)[0])
-                enc, _m = st.finish()      # finish()가 FF까지 붙임
-                if max(len(pg) for pg in _m["pages"]) <= 3:
-                    break
+                return st.finish()
+
+            # 번역에 박아 둔 <f6> 로 줄이 넘치면, 그 줄바꿈은 버리고 다시 흘린다
+            enc, _m = _lay(False)
+            if max(len(pg) for pg in _m["pages"]) > _lines:
+                enc, _m = _lay(True)
             sup[off] = bytes(enc)
             stat["layout"] += 1
     return sup, stat

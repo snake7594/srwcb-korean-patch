@@ -38,19 +38,23 @@ from pathlib import Path
 
 R = str(_P.WORK)
 sys.path.insert(0, f"{R}/tools")
-from analyze_sce_relocation import parse_scenarios, TEXT_POINTER_OPCODES
+from analyze_sce_relocation import (parse_scenarios, TEXT_POINTER_OPCODES,
+                                    iter_pointer_sites)
 
 
 def scan_pool_refs(buf, scn):
-    """pool 레코드 영역에서 target 이 레코드 시작인 B1/B3/B4 (진짜 이벤트 참조)."""
+    """pool 레코드 영역에서 target 이 레코드 시작인 대사 포인터.
+
+    `B1/B3/B4 <변위16>` 과 `B6 00 <변위16>` 두 형태를 모두 본다 — 뒤엣것은
+    피연산자가 옵코드+2 에 있다(핸들러가 커서를 1 늘린 뒤 읽는다).
+    반환값의 세 번째 원소는 **피연산자 위치**다.
+    """
     starts = {r.start for r in scn.records}
     refs = []
-    for off in range(scn.pool_start, scn.record_data_end - 2):
-        op = buf[off]
-        if op not in TEXT_POINTER_OPCODES:
-            continue
-        disp = struct.unpack_from("<H", buf, off + 1)[0]
-        tgt = (off + 1) + disp
+    for off, operand, op in iter_pointer_sites(buf, scn.pool_start,
+                                               scn.record_data_end):
+        disp = struct.unpack_from("<h", buf, operand)[0]
+        tgt = operand + disp
         if tgt in starts:
             refs.append((off, op, tgt))
     return refs
@@ -101,17 +105,18 @@ def retarget(ko_bytes, jp_bytes, *, apply=False, verbose=True):
                 spurious_list.append(f"sc{si} rec[{host}]+{off_in_rec:#x} op{op:#x}")
                 continue
             new_tgt = sk.records[tgt_ord].start
-            new_disp = new_tgt - (off_k + 1)
-            if not (0 <= new_disp <= 0xFFFF):
+            opnd_k = off_k + (2 if op == 0xB6 else 1)
+            new_disp = new_tgt - opnd_k
+            if not (-0x8000 <= new_disp <= 0x7FFF):
                 problems.append(f"sc{si} @{off_k:#x}: 변위 범위초과 {new_disp:#x}")
                 continue
-            cur_disp = struct.unpack_from("<H", ko, off_k + 1)[0]
-            cur_tgt = (off_k + 1) + cur_disp
+            cur_disp = struct.unpack_from("<h", ko, opnd_k)[0]
+            cur_tgt = opnd_k + cur_disp
             if cur_tgt == new_tgt:
                 already += 1
                 continue
             if apply:
-                struct.pack_into("<H", ko, off_k + 1, new_disp)
+                struct.pack_into("<h", ko, opnd_k, new_disp)
             fixed += 1
     if verbose:
         print(f"  이벤트 참조 총 {total}  재조준필요 {fixed}  이미정상 {already}  "
@@ -119,6 +124,67 @@ def retarget(ko_bytes, jp_bytes, *, apply=False, verbose=True):
         for s in spurious_list[:8]:
             print("   ~ 우연매치 스킵:", s)
         for p in problems[:20]:
+            print("   !!", p)
+    return bytes(ko), fixed, problems
+
+
+def scan_f0_refs(buf, scn):
+    """`F0 <b> <u16>` — 풀 시작 기준 **바이트 오프셋**으로 대사를 가리키는 참조.
+
+    대화의 시작 지점을 이걸로 잡는다. B1/B3/B4(필드 상대)만 재조준하고 이건
+    원문 값 그대로 두면, 한글로 풀이 커진 만큼 엉뚱한 자리에 떨어져 대사가
+    문장 중간부터 나오고 화자가 사라진다(제3차 8화).
+
+    레트일에서 **레코드 시작을 정확히 가리키는 것만** 진짜 참조로 인정한다.
+    """
+    rel = {r.start - scn.pool_start: i for i, r in enumerate(scn.records)}
+    out = []
+    for off in range(scn.block_start, scn.pool_start - 3):
+        if buf[off] != 0xF0:
+            continue
+        v = struct.unpack_from("<H", buf, off + 2)[0]
+        if v > 0 and v in rel:
+            out.append((off, v, rel[v]))
+    return out
+
+
+def retarget_f0(ko_bytes, jp_bytes, *, apply=False, verbose=True):
+    """풀 상대 오프셋(F0) 참조를 같은 서수 레코드의 새 위치로 다시 겨눈다."""
+    ko = bytearray(ko_bytes)
+    bj = parse_scenarios(jp_bytes)
+    bk = parse_scenarios(ko)
+    total = fixed = already = skipped = 0
+    problems = []
+    left = []
+    for si, (sj, sk) in enumerate(zip(bj, bk)):
+        # 레코드 수가 안 맞는 시나리오는 서수 대응이 불가능하다. 경계 안정화가
+        # 손댈 수 없어 남긴 시나리오가 여기 해당한다 — 건드리지 않고 넘어간다.
+        if len(sj.records) != len(sk.records):
+            left.append(si)
+            continue
+        if (sj.pool_start - sj.block_start) != (sk.pool_start - sk.block_start):
+            left.append(si)
+            continue
+        for off_j, val, ordn in scan_f0_refs(jp_bytes, sj):
+            total += 1
+            off_k = sk.block_start + (off_j - sj.block_start)
+            if ko[off_k] != 0xF0:                 # 구조가 다르면 손대지 않는다
+                skipped += 1
+                continue
+            new = sk.records[ordn].start - sk.pool_start
+            if not (0 < new <= 0xFFFF):
+                problems.append(f"sc{si} @{off_j:#x}: 범위 초과 {new:#x}")
+                continue
+            if struct.unpack_from("<H", ko, off_k + 2)[0] == new:
+                already += 1
+                continue
+            if apply:
+                struct.pack_into("<H", ko, off_k + 2, new)
+            fixed += 1
+    if verbose:
+        print(f"  F0 풀상대 참조 총 {total}  재조준 {fixed}  이미정상 {already}  "
+              f"건너뜀 {skipped}  손 못 댄 시나리오 {left}  문제 {len(problems)}")
+        for p in problems[:10]:
             print("   !!", p)
     return bytes(ko), fixed, problems
 
@@ -163,8 +229,14 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
     #    번역으로 교체하는 레코드(= 순수 텍스트)만 줄 끝 공백을 하나 붙인다.
     safe = set(replacements)
     unsafe: set[int] = set()          # 스크립트뿐이라 손댈 수 없는 시나리오
+    # ★ 작전목적(승리/패배조건) 블록에는 **빈 줄(F6)을 붙이면 안 된다** — 작전목적
+    #   창이 깨지고 게임이 멈춘다(2026-08-09 제보, 제3차 8화). 다만 이 블록을
+    #   통째로 빼면 경계를 못 맞춰 조건문 순번이 어긋난다. 그래서 여기서는
+    #   줄 끝 공백만 허용한다(줄 수 불변).
+    from analyze_sce_relocation import objective_block_records as _OBJ
+    objective = _OBJ(bytes(src))
 
-    def _pad_byte(raw):
+    def _pad_byte(raw, allow_newline=True):
         """레코드를 한 바이트 늘릴 때 **화면을 안 건드리는** 바이트를 고른다.
 
         예전엔 무조건 반각 공백을 끝에 붙였다. 그런데 그 줄이 이미 상자(32칸)를
@@ -198,7 +270,7 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
             step, phase = glyph_advance(idx, phase)
             adv += step
         mx = max(mx, adv)
-        if maxlines < 3:
+        if maxlines < 3 and allow_newline:
             return bytes([0xF6])   # 빈 줄 — 폭이 안 늘어난다
         if mx < 32:
             return bytes(1)      # 줄 끝 공백 — 상자 안에 여유가 있을 때만
@@ -207,7 +279,9 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
     def _has_room(rec):
         """이 레코드를 한 바이트 늘려도 화면이 안 깨지는가."""
         raw = repl.get(rec.start)
-        return raw is not None and _pad_byte(raw) is not None
+        if raw is None:
+            return False
+        return _pad_byte(raw, rec.start not in objective) is not None
 
     def pick(records, i):
         """i 번 레코드 앞쪽에서 손대도 되는(번역된) 레코드를 찾는다.
@@ -263,7 +337,8 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
             return repl, out
         for rec in grow:
             cur = repl.get(rec.start) or bytes(src[rec.start:rec.end])
-            repl[rec.start] = cur[:-1] + (_pad_byte(cur) or bytes(1)) + cur[-1:]
+            pad = _pad_byte(cur, rec.start not in objective) or bytes(1)
+            repl[rec.start] = cur[:-1] + pad + cur[-1:]
             added += 1
     raise SystemExit("레코드 경계를 레트일과 맞추지 못했습니다")
 
@@ -313,8 +388,9 @@ def _verify(ko_bytes, jp_bytes):
             off_k = sk.records[host].start + off_in_rec
             if off_k + 3 > len(ko_bytes) or ko_bytes[off_k] != op:
                 continue          # 우연 매치(텍스트 재번역으로 밀림) — 검증 대상 아님
-            disp = struct.unpack_from("<H", ko_bytes, off_k + 1)[0]
-            if (off_k + 1) + disp not in starts:
+            opnd_k = off_k + (2 if op == 0xB6 else 1)
+            disp = struct.unpack_from("<h", ko_bytes, opnd_k)[0]
+            if opnd_k + disp not in starts:
                 bad += 1
     return bad
 

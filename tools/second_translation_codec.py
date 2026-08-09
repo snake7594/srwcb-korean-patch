@@ -45,6 +45,8 @@ MAX_LINE_CELLS = 20
 # glyph of the next box renders as garbage).  We therefore pre-break every line
 # at <= this width so the game never auto-wraps a dialogue record.
 MAX_LINE_ADVANCE = 18
+# 대사창 상자의 실제 폭(칸). 시나리오 대사는 이 값으로 접는다.
+MAX_SCENE_ADVANCE = 32
 MAX_PAGE_LINES = 3
 # 어떤 낱말도 들어가는 넓이 (마지막 수단)
 SAFE_FALLBACK_ADVANCE = 32
@@ -274,10 +276,17 @@ class LayoutState:
                 self.pending_spaces += len(token)
                 continue
 
+            # 낱말 자체가 한 줄보다 길면 줄을 바꿔도 어차피 중간에서 잘린다.
+            # 그때 줄을 바꾸면 지금 줄의 남은 칸을 통째로 버리게 된다 —
+            # 띄어쓰기를 지운 뒤 문장이 한 덩어리가 되면 첫 줄이 12칸만 쓰이고
+            # 넉 줄이 되어 상자를 넘치던 원인이 이것이다.
+            span = self._span_advance(token)
+            fits_alone = span <= self.max_advance
             if self.pending_spaces:
                 # spaces advance one unit each (low glyph, no phase change)
-                needed = self.pending_spaces + self._span_advance(token)
-                if self.current_advance and self.current_advance + needed > self.max_advance:
+                needed = self.pending_spaces + span
+                if (self.current_advance and fits_alone
+                        and self.current_advance + needed > self.max_advance):
                     # A layout break is the visible separator at a word
                     # boundary; no lexical space is deleted within a line.
                     self._new_line_or_page()
@@ -285,7 +294,8 @@ class LayoutState:
                 else:
                     self._emit_spaces(self.pending_spaces)
                 self.pending_spaces = 0
-            elif self.current_advance and self.current_advance + self._span_advance(token) > self.max_advance:
+            elif (self.current_advance and fits_alone
+                    and self.current_advance + span > self.max_advance):
                 # There was no legal word boundary.  Split a long token rather
                 # than alter or truncate it.
                 self._new_line_or_page()
@@ -343,6 +353,115 @@ class LayoutState:
         }
 
 
+def fit_exact_length(encoded: bytes, want: int) -> bytes:
+    """레코드를 원문과 **정확히 같은 바이트 길이**로 만든다.
+
+    엔진은 포인터가 없는 대사를 '풀 시작 + 원문 기준 바이트 오프셋'으로 찾는다.
+    앞선 레코드가 원문보다 길거나 짧으면 그만큼 밀려서, 대사가 문장 중간부터
+    나오고 화자가 사라진다(제3차 8화). 그래서 풀 배치를 원문과 바이트 단위로
+    똑같이 맞춰야 한다.
+
+    길면 글리프 경계에서 자르고, 짧으면 종결자 앞을 반각 공백으로 채운다.
+    """
+    if want < 1:
+        return encoded
+    body = bytes(encoded)
+    if body and body[-1] == 0xFF:
+        body = body[:-1]
+    # 글리프 경계를 지키며 want-1 바이트까지만 남긴다
+    keep = 0
+    q = 0
+    while q < len(body):
+        b = body[q]
+        n = 1 if b < 0xEB else (2 if b <= 0xF5 else 1 + CONTROL_ARGUMENT_BYTES.get(b, 0))
+        if q + n > want - 1:
+            break
+        q += n
+        keep = q
+    out = bytearray(body[:keep])
+    need = (want - 1) - len(out)
+    if need > 0:
+        # 채움 바이트(0x00)도 **글리프라서 폭을 먹는다.** 그냥 붙이면 마지막 줄이
+        # 상자(32칸)를 넘어 화면이 깨진다. 그래서 줄이 찰 때마다 F6(줄바꿈)을
+        # 넣어 다음 줄로 넘긴다 — 빈 줄이라 화면에는 안 보인다.
+        adv, ln = _tail_line_state(out)
+        while need > 0:
+            if adv >= MAX_SCENE_ADVANCE and ln < MAX_PAGE_LINES:
+                out.append(0xF6); need -= 1; adv = 0; ln += 1
+                continue
+            out.append(0x00); need -= 1; adv += 1
+    out.append(0xFF)
+    return bytes(out)
+
+
+def _tail_line_state(buf: bytes) -> tuple[int, int]:
+    """레코드 바이트열의 **마지막 줄 advance** 와 그 쪽의 줄 수를 센다."""
+    adv = 0
+    lines = 1
+    phase = 0
+    i = 0
+    while i < len(buf):
+        x = buf[i]
+        if x == 0xFF:
+            break
+        if x < 0xEB:
+            idx = x
+            i += 1
+        elif x < 0xF6:
+            idx = ((x - 0xEB) << 8) | (buf[i + 1] if i + 1 < len(buf) else 0)
+            i += 2
+        else:
+            if x == 0xF6:
+                adv = 0
+                phase = 0
+                lines += 1
+            elif x == 0xF7:
+                adv = 0
+                phase = 0
+                lines = 1
+            i += 1 + CONTROL_ARGUMENT_BYTES.get(x, 0)
+            continue
+        if idx < 0x101:
+            adv += 1
+        else:
+            adv += 1 + phase
+            phase ^= 1
+    return adv, lines
+
+
+def pin_objective_block(src_sce, replacements, *, label="", verbose=True):
+    """작전목적(승리/패배조건) 블록 레코드를 **원문과 똑같은 바이트 길이**로 고정.
+
+    작전목적 화면이 이 레코드들을 어떤 방식으로 집어 오는지(순번인지 바이트
+    오프셋인지)에 관계없이 안전하도록, 시나리오 앞머리 블록만 레트일 배치를
+    그대로 유지한다. 대사는 이 블록 밖이라 자유롭게 커진다.
+
+    한 줄짜리 조건문이라 예산 초과는 드물고(제3차 81/432), 넘치면 앞단에서
+    띄어쓰기를 지운 뒤 남는 만큼만 잘린다.
+    """
+    from analyze_sce_relocation import parse_scenarios, objective_block_records
+    src = bytes(src_sce)
+    block = objective_block_records(src)
+    want = {r.start: r.end - r.start
+            for s in parse_scenarios(src) for r in s.records}
+    pinned = cut = lost = 0
+    for off in list(replacements):
+        if off not in block:
+            continue
+        size = want.get(off)
+        if not size or len(replacements[off]) == size:
+            continue
+        if len(replacements[off]) > size:
+            cut += 1
+            lost += len(replacements[off]) - size
+        replacements[off] = fit_exact_length(replacements[off], size)
+        pinned += 1
+    if verbose and pinned:
+        print(f"  작전목적 블록 고정{label}: {pinned}개 "
+              f"(길이 초과로 줄인 것 {cut}개, {lost}B)")
+    return replacements
+
+
 def record_geometry(raw: bytes) -> tuple[int, int]:
     """레트일 레코드가 실제로 쓴 (줄 폭, 페이지당 줄수).
 
@@ -389,12 +508,12 @@ def assemble_translated_record(
     ko_parts: dict[str, str],
     glyph_map: dict[str, int],
     geometry: tuple[int, int] | None = None,
+    max_bytes: int | None = None,
 ) -> tuple[bytes, dict[str, Any]]:
     adv, lines, page_break = (geometry or (MAX_LINE_ADVANCE, MAX_PAGE_LINES, True))
     if page_break:
-        # 쪽을 나눌 수 있으면 상자 폭·줄수를 다 지킬 수 있다. 그래도 안 되면
-        # (제어 토큰이 자리를 잡아먹는 드문 경우) 띄어쓰기를 지워 본다.
-        for squeeze in (0, 1, 2):
+        # 원문이 쪽을 나눈 레코드 — 우리도 나눠도 된다.
+        for squeeze in (0, 1, 2, 3, 4, 5):
             enc, man = _assemble(translation_parts, ko_parts, glyph_map,
                                  adv, lines, True, squeeze, strict=False)
             widest = max((a for pg in man["page_advances"] for a in pg), default=0)
@@ -402,15 +521,86 @@ def assemble_translated_record(
                 return enc, man
         return _assemble(translation_parts, ko_parts, glyph_map,
                          max(adv, SAFE_FALLBACK_ADVANCE), lines, True, 1)
+
+    # 원문이 쪽을 안 나눈 레코드 — 대사창 경로는 F7 을 처리하지 못한다.
+    # 바이트 상한이 주어지면 그 안에 들어갈 때까지 더 줄인다.
+    # 상자(기본 32x3 = 96칸) 안에 넣는다. 안 되면 띄어쓰기를 지운다.
+    first = None
+    best = None                     # 상자에는 들어가는 것 중 가장 짧은 것
+    for squeeze in (0, 1, 2, 3, 4, 5):
+        enc, man = _assemble(translation_parts, ko_parts, glyph_map,
+                             adv, lines, False, squeeze, strict=False)
+        widest = max((a for pg in man["page_advances"] for a in pg), default=0)
+        if first is None:
+            first = (enc, man)
+        fits_box = (widest <= adv and max(len(pg) for pg in man["pages"]) <= lines)
+        if fits_box and (max_bytes is None or len(enc) <= max_bytes):
+            return enc, man
+        if fits_box and (best is None or len(enc) < len(best[0])):
+            best = (enc, man)
+    # 바이트 예산에는 못 들어간 대사.  제3차는 레코드가 원문 자리에 있어야 하므로
+    # (엔진이 포인터 없는 대사를 원문 바이트 오프셋으로 찾는다) **상자에는 들어가는
+    # 것 중 가장 짧은 후보**를 돌려준다. 예전에는 무조건 축약단계 4 를 썼는데,
+    # 5(화자 이름 생략)가 더 짧은 경우를 놓쳐 쓸데없이 잘려 나갔다.
+    if best is not None:
+        enc, man = best
+    else:
+        enc, man = _assemble(translation_parts, ko_parts, glyph_map,
+                             adv, lines, False, 5, strict=False)
+    man["overflow"] = True
+    return enc, man
     return _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, 0)
 
 
+# 뜻·말투를 유지하는 한국어 축약 (긴 것부터)
+CONTRACTIONS = [
+    ("무엇을", "뭘"), ("무엇이", "뭐가"), ("무엇", "뭐"),
+    ("이야기", "얘기"), ("그리하여", "그래서"), ("그러하다", "그렇다"),
+    ("것입니다", "겁니다"), ("것이다", "거다"), ("것이야", "거야"), ("것이", "게"),
+    ("것은", "건"), ("것을", "걸"), ("것도", "것도"), ("것과", "것과"),
+    ("하여야", "해야"), ("되어야", "돼야"), ("하여", "해"), ("되어", "돼"),
+    ("말이야", "말야"), ("말이지", "말지"),
+    ("나는", "난"), ("너는", "넌"), ("저는", "전"), ("우리는", "우린"),
+    ("그것은", "그건"), ("그것을", "그걸"), ("이것은", "이건"), ("이것을", "이걸"),
+    ("저것은", "저건"), ("저것을", "저걸"), ("그것이", "그게"), ("이것이", "이게"),
+    ("무리하지", "무리 말"), ("그러면", "그럼"), ("그렇지만", "하지만"),
+    ("어떻게든", "어떻게"), ("아무래도", "아무튼"),
+]
+
+
 def _squeeze(text: str, level: int) -> str:
+    """상자에 안 들어갈 때 단계별로 줄인다. 뜻은 절대 건드리지 않는다."""
     if level == 0:
         return text
     if level == 1:                      # 조사 앞뒤가 아닌 곳부터: 두 칸 이상만
         return re.sub(r"  +", " ", text)
-    return text.replace(" ", "")
+    if level == 2:
+        # 전각 공백(U+3000)도 같이 지운다. 정규화되면 공백이 되어 줄바꿈 자리를
+        # 만드는데, 상자가 빠듯할 때는 그 한 칸 때문에 줄이 하나 더 생긴다.
+        return text.replace(" ", "").replace("　", "")
+    # 3단계: 말줄임표를 한 글자로. 화면에서 점 개수만 줄고 뜻은 그대로다.
+    # (닫는 따옴표 한 글자가 넘쳐 넉 줄이 되던 대사가 여기서 해결된다)
+    out = text.replace(" ", "").replace("　", "")
+    for a, b in (("……", "…"), ("‥‥", "‥"), ("···", "…"), ("...", "…")):
+        out = out.replace(a, b)
+    if level == 3:
+        return out
+    if level >= 5:
+        # 5단계: 화자 이름을 뺀다. 한글은 글자당 2바이트라, 일본어 가나로 쓰인
+        # 짧은 대사는 이름만으로 원문 예산을 넘긴다(`치즈루「예!」` 12B > 9B).
+        # 화면에 초상화가 나오므로 누가 말하는지는 알 수 있다. 마지막 수단이다.
+        for _open in ("「", "("):
+            k = out.find(_open)
+            if 0 < k <= 12:
+                out = out[k:]
+                break
+    # 4단계: 한국어 표준 축약. 뜻과 말투를 유지하면서 글자 수만 줄인다.
+    # 엔진이 대사 여러 개를 한 페이지(3줄)에 몰아 담기 때문에, 줄 수가 원문보다
+    # 많으면 페이지 경계가 레코드 한가운데로 밀려 다음 대사가 문장 중간부터
+    # 나온다. 그래서 원문 줄 수 안에 넣는 것이 화면상 필수다.
+    for a, b in CONTRACTIONS:
+        out = out.replace(a, b)
+    return out
 
 
 def _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, squeeze,

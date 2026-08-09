@@ -34,6 +34,10 @@ CONTROL_ARG_LENGTHS = {
     0xFE: 1,
 }
 TEXT_POINTER_OPCODES = frozenset((0xB1, 0xB3, 0xB4))
+# 작전목적 앞머리 블록의 최대 레코드 수 (실측 4~11)
+OBJECTIVE_BLOCK_MAX = 12
+# 대사 인용부호 「 의 글리프 바이트 — 앞머리 블록은 여기서 끊는다
+_DIALOGUE_QUOTE = 0x3E
 SCENARIO_HEADER_SIZE = 0x38
 
 
@@ -115,24 +119,73 @@ def parse_records(data: bytes, start: int, end: int) -> tuple[Record, ...]:
     return tuple(records)
 
 
+def iter_pointer_sites(data: bytes, start: int, end: int):
+    """(옵코드 위치, 피연산자 위치, 옵코드) 후보를 훑는다.
+
+    대사 포인터 명령은 두 가지 형태다 (THIRD.WAR 역어셈블로 확인, 2026-08-09):
+
+    * ``B1/B3/B4 <변위16>``      — 피연산자가 옵코드 바로 뒤.
+    * ``B6 00 <변위16>``         — 핸들러(점프표 0x1F, 0x800CB1D0)가 VM 커서를
+      **1 늘린 뒤** 공통 루틴 0x800CB290 을 부른다. 그래서 피연산자가 옵코드+2.
+      이걸 놓치면 그 대사들만 원문 자리에 남아, 레코드를 옮긴 만큼 밀려서
+      나온다(제3차 8화·10화의 '화자가 사라지고 문장 중간부터' 증상).
+
+    변위는 **부호 있는 16비트**다 (0x800CB2F4: sll 16 / sra 16).
+    """
+    for off in range(start, end - 2):
+        op = data[off]
+        if op in TEXT_POINTER_OPCODES:
+            yield off, off + 1, op
+        elif op == 0xB6 and off + 3 < end and data[off + 1] == 0x00:
+            yield off, off + 2, op
+
+
 def find_text_references(
     data: bytes, block_start: int, pool_start: int, records: tuple[Record, ...]
 ) -> tuple[TextReference, ...]:
-    """Find VM B1/B3/B4 operands whose original target is a record start."""
+    """레코드 시작을 가리키는 VM 대사 포인터를 모두 찾는다."""
     starts = {record.start for record in records}
     references: list[TextReference] = []
-    for opcode_offset in range(block_start, pool_start - 2):
-        opcode = data[opcode_offset]
-        if opcode not in TEXT_POINTER_OPCODES:
-            continue
-        operand_offset = opcode_offset + 1
-        displacement = struct.unpack_from("<H", data, operand_offset)[0]
+    for opcode_offset, operand_offset, opcode in iter_pointer_sites(
+        data, block_start, pool_start
+    ):
+        displacement = struct.unpack_from("<h", data, operand_offset)[0]
         target = operand_offset + displacement
         if target in starts:
             references.append(
                 TextReference(opcode_offset, operand_offset, target, opcode)
             )
     return tuple(references)
+
+
+def objective_block_records(data: bytes) -> set[int]:
+    """작전목적(승리/패배조건) 블록에 속한 레코드 시작 오프셋.
+
+    시나리오 앞머리에는 대사 포인터가 겨누지 않는 레코드 몇 개가 모여 있는데,
+    이게 작전목적 화면이 읽는 조건문·목표 텍스트다(제3차 기준 시나리오당 4~11개).
+    **여기에 줄(F6)을 하나라도 더 넣으면 작전목적 창이 깨지고 게임이 멈춘다**
+    (2026-08-09 제보, 8화). 그래서 이 레코드들은 원문이 쓴 줄 수를 지켜야 한다.
+
+    첫 대사 포인터가 겨누는 레코드 앞까지를 그 블록으로 본다. 다만 대사 포인터가
+    한참 뒤에야 나오는 시나리오(튜토리얼 등)에서는 이 규칙이 진짜 대사까지 삼켜
+    버리므로 ``OBJECTIVE_BLOCK_MAX`` 로 자른다. 실제 앞머리는 4~11개다.
+    """
+    out: set[int] = set()
+    for scenario in parse_scenarios(data):
+        targets = set()
+        for _off, operand, _op in iter_pointer_sites(
+            data, scenario.block_start, scenario.record_data_end
+        ):
+            targets.add(operand + struct.unpack_from("<h", data, operand)[0])
+        for index, record in enumerate(scenario.records):
+            if record.start in targets or index >= OBJECTIVE_BLOCK_MAX:
+                break
+            # 대사(「…」)가 나오면 거기서 앞머리 블록은 끝이다. 튜토리얼처럼 대사가
+            # 일찍 시작하는 시나리오에서 진짜 대사까지 못박아 잘리는 걸 막는다.
+            if _DIALOGUE_QUOTE in data[record.start:record.end]:
+                break
+            out.add(record.start)
+    return out
 
 
 def parse_scenarios(data: bytes) -> tuple[Scenario, ...]:
@@ -238,13 +291,14 @@ def relocate_sce(source: bytes, replacements: dict[int, bytes]) -> bytes:
             operand_rel = reference.operand_offset - scenario.block_start
             target_rel = new_record_rel[reference.target]
             displacement = target_rel - operand_rel
-            if not 0 <= displacement <= 0xFFFF:
+            # 변위는 부호 있는 16비트다 (엔진이 sll 16 / sra 16 으로 확장한다).
+            if not -0x8000 <= displacement <= 0x7FFF:
                 raise ValueError(
                     f"scenario {scenario.index} text reference at "
-                    f"{reference.operand_offset:#x} exceeds u16 after relocation: "
+                    f"{reference.operand_offset:#x} exceeds s16 after relocation: "
                     f"{displacement:#x}"
                 )
-            struct.pack_into("<H", script, operand_rel, displacement)
+            struct.pack_into("<h", script, operand_rel, displacement)
 
         output.extend(script)
         output.extend(new_pool)

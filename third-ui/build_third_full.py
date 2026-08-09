@@ -22,7 +22,7 @@ for _sub in ("tools", "third-ui", "ex-ui", "tr-ui", "audit", "menu-align", "seco
     if _os.path.isdir(_p) and _p not in _sys.path:
         _sys.path.append(_p)
 # ------------------------------------------------------------------
-import json, struct, sys, re, shutil, hashlib
+import json, os, struct, sys, re, shutil, hashlib
 from pathlib import Path
 ROOT = _P.WORK
 SP = str(_P.BUILD)
@@ -32,6 +32,10 @@ import rebuild_second_sce as R
 R.EXPECTED_POINTER_COUNT = 142; R.EXPECTED_SCENARIO_COUNT = 71
 from rebuild_second_sce import rebuild_second_sce
 from analyze_second_message_archives import rebuild_bmess_repack, rebuild_dead
+# 작전목적(승리/패배조건) 블록을 레트일 배치로 못박는다 — **제3차만** 필요하다.
+# 제3차 작전목적 화면은 이 레코드들이 원문 자리에 없으면 엉뚱한 대사를 물어 온다
+# (2026-08-09 제보: 승리조건 빈칸, 패배조건에 대사). 제2차·EX 는 해당 없음.
+os.environ["SRWCB_PIN_OBJECTIVE"] = "1"
 from build_second_expanded_patch import (validate_translation_inputs, make_replacements,
                                           build_dynamic_font, replace_unique_equal_sized_blob,
                                           parse_message_record)
@@ -106,6 +110,70 @@ for _sc in R.parse_scenarios(src_sce):
             sce_r[_r.start] = _new; _left += 1
 print(f"leftover condition records phrase-subbed: {_left}")
 import fix_sce_event_refs as _FX
+# 진단 전용(기본 꺼짐): 레코드를 원문과 똑같은 바이트 길이로 맞춘다.
+#
+# 한동안 이게 제3차 대사 꼬임의 해법이었지만, 진짜 원인은 따로 있었다:
+# 대사 포인터 명령에 `B6 00 <변위16>` 형태가 있는데(피연산자가 옵코드+2)
+# 재조준기가 `B1/B3/B4 <변위16>`(+1)만 알고 있어서 221곳을 놓쳤다. 그 대사들만
+# 원문 자리에 남아, 레코드를 옮긴 만큼 밀려 나왔다. → 2026-08-09 수정.
+# 자세한 근거는 tools/analyze_sce_relocation.iter_pointer_sites 주석 참조.
+#
+# 이 경로를 켜면 번역 꼬리가 잘린다(제3차 3,475개 34,699B). 비교용으로만 남긴다.
+if os.environ.get("SRWCB_EXACT_LEN", "") not in ("", "0"):
+    from second_translation_codec import fit_exact_length
+    from analyze_sce_relocation import parse_scenarios as _PS
+    _want = {}
+    for _s in _PS(bytes(src_sce)):
+        for _r in _s.records:
+            _want[_r.start] = _r.end - _r.start
+    from build_second_expanded_patch import _EXACT_CUTS
+    if _EXACT_CUTS:
+        import json as _j
+        _j.dump([{"id": i, "off": o, "budget": w, "over": n, "ko": k}
+                 for i, o, w, n, k in sorted(_EXACT_CUTS, key=lambda z: -z[3])],
+                open(f"{SP}/third_ledger_cuts.json", "w", encoding="utf-8"),
+                ensure_ascii=False, indent=1)
+        print(f"   원장 대사 절단: {len(_EXACT_CUTS)}개 "
+              f"(총 {sum(z[3] for z in _EXACT_CUTS)}B) -> third_ledger_cuts.json")
+    _pad = _cut = 0; _lost = 0; _bad = []; _pre = {}
+    for _off in list(sce_r):
+        _w = _want.get(_off)
+        if not _w or len(sce_r[_off]) == _w:
+            continue
+        if len(sce_r[_off]) > _w:
+            _cut += 1; _lost += len(sce_r[_off]) - _w
+            _bad.append((_off, len(sce_r[_off]) - _w)); _pre[_off] = sce_r[_off]
+        else:
+            _pad += 1
+        sce_r[_off] = fit_exact_length(sce_r[_off], _w)
+    print(f"정확 길이 보정: 공백채움 {_pad} / 잘림 {_cut} (총 {_lost}B)")
+    if _bad:
+        _bad.sort(key=lambda z: -z[1])
+        print("   가장 많이 넘는 것:", [(hex(o), n) for o, n in _bad[:10]])
+        import json as _json
+        def _dec(_b):
+            _s = ""; _i = 0
+            while _i < len(_b):
+                _x = _b[_i]
+                if _x == 0xFF: break
+                if _x < 0xEB: _s += _idx2ch.get(_x, "?"); _i += 1
+                elif _x < 0xF6:
+                    _s += _idx2ch.get(((_x - 0xEB) << 8) | _b[_i + 1], "?"); _i += 2
+                else:
+                    _s += {0xF6: "⏎", 0xF7: "▶"}.get(_x, f"<{_x:02x}>")
+                    _i += 1 + {0xF8: 1, 0xF9: 1, 0xFA: 0, 0xFB: 2, 0xFC: 2, 0xFD: 2, 0xFE: 1}.get(_x, 0)
+            return _s
+        _json.dump([{"off": o, "over": n, "budget": _want[o],
+                     "ko": _dec(_pre[o]), "jp": _dec(bytes(src_sce[o:o + _want[o]]))}
+                    for o, n in _bad],
+                   open(f"{SP}/third_overbudget.json", "w", encoding="utf-8"), indent=1)
+        print(f"   [주의] 원문 예산을 넘어 잘린 대사 {_cut}개 (총 {_lost}B) — "
+              f"번역을 줄여야 합니다: {SP}/third_overbudget.json")
+        if os.environ.get("SRWCB_STRICT_LEN"):
+            raise SystemExit("SRWCB_STRICT_LEN: 잘림이 남아 빌드를 멈춥니다")
+
+from second_translation_codec import pin_objective_block as _PIN
+_PIN(src_sce, sce_r, label=" 제3차")
 sce_r, out_sce = _FX.harden_against_ff_operands(
     src_sce, sce_r,
     lambda s, r: rebuild_second_sce(s, r, strict_source=False))
