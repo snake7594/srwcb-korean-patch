@@ -210,7 +210,7 @@ def _bad_operand_targets(buf, scn):
     return out
 
 
-def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose=True):
+def harden_against_ff_operands(src, replacements, rebuild, *, rounds=400, verbose=True):
     """레코드 경계가 레트일과 똑같이 나오는 배치가 될 때까지 다시 빌드한다.
 
     작전목적 화면은 조건문을 **레코드 순번**으로 집어 온다. 그런데 B1/B3/B4 의
@@ -293,7 +293,15 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
             for j in range(i, -1, -1):
                 if records[j].start in safe and (not want_room or _has_room(records[j])):
                     return records[j]
-        return None          # 안 풀리는 시나리오는 더 앞 레코드를 늘려 본다
+        # 앞쪽이 전부 스크립트 레코드인 경우가 있다(EX 시나리오 8/23/52/55: 레코드 0
+        # 이 스크립트인데 그 안의 포인터 변위에 0xFF 가 들어 레코드가 거기서 끊긴다).
+        # 그럴 땐 **뒤쪽** 번역 레코드를 늘려도 된다 — 뒤를 밀면 그 포인터가 겨누는
+        # 타깃이 움직여서 변위가 바뀌고, 경계가 원문과 같아질 수 있다.
+        for want_room in (True, False):
+            for j in range(i + 1, len(records)):
+                if records[j].start in safe and (not want_room or _has_room(records[j])):
+                    return records[j]
+        return None
     for _ in range(rounds):
         out, _meta = rebuild(src, repl)
         fixed, _, _ = retarget(out, src, apply=True, verbose=False)
@@ -313,7 +321,12 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
                 if tgt in starts:
                     i = starts.index(tgt)
                     if i:
-                        grow.append(a.records[i - 1])
+                        # 바로 앞 레코드에 여유가 없으면 더 앞에서 여유 있는 걸 고른다.
+                        # 여유 없는 레코드를 늘리면 그 줄이 상자를 넘어 깨진다.
+                        rec = a.records[i - 1]
+                        if not _has_room(rec):
+                            rec = pick(a.records, i - 1) or rec
+                        grow.append(rec)
                         picked = True
             if picked:
                 continue
@@ -335,12 +348,33 @@ def harden_against_ff_operands(src, replacements, rebuild, *, rounds=60, verbose
                 note = f", 손댈 수 없어 남긴 시나리오 {sorted(unsafe)}" if unsafe else ""
                 print(f"  레코드 경계 안정화: 앞 레코드 늘림 {added}개{note}")
             return repl, out
+        grew = False
         for rec in grow:
             cur = repl.get(rec.start) or bytes(src[rec.start:rec.end])
-            pad = _pad_byte(cur, rec.start not in objective) or bytes(1)
+            pad = _pad_byte(cur, rec.start not in objective)
+            if pad is None:
+                # 여유가 없는 레코드다. 예전엔 `or bytes(1)` 로 그냥 공백을 붙였는데
+                # 그러면 그 줄이 상자를 한 칸 넘어 화면에서 글자가 잘린다
+                # (EX 0xA73C2 에서 적발). 손대지 않고 넘어간다.
+                continue
             repl[rec.start] = cur[:-1] + pad + cur[-1:]
             added += 1
-    raise SystemExit("레코드 경계를 레트일과 맞추지 못했습니다")
+            grew = True
+        if not grew:
+            # 늘릴 수 있는 레코드가 하나도 없다. 화면을 깨뜨리면서까지 맞추지는
+            # 않는다 — 경계가 어긋난 시나리오는 작전목적 조건문 표시만 어긋난다.
+            for a, b, c in zip(sj, sk, pre):
+                if len(a.records) != len(b.records):
+                    unsafe.add(a.index)
+            stuck.clear()
+            if verbose:
+                print(f"  레코드 경계 안정화: 앞 레코드 늘림 {added}개, "
+                      f"손댈 수 없어 남긴 시나리오 {sorted(unsafe)}")
+            return repl, out
+    if verbose:
+        print(f"  레코드 경계 안정화: {rounds}회 안에 다 맞추지 못했습니다 "
+              f"(늘림 {added}개, 남은 시나리오 {sorted(unsafe)})")
+    return repl, out
 
 
 def nudge_ff_operands(ko_bytes, jp_bytes, *, rounds=8, verbose=True):

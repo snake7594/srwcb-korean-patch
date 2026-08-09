@@ -47,6 +47,9 @@ MAX_LINE_CELLS = 20
 MAX_LINE_ADVANCE = 18
 # 대사창 상자의 실제 폭(칸). 시나리오 대사는 이 값으로 접는다.
 MAX_SCENE_ADVANCE = 32
+# 축약 사다리: 0=그대로, 11~19=띄어쓰기를 10~90%만 제거(읽기 좋게 조금씩),
+# 2=전부 제거, 3=말줄임표 축약, 4=한국어 축약, 5=화자 이름 생략(최후수단)
+SQUEEZE_LADDER = (0, 11, 13, 15, 17, 19, 2, 3, 4, 5)
 MAX_PAGE_LINES = 3
 # 어떤 낱말도 들어가는 넓이 (마지막 수단)
 SAFE_FALLBACK_ADVANCE = 32
@@ -381,9 +384,12 @@ def fit_exact_length(encoded: bytes, want: int) -> bytes:
     out = bytearray(body[:keep])
     need = (want - 1) - len(out)
     if need > 0:
-        # 채움 바이트(0x00)도 **글리프라서 폭을 먹는다.** 그냥 붙이면 마지막 줄이
-        # 상자(32칸)를 넘어 화면이 깨진다. 그래서 줄이 찰 때마다 F6(줄바꿈)을
-        # 넣어 다음 줄로 넘긴다 — 빈 줄이라 화면에는 안 보인다.
+        # 채움 바이트(0x00)도 **글리프라서 폭을 먹는다.** 그냥 뒤에 붙이면 마지막
+        # 줄이 상자(32칸)를 넘어 화면이 깨진다. 그래서
+        #   1) 줄바꿈(F6/F7) 자리마다 그 줄의 남은 폭만큼 나눠 넣고,
+        #   2) 그래도 남으면 쪽에 줄 여유가 있을 때 빈 줄(F6)을 만들어 거기 넣는다.
+        out = bytearray(_pad_into_slack(bytes(out), need))
+        need = (want - 1) - len(out)
         adv, ln = _tail_line_state(out)
         while need > 0:
             if adv >= MAX_SCENE_ADVANCE and ln < MAX_PAGE_LINES:
@@ -391,6 +397,50 @@ def fit_exact_length(encoded: bytes, want: int) -> bytes:
                 continue
             out.append(0x00); need -= 1; adv += 1
     out.append(0xFF)
+    return bytes(out)
+
+
+def _pad_into_slack(buf: bytes, need: int) -> bytes:
+    """줄마다 남은 폭에 채움 바이트(0x00)를 나눠 넣는다.
+
+    마지막 줄이 이미 꽉 찬 레코드를 뒤에서 채우면 상자를 넘는다. 줄 끝(F6/F7
+    직전)마다 그 줄이 상자 폭까지 남긴 만큼만 넣으면 폭이 안 늘어난다.
+    """
+    if need <= 0:
+        return buf
+    # 줄 끝 위치와 그 줄의 advance 를 모은다
+    ends = []
+    adv = phase = 0
+    i = 0
+    while i < len(buf):
+        x = buf[i]
+        if x == 0xFF:
+            break
+        if x < 0xEB:
+            idx, i = x, i + 1
+        elif x < 0xF6:
+            idx, i = ((x - 0xEB) << 8) | buf[i + 1], i + 2
+        else:
+            if x in (0xF6, 0xF7):
+                ends.append((i, adv))
+                adv = phase = 0
+            i += 1 + CONTROL_ARGUMENT_BYTES.get(x, 0)
+            continue
+        if idx < 0x101:
+            adv += 1
+        else:
+            adv += 1 + phase
+            phase ^= 1
+    ends.append((len(buf), adv))            # 마지막 줄
+    out = bytearray(buf)
+    for pos, a in sorted(ends, key=lambda z: -(MAX_SCENE_ADVANCE - z[1])):
+        if need <= 0:
+            break
+        room = min(need, max(0, MAX_SCENE_ADVANCE - a))
+        if room:
+            out[pos:pos] = bytes(room)
+            need -= room
+            ends = [(q + room if q > pos else q, b) for q, b in ends]
     return bytes(out)
 
 
@@ -513,12 +563,20 @@ def assemble_translated_record(
     adv, lines, page_break = (geometry or (MAX_LINE_ADVANCE, MAX_PAGE_LINES, True))
     if page_break:
         # 원문이 쪽을 나눈 레코드 — 우리도 나눠도 된다.
-        for squeeze in (0, 1, 2, 3, 4, 5):
+        narrowest = None
+        for squeeze in SQUEEZE_LADDER:
             enc, man = _assemble(translation_parts, ko_parts, glyph_map,
                                  adv, lines, True, squeeze, strict=False)
             widest = max((a for pg in man["page_advances"] for a in pg), default=0)
             if widest <= adv:
                 return enc, man
+            if narrowest is None or widest < narrowest[0]:
+                narrowest = (widest, enc, man)
+        # 어느 단계로도 상자 폭에 못 넣었다 — 낱말 하나가 한 줄보다 긴 경우다.
+        # 예전엔 축약 1단계로 되돌렸는데 그게 가장 넓은 후보라 오히려 더 넘쳤다.
+        # 가장 좁게 나온 후보를 쓴다.
+        if narrowest is not None:
+            return narrowest[1], narrowest[2]
         return _assemble(translation_parts, ko_parts, glyph_map,
                          max(adv, SAFE_FALLBACK_ADVANCE), lines, True, 1)
 
@@ -527,7 +585,7 @@ def assemble_translated_record(
     # 상자(기본 32x3 = 96칸) 안에 넣는다. 안 되면 띄어쓰기를 지운다.
     first = None
     best = None                     # 상자에는 들어가는 것 중 가장 짧은 것
-    for squeeze in (0, 1, 2, 3, 4, 5):
+    for squeeze in SQUEEZE_LADDER:
         enc, man = _assemble(translation_parts, ko_parts, glyph_map,
                              adv, lines, False, squeeze, strict=False)
         widest = max((a for pg in man["page_advances"] for a in pg), default=0)
@@ -568,12 +626,42 @@ CONTRACTIONS = [
 ]
 
 
+def _drop_spaces(text: str, ratio: float) -> str:
+    """띄어쓰기를 `ratio` 비율만큼만 지운다 (0.1 = 10%).
+
+    전부 지우면 읽기가 나빠지므로, 한 칸이 모자랄 때는 조금만 지운다.
+    지우는 우선순위: 구두점 바로 뒤 → 앞뒤 토막이 짧은 자리 → 나머지.
+    """
+    pos = [i for i, c in enumerate(text) if c in " 　"]
+    if not pos:
+        return text
+    n = max(1, min(len(pos), round(len(pos) * ratio)))
+
+    def cost(i):
+        prev = text[i - 1] if i else ""
+        c = 0
+        if prev in "!?.,、。」』…‥":
+            c -= 10                      # 구두점 뒤 공백은 없어도 잘 읽힌다
+        left = i - (text.rfind(" ", 0, i) + 1)
+        nxt = text.find(" ", i + 1)
+        right = (nxt if nxt >= 0 else len(text)) - i
+        return c + min(left, right)
+
+    drop = set(sorted(pos, key=cost)[:n])
+    return "".join(c for i, c in enumerate(text) if i not in drop)
+
+
 def _squeeze(text: str, level: int) -> str:
     """상자에 안 들어갈 때 단계별로 줄인다. 뜻은 절대 건드리지 않는다."""
     if level == 0:
         return text
     if level == 1:                      # 조사 앞뒤가 아닌 곳부터: 두 칸 이상만
         return re.sub(r"  +", " ", text)
+    if 10 <= level < 20:
+        # 10~19단계: **띄어쓰기를 필요한 만큼만** 지운다. 한 칸이 모자라서 통째로
+        # 붙여 쓰던 것을 막는다(EX 대사 295개가 여기 해당했다). 지우는 자리는
+        # 눈에 덜 띄는 곳부터 고른다 — 구두점 옆 > 짧은 토막 사이 > 나머지.
+        return _drop_spaces(text, (level - 9) / 10.0)
     if level == 2:
         # 전각 공백(U+3000)도 같이 지운다. 정규화되면 공백이 되어 줄바꿈 자리를
         # 만드는데, 상자가 빠듯할 때는 그 한 칸 때문에 줄이 하나 더 생긴다.

@@ -59,7 +59,8 @@ def _load_gap_translations():
 
 
 def build_ex_supplement(glyph_map, src_sce, idx2ch):
-    from second_translation_codec import normalise_for_font, LayoutState, record_geometry
+    from second_translation_codec import (normalise_for_font, LayoutState, record_geometry,
+                                      SQUEEZE_LADDER, _squeeze)
     from sce_gap_supplement import make_encoder, _tokens as _tok, _rec_end
     enc_ko = make_encoder(glyph_map, idx2ch)
     tr = _load_gap_translations()
@@ -84,17 +85,20 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
     # 앞에 스크립트 바이트가 있는 레코드는 평문 인코딩이라 자동 줄바꿈이 없다.
     # 이들 중 선택지·챕터 메뉴는 창 폭이 레트일 텍스트 기준으로 잡히므로
     # 줄마다 레트일 advance 이하로 줄여야 한다(넘치면 글자가 겹쳐 깨진다).
+    # 선택지·챕터 메뉴는 창 폭이 레트일 텍스트 기준이라 줄마다 그 안에 들어와야
+    # 한다. 아래 값은 **레트일 폭에 맞춰 다시 쓴 것**이고, 예전 '폭 18' 시절의
+    # 과한 축약은 걷어냈다(대사창은 폭 32 다 — 2026-08-09).
     KO_OVERRIDE = {
-        # 선택지: 폭 18 안에 들어와야 겹치지 않는다 (17 / 8)
+        # 선택지 (레트일 폭 24 / 8)
         "マサキ「ほう,まだそんな口がきけるのか‥‥」<f6>無言ではり倒す":
-            "마사키「입이 살았군‥‥」<f6>말없이 강타",
-        # 챕터 선택 메뉴: 12 / 11 / 12
+            "마사키「호오, 아직 그런 말이 나오나‥‥」<f6>말없이 후려친다",
+        # 챕터 선택 메뉴 (레트일 폭 12 / 11 / 12)
         "マサキの章(やさしい)<f6>リュ-ネの章(ふつう)<f6>シュウの章(むずかしい)":
             "마사키편(쉬움)<f6>류네편(보통)<f6>슈우편(어려움)",
-        # 선택지: 얀롱(‥‥그렇군)(13) / (크‥‥쓸데없는 참견이다)(18)
+        # 선택지 (레트일 폭 13 / 18)
         "ヤンロン(‥‥そうだな)<f6>ヤンロン(ぐ‥‥よけいなお世話だ)":
             "얀롱(‥‥그렇군)<f6>얀롱(큭‥‥쓸데없는 참견)",
-        # 튜토리얼 성공 메시지(10)
+        # 튜토리얼 성공 메시지 (레트일 폭 10)
         "成功!<f6>つぎいってみよう!!": "성공!<f6>다음 가자!!",
     }
     from analyze_sce_relocation import objective_block_records as _OBJ
@@ -174,7 +178,7 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             _adv = max(_w, 32)
             _lines = _l if off in _objective else max(_l, 3)
 
-            def _lay(drop_breaks):
+            def _lay(drop_breaks, squeeze=0):
                 st = LayoutState(glyph_map, max_advance=_adv, max_lines=_lines,
                                  allow_page_break=_pb, strict_width=False)
                 for s in segs:
@@ -188,13 +192,24 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
                             st.pending_spaces = 0
                             st._new_line_or_page()
                     else:
-                        st.emit_text(normalise_for_font(s)[0])
+                        st.emit_text(normalise_for_font(_squeeze(s, squeeze))[0])
                 return st.finish()
 
-            # 번역에 박아 둔 <f6> 로 줄이 넘치면, 그 줄바꿈은 버리고 다시 흘린다
-            enc, _m = _lay(False)
-            if max(len(pg) for pg in _m["pages"]) > _lines:
-                enc, _m = _lay(True)
+            # 상자(_adv x _lines)에 들어갈 때까지 축약 사다리를 올라간다.
+            # 예전엔 축약 없이 <f6> 만 버려 봐서, 안 들어가면 그대로 넘쳤다.
+            enc = _m = None
+            for _sq in SQUEEZE_LADDER:
+                for _drop in (False, True):
+                    e, m = _lay(_drop, _sq)
+                    if enc is None:
+                        enc, _m = e, m
+                    wide = max((a for pg in m["page_advances"] for a in pg), default=0)
+                    if wide <= _adv and max(len(pg) for pg in m["pages"]) <= _lines:
+                        enc, _m = e, m
+                        break
+                else:
+                    continue
+                break
             sup[off] = bytes(enc)
             stat["layout"] += 1
     return sup, stat

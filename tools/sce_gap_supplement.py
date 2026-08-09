@@ -93,7 +93,8 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
     # Same path as the main pipeline: auto-wrap at MAX_LINE_ADVANCE=18 (the renderer's
     # buggy auto-wrap must never fire), <=3 lines/page with automatic F7 paging.
     # '<f6>' = explicit line break (choice rows / intended splits), '<f7>' = page break.
-    from second_translation_codec import LayoutState, record_geometry
+    from second_translation_codec import (LayoutState, record_geometry,
+                                          SQUEEZE_LADDER as _LADDER)
     from second_translation_codec import _squeeze
 
     def _lay(segs, adv, lines, pb, drop_breaks, squeeze=0):
@@ -135,7 +136,7 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
         _cap = (len(_raw) if off in _strict
                 and _oss.environ.get("SRWCB_PIN_OBJECTIVE") == "1" else None)
         enc = man = None
-        for _sq in (0, 1, 2, 3, 4, 5):
+        for _sq in _LADDER:
             for _drop in (False, True):
                 e, m = _lay(segs, _adv, _lines, _pb, _drop, _sq)
                 if enc is None:

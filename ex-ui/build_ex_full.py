@@ -99,7 +99,13 @@ _dup = [k for k in _sup if k in sce_r]
 assert not _dup, f"보충이 원장 레코드와 충돌: {[hex(x) for x in _dup[:5]]}"
 sce_r.update(_sup)
 print(f"E_SCE 보충: {_rep}  (총 {len(_sup)} 레코드)")
+# 작전목적(승리/패배조건) 블록을 레트일 배치로 못박는다. 제3차에서 이게 없으면
+# 승리조건이 비고 패배조건에 엉뚱한 대사가 들어왔다. EX 는 같은 계열 엔진이라
+# 같은 보호를 건다 — 비용은 조건문 몇 개가 조금 짧아지는 정도다.
+_os.environ["SRWCB_PIN_OBJECTIVE"] = "1"
+from second_translation_codec import pin_objective_block as _PIN
 import fix_sce_event_refs as _FX
+_PIN(src_sce, sce_r, label=" EX")
 sce_r, out_sce = _FX.harden_against_ff_operands(
     src_sce, sce_r,
     lambda s, r: rebuild_second_sce(s, r, strict_source=False))
