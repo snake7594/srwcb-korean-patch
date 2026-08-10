@@ -29,11 +29,19 @@ sys.path.insert(0, SP)
 from srw_lz_fast import decompress
 from srw_lz_enc import compress
 import menu_strips as M
+import title_menu_strips as TM
+import prologue_strips as PS
 
 SRC = str(_P.EXTRACTED / "C_SMAP.BIN")
 OUT = f"{SP}/gfx/C_SMAP_ko.BIN"
 os.makedirs(f"{SP}/gfx", exist_ok=True)
 TARGET = 21
+# 제2차 타이틀 메뉴(시작/로드/이어하기). 표에 길이 0 짜리 빈 항목이 섞여 있어
+# 번호가 한 칸씩 밀린다 — 25 가 파일 0xCD394 짜리 멤버다.
+TITLE_TARGET = 25
+# 오프닝 프롤로그: 멤버 34 는 스트림이 두 개다. 두 번째(파일 0x148D5D)가 글판이다.
+PROLOGUE_MEMBER = 34
+PROLOGUE_AT = 0x148D5D
 
 
 def members(d):
@@ -68,6 +76,19 @@ def tims(a):
                             i = p + bl; continue
         i += 4
     return out
+
+
+def _palette_at(buf, timlist, px_off):
+    """픽셀 오프셋이 속한 TIM 의 CLUT 를 RGB 리스트로."""
+    import struct as _s
+    for (off, bpp, w, h, x, y, p0, p1) in timlist:
+        if p0 == px_off:
+            q = off + 8
+            csz, cx, cy, cw, ch = _s.unpack_from("<IHHHH", buf, q)
+            cl = q + 12
+            return [(((v & 31) << 3), (((v >> 5) & 31) << 3), (((v >> 10) & 31) << 3))
+                    for v in (_s.unpack_from("<H", buf, cl + 2 * i)[0] for i in range(cw))]
+    raise SystemExit(f"CLUT 을 못 찾음: {px_off:#x}")
 
 
 def main():
@@ -112,6 +133,53 @@ def main():
 
     out = bytearray(d)
     out[s:s + len(new)] = new          # 남는 꼬리는 원본 바이트 유지
+
+    # ── 멤버 24: 제2차 타이틀 화면 메뉴 3항목 x 3상태 ────────────────────
+    ts, te = ms[TITLE_TARGET]
+    traw, tused = decompress(d[ts:te], 0)
+    assert tused == te - ts, "멤버24 소비 길이 불일치"
+    tbody = bytearray(traw)
+    tbefore = tims(traw)
+    for name, off, stride, w, h, ko in TM.STRIPS:
+        src = TM.read_strip(tbody, off, stride, w, h)
+        bg = TM.background(src)
+        pal = _palette_at(tbody, tbefore, off)
+        TM.write_strip(tbody, off, stride, TM.build(ko, src, bg, pal))
+        print(f"  {name} @{off:#x} {w}x{h} <- '{ko}'")
+    assert tims(bytes(tbody)) == tbefore, "멤버24 TIM 목록이 바뀜"
+    tranges = [(o, o + st * h) for _, o, st, _w, h, _k in TM.STRIPS]
+    tstray = [i for i in range(len(traw)) if traw[i] != tbody[i]
+              and not any(lo <= i < hi for lo, hi in tranges)]
+    assert not tstray, f"멤버24 스트립 밖 변경 {len(tstray)}바이트"
+    tnew = compress(bytes(tbody))
+    troom = te - ts
+    assert len(tnew) <= troom, f"멤버24 재압축 {len(tnew)} > {troom} — 자리 부족"
+    chk2, u4 = decompress(tnew, 0)
+    assert chk2 == bytes(tbody) and u4 == len(tnew), "멤버24 재압축 왕복 실패"
+    print(f"  멤버24 재압축 {troom:,} -> {len(tnew):,} (여유 {troom-len(tnew):,}B)")
+    out[ts:ts + len(tnew)] = tnew
+
+    # ── 멤버 34 두 번째 스트림: 오프닝 프롤로그 글판 8장 ──────────────────
+    ps, pe = ms[PROLOGUE_MEMBER]
+    praw, pused = decompress(d[PROLOGUE_AT:pe], 0)
+    proom = pused                      # 이 스트림이 원래 쓰던 바이트 수
+    pbody = bytearray(praw)
+    pbefore = tims(praw)
+    font = PS.global_font(256 - PS.MARGIN * 2, 16 - 3)[0]
+    for off, stride, w, h, lines in PS.TEXT:
+        PS.write_block(pbody, off, stride, PS.build(lines, w, h, font))
+    assert tims(bytes(pbody)) == pbefore, "프롤로그 TIM 목록이 바뀜"
+    pranges = [(o, o + st * h) for o, st, _w, h, _l in PS.TEXT]
+    pstray = [i for i in range(len(praw)) if praw[i] != pbody[i]
+              and not any(lo <= i < hi for lo, hi in pranges)]
+    assert not pstray, f"프롤로그 글판 밖 변경 {len(pstray)}바이트"
+    pnew = compress(bytes(pbody))
+    assert len(pnew) <= proom, f"프롤로그 재압축 {len(pnew)} > {proom} — 자리 부족"
+    chk3, u6 = decompress(pnew, 0)
+    assert chk3 == bytes(pbody) and u6 == len(pnew), "프롤로그 재압축 왕복 실패"
+    print(f"  프롤로그 재압축 {proom:,} -> {len(pnew):,} (여유 {proom-len(pnew):,}B), 글판 8장")
+    out[PROLOGUE_AT:PROLOGUE_AT + len(pnew)] = pnew
+
     outb = bytes(out)
     assert len(outb) == len(d), "파일 크기 변동"
     os.makedirs(f"{SP}/gfx", exist_ok=True)
@@ -121,11 +189,17 @@ def main():
     n2, ms2 = members(outb)
     assert n2 == n and ms2 == ms, "표가 바뀜"
     for i, (a, b) in enumerate(ms):
-        if i == TARGET: continue
+        if i in (TARGET, TITLE_TARGET, PROLOGUE_MEMBER): continue
         assert outb[a:b] == d[a:b], f"멤버 {i} 변경됨"
     # 검증 ② 대상 멤버가 패치된 픽셀로 해제되고, 소비 길이가 원본 범위 안
     o2, u3 = decompress(outb[s:e], 0)
     assert o2 == bytes(body) and u3 == len(new) <= room
+    o4, u5 = decompress(outb[ts:te], 0)
+    assert o4 == bytes(tbody) and u5 == len(tnew) <= troom
+    o6, u7 = decompress(outb[PROLOGUE_AT:pe], 0)
+    assert o6 == bytes(pbody) and u7 == len(pnew) <= proom
+    # 멤버34 의 **첫 번째** 스트림은 손대지 않았는지
+    assert outb[ps:PROLOGUE_AT] == d[ps:PROLOGUE_AT], "멤버34 첫 스트림이 변경됨"
     print(f"  검증 통과: 파일 {len(outb):,}B (원본과 동일), 멤버 {len(ms)}개 위치 불변")
     print(f"WROTE {OUT}")
 
