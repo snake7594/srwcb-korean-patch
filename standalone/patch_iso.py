@@ -22,9 +22,14 @@ CBR=str(config.CB_REBUILT)+"/"
 EX=str(config.SRW2_EXTRACTED)+"/"
 
 # (iso_name, retail_source, patched_file)
+# 시나리오 예고 타이틀 카드 한글 그래픽. EFFECT.BIN 은 네 디스크가 바이트까지
+# 같고 크기도 안 변해서 제자리 교체로 끝난다.
+EFFECT_SRC = str(_P.EXTRACTED / "EFFECT.BIN")
+EFFECT_KO = str(_P.BUILD / "gfx" / "EFFECT_ko.BIN")
 INPLACE=[("SLPS_024.06;1", EX+"SLPS_024.06", str(config.PATCHED_EXE)),
          # 타이틀 메뉴·오프닝 프롤로그 한글 그래픽. 크기가 같아 제자리 교체.
-         ("Z_SMAP.BIN;1", EX+"Z_SMAP.BIN", str(_P.BUILD/"gfx"/"Z_SMAP_ko.BIN"))]
+         ("Z_SMAP.BIN;1", EX+"Z_SMAP.BIN", str(_P.BUILD/"gfx"/"Z_SMAP_ko.BIN")),
+         ("EFFECT.BIN;1", EFFECT_SRC, EFFECT_KO)]
 RELOC=[(iso, EX+src, str(_P.final(pat, CBR+pat))) for iso,src,pat in config.RELOC_FILES]
 FREE_START=config.NULL_DA_FREE_START
 FREE_END=config.NULL_DA_FREE_END

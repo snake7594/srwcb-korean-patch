@@ -34,7 +34,12 @@ OUT_CUE = f"{OUT_DIR}/Super Robot Taisen EX (Korean).cue"
 PATCHED_EXE = f"{SRWEX}/extracted/SLPS_025.29.patched"
 RETAIL_EXE = f"{SRWEX}/extracted/SLPS_025.29"
 
-INPLACE = [("SLPS_025.29;1", RETAIL_EXE, PATCHED_EXE)]
+# 시나리오 예고 타이틀 카드 한글 그래픽. EFFECT.BIN 은 네 디스크가 바이트까지
+# 같고 크기도 안 변해서 제자리 교체로 끝난다.
+EFFECT_SRC = str(_P.EXTRACTED / "EFFECT.BIN")
+EFFECT_KO = str(_P.BUILD / "gfx" / "EFFECT_ko.BIN")
+INPLACE = [("SLPS_025.29;1", RETAIL_EXE, PATCHED_EXE),
+           ("EFFECT.BIN;1", EFFECT_SRC, EFFECT_KO)]
 RELOC = [("E_SCE.BIN;1", 777512, str(_P.final("EX/E_SCE.BIN", f"{EXB}/rebuilt/EX/E_SCE.BIN"))),
          ("BMESS4.BIN;1", 657036, str(_P.final("BMESS4.BIN", f"{EXB}/rebuilt/BMESS4.BIN"))),
          ("E_DEAD.BIN;1", 4828, str(_P.final("EX/E_DEAD.BIN", f"{EXB}/rebuilt/EX/E_DEAD.BIN")))]

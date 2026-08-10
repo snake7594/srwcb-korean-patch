@@ -119,8 +119,13 @@ def main() -> None:
         run("글리프 무결성", [str(REPO / "tr-ui" / "verify_tr_glyphs.py")])
         run("최종 이미지 검증", [str(REPO / "audit" / "verify_image.py"),
                           "--version", a.version])
+        run("예고 타이틀 카드 검증", [str(REPO / "audit" / "verify_eyecatch.py")])
     if want(9):
         # 별매 CD 를 가진 사람만. 먼저 setup_standalone.py 로 준비한다.
+        # 예고 타이틀 카드 그래픽은 네 디스크가 같은 파일을 쓴다 — 없으면 만든다.
+        if not (P.BUILD / "gfx" / "EFFECT_ko.BIN").exists():
+            run("예고 타이틀 카드 그래픽",
+                [str(REPO / "tools" / "graphics" / "build_effect_ko.py")])
         for key, steps in (
             ("srw2", [("제2차 단독판", REPO / "standalone" / "build_standalone.py")]),
             ("srw3", [("제3차 단독판 실행파일", REPO / "standalone3" / "port_exe3.py"),

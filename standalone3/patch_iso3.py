@@ -37,7 +37,12 @@ PATCHED_EXE=f"{SRW3}/extracted/SLPS_025.30.patched"
 RETAIL_EXE=f"{SRW3}/extracted/SLPS_025.30"
 
 # (iso_name, retail_size, patched_path)   -- retail_size = standalone dir old_size for the assert
-INPLACE=[("SLPS_025.30;1", RETAIL_EXE, PATCHED_EXE)]
+# 시나리오 예고 타이틀 카드 한글 그래픽. EFFECT.BIN 은 네 디스크가 바이트까지
+# 같고 크기도 안 변해서 제자리 교체로 끝난다.
+EFFECT_SRC = str(_P.EXTRACTED / "EFFECT.BIN")
+EFFECT_KO = str(_P.BUILD / "gfx" / "EFFECT_ko.BIN")
+INPLACE=[("SLPS_025.30;1", RETAIL_EXE, PATCHED_EXE),
+         ("EFFECT.BIN;1", EFFECT_SRC, EFFECT_KO)]
 RELOC=[("3_SCE.BIN;1", 684344, str(_P.final("THIRD/3_SCE.BIN", f"{CBR}/THIRD/3_SCE.BIN"))),
        ("BMESS3.BIN;1", 582354, str(_P.final("BMESS3.BIN", f"{CBR}/BMESS3.BIN"))),
        ("3_DEAD.BIN;1", 5754,   str(_P.final("THIRD/3_DEAD.BIN", f"{CBR}/THIRD/3_DEAD.BIN")))]
