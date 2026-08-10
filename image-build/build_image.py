@@ -197,6 +197,13 @@ def step_leftover(files):
     print(f"  잔여 미번역 UI {n}건 보충")
 
 
+def step_port_second(files):
+    """제2차에만 있던 번역을 나머지 실행파일로 이식(예고편 대사 풀 등)."""
+    import port_from_second as PS
+    n = PS.apply(files)
+    print(f"  제2차에서 이식 {n}건")
+
+
 def step_residual(files):
     """원문 바이트가 그대로 남아 뜻 모를 한글로 나오던 자리 제자리 교체."""
     import fix_residual_jp as FR
@@ -240,6 +247,7 @@ def main():
         print("  건너뜀")
     else:
         step_leftover(files)
+    step_port_second(files)
     step_residual(files)
     print("[7/8] 그래픽(게임 선택 화면 + 예고 타이틀 카드)")
     step_csmap(files)
