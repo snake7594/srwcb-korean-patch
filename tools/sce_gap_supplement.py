@@ -94,7 +94,8 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
     # buggy auto-wrap must never fire), <=3 lines/page with automatic F7 paging.
     # '<f6>' = explicit line break (choice rows / intended splits), '<f7>' = page break.
     from second_translation_codec import (LayoutState, record_geometry,
-                                          SQUEEZE_LADDER as _LADDER)
+                                          SQUEEZE_LADDER as _LADDER,
+                                          MAX_SCENE_ADVANCE)
     from second_translation_codec import _squeeze
 
     def _lay(segs, adv, lines, pb, drop_breaks, squeeze=0):
@@ -124,7 +125,7 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
         _w, _l = record_geometry(_raw)
         from build_second_expanded_patch import _has_page_break
         _pb = _has_page_break(_raw)
-        _adv = max(_w, 32)
+        _adv = max(_w, MAX_SCENE_ADVANCE)
         _lines = _l if off in _strict else max(_l, 3)
         # 번역 데이터에 박아 둔 <f6> 를 그대로 쓰면 줄이 넘칠 수 있다.
         # 넘치면 그 줄바꿈은 버리고 상자에 맞춰 다시 흘린다.

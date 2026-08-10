@@ -87,7 +87,7 @@ GAMES = [
 # 대사창 상자. 세 게임 전 시나리오의 참조 대사 레코드를 다 훑어 잰 값이다 —
 # 줄을 바꾼 지점은 16~32 에 몰려 있고 32 를 넘는 줄이 하나도 없다. 한 쪽은 3줄까지.
 # 긴 대사는 원문도 F7 로 쪽을 나눈다(쪽 나눔은 정상이다).
-SCE_BOX_ADVANCE = 32
+SCE_BOX_ADVANCE = 31   # 32칸을 꽉 채우면 게임에서 넘친다(v0.11.23)
 SCE_MAX_LINES = 3
 BATTLE_BOX_ADVANCE = 29
 
@@ -225,7 +225,7 @@ def check_wrap_width():
     from second_translation_codec import (LayoutState, load_safe_glyph_map,
                                           normalise_for_font)
     gm = load_safe_glyph_map()
-    st = LayoutState(gm, max_advance=32, max_lines=3, allow_page_break=False)
+    st = LayoutState(gm, max_advance=31, max_lines=3, allow_page_break=False)
     st.emit_text(normalise_for_font("가나다라마바사아자차카타파하거너더러머버서어저처")[0])
     _enc, man = st.finish()
     first = man["page_advances"][0][0]
@@ -281,6 +281,36 @@ def check_objective_block(name, ko, jp, tbl, out):
         out.append((f"{name} 작전목적", len(block), 0, bad, 0))
 
 
+def check_retail_leftovers(name, ko, jp, recs_ko, recs_jp, out):
+    """**레트일 바이트가 그대로 남은** 레코드를 잡는다.
+
+    폰트를 한글로 갈아 끼웠으므로 번역 안 된 레코드는 화면에서 일본어가 아니라
+    뜻 모를 한글로 나온다(제3차 분기 선택지 `早乙女研究所/光子力研究所` →
+    '건걷걸근귿글'). 한글맵으로 읽는 미번역 검사로는 절대 안 걸린다.
+    바이트가 원문과 같고 **원문맵으로 읽으면 일본어**면 미번역이다.
+    """
+    import re
+    JPRE = re.compile(r"[぀-ヿ一-鿿]")
+    jt = {i: ch for i, ch in A.JP.items() if ch}   # 레트일(일본어) 글리프표
+    try:
+        from analyze_sce_relocation import parse_scenarios  # noqa: F401
+    except Exception:
+        pass
+    bad = 0
+    for (s, e, *_r), (sj, ej) in zip(recs_ko, recs_jp):
+        if ko[s:e] != jp[sj:ej]:
+            continue
+        try:
+            txt = A.decode(jp, sj, ej, jt)
+        except Exception:
+            continue
+        letters = [c for c in txt if not c.isspace()]
+        if len(letters) >= 3 and len(JPRE.findall(txt)) / len(letters) >= 0.5:
+            bad += 1
+    if bad:
+        out.append((f"{name} 원문잔재", len(recs_ko), bad, 0, 0))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--version", default="v0.11.0")
@@ -301,6 +331,7 @@ def main():
         ko_recs, jp_recs = _paired(d, j, tbl)
         check_pages(f"{game} 대사", d, j, ko_recs, jp_recs, tbl, SCE_BOX_ADVANCE, rows)
         check_objective_block(game, d, j, tbl, rows)
+        check_retail_leftovers(f"{game} 대사", d, j, ko_recs, jp_recs, rows)
         d = A.read_iso(img, bmess)
         check(f"{game} 전투", d, A.bmess_records(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
         d = A.read_iso(img, dead)

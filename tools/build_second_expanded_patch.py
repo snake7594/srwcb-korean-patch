@@ -111,7 +111,7 @@ UI_PREVIEW_OVERLAY = _P.TRANSLATION / "second_ui_preview_overlay.json"
 UI_MAP_LABEL_OVERLAY = _P.TRANSLATION / "second_ui_map_labels_overlay.json"
 SCE_CONDITIONS_OVERLAY = _P.TRANSLATION / "second_sce_conditions_overlay.json"
 # 대사창 상자 (전 시나리오 참조 대사 실측: 줄 폭 <=32, 쪽당 줄수 <=3)
-MAX_SCENE_ADVANCE = 32
+MAX_SCENE_ADVANCE = 31
 from analyze_sce_relocation import parse_scenarios as _relocation_scenarios
 MAX_SCENE_LINES = 3
 BUILD_LABEL = "v0.8.7-full-menus"

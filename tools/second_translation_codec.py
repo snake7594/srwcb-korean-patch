@@ -45,14 +45,19 @@ MAX_LINE_CELLS = 20
 # glyph of the next box renders as garbage).  We therefore pre-break every line
 # at <= this width so the game never auto-wraps a dialogue record.
 MAX_LINE_ADVANCE = 18
-# 대사창 상자의 실제 폭(칸). 시나리오 대사는 이 값으로 접는다.
-MAX_SCENE_ADVANCE = 32
+# 대사창 상자에 실제로 들어가는 폭(칸).
+# 상자 자체는 32칸이지만 **32칸을 꽉 채우면 게임에서 반 칸이 넘친다**. 그러면
+# 렌더러가 자동으로 줄을 접는데, 그때 2바이트 글리프의 선두 바이트를 잃어
+# 화자 이름이 통째로 사라지고 문장 중간부터 나온다(2026-08-10 제보, 제3차 9화
+# '미치루「왔어 메카자우루스야!잭, 준비됐어?」' = 정확히 32칸).
+# 그래서 한 칸 덜 채운다.
+MAX_SCENE_ADVANCE = 31
 # 축약 사다리: 0=그대로, 11~19=띄어쓰기를 10~90%만 제거(읽기 좋게 조금씩),
 # 2=전부 제거, 3=말줄임표 축약, 4=한국어 축약, 5=화자 이름 생략(최후수단)
 SQUEEZE_LADDER = (0, 11, 13, 15, 17, 19, 2, 3, 4, 5)
 MAX_PAGE_LINES = 3
 # 어떤 낱말도 들어가는 넓이 (마지막 수단)
-SAFE_FALLBACK_ADVANCE = 32
+SAFE_FALLBACK_ADVANCE = 31
 # 제어코드가 뒤에 데리고 오는 인자 바이트 수
 CONTROL_ARGUMENT_BYTES = {0xF6: 0, 0xF7: 0, 0xF8: 1, 0xF9: 1, 0xFA: 0,
                           0xFB: 2, 0xFC: 2, 0xFD: 2, 0xFE: 1}

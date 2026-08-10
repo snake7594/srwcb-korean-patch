@@ -53,7 +53,7 @@ THIRD_ORDER = [
     ("甲児「さあて", ["甲児p2"]),
     ("竜馬「そろそろ", ["竜馬p2"]),
     ("豹馬「おっと", ["豹馬p2"]),
-    ("万丈「ごくろ", ["万丈p2"]),
+    ("万丈「ごくろ", ["万丈p2", "万丈p3"]),
 ]
 
 def enc_jp(s):
@@ -91,37 +91,50 @@ def rec_end(buf, start):
             p += 1 + CTRL.get(b, 0)
     raise ValueError("no FF terminator from 0x%x" % start)
 
-def inject(buf, game, verbose=True):
+def inject(buf, game, verbose=True, retail=None):
+    """종료 메시지를 넣는다.
+
+    `retail` 을 주면 **앵커와 레코드 경계를 원문에서 찾는다**. 중간 산출물이
+    이미 한 번 주입된 상태여도 번역을 고치면 그대로 다시 반영된다(예전에는
+    앵커(일본어)가 안 보이면 '이미 한글'로 건너뛰어, 고친 번역이 제3차에
+    영원히 안 들어갔다 — 2026-08-10).
+    """
     buf = bytearray(buf)
     order = SECOND_ORDER if game == "second" else THIRD_ORDER
     texts = KO[game]
     enc_ko = make_enc_ko(SECOND_EXTRAS if game == "second" else THIRD_EXTRAS)
     report = []
     written = 0
+    ref = bytearray(retail) if retail is not None else buf
     for anchor, conts in order:
         pat = enc_jp(anchor)
         hits = []
-        at = buf.find(pat)
+        at = ref.find(pat)
         while at >= 0:
             hits.append(at)
-            at = buf.find(pat, at + 1)
+            at = ref.find(pat, at + 1)
         if len(hits) != 1:
             report.append((anchor, "FOUND=%d" % len(hits), 0, 0, False))
             continue
         start = hits[0]
         bounds = []
         s = start
-        end = rec_end(buf, s)
+        end = rec_end(ref, s)
         bounds.append((s, end, texts[anchor]))
         for ck in conts:
             s = end
-            end = rec_end(buf, s)
+            end = rec_end(ref, s)
             bounds.append((s, end, texts[ck]))
         plans, ok_all = [], True
         for s, e, txt in bounds:
             data = enc_ko(txt)
             budget = e - s
             ok = len(data) <= budget
+            # 한국어가 짧아 남는 꼬리에 원문이 그대로 있으면, 렌더러가 종료자
+            # 다음으로 넘어가면서 그 일본어를 다음 쪽으로 보여 준다(2026-08-10
+            # 제보 #4). 빈칸으로 채워 레코드를 정확히 메운다.
+            if ok and len(data) < budget:
+                data = data[:-1] + bytes(budget - len(data)) + bytes((0xFF,))
             ok_all &= ok
             plans.append((s, e, data, budget, ok))
         for i, (s, e, data, budget, ok) in enumerate(plans):

@@ -60,7 +60,7 @@ def _load_gap_translations():
 
 def build_ex_supplement(glyph_map, src_sce, idx2ch):
     from second_translation_codec import (normalise_for_font, LayoutState, record_geometry,
-                                      SQUEEZE_LADDER, _squeeze)
+                                      SQUEEZE_LADDER, _squeeze, MAX_SCENE_ADVANCE)
     from sce_gap_supplement import make_encoder, _tokens as _tok, _rec_end
     enc_ko = make_encoder(glyph_map, idx2ch)
     tr = _load_gap_translations()
@@ -148,7 +148,7 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             # 이 경로는 번역문을 그대로 붙이기만 해서 자동 줄바꿈이 없다. 줄이 상자
             # (폭 32)를 넘으면 화면에서 잘리므로, 넘칠 때만 본문을 다시 배치한다.
             _w, _l = record_geometry(rec)
-            _cap = max(_w, 32)
+            _cap = max(_w, MAX_SCENE_ADVANCE)
             _lines_now = 1 + sum(1 for b in sup[off] if b in (0xF6, 0xF7))
             if any(a > _cap for a in _line_advs(sup[off])) or _lines_now > max(_l, 3):
                 from build_second_expanded_patch import _has_page_break as _HPB
@@ -165,7 +165,7 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
                 sup[off] = head + bytes(_enc)[:-1] + tail
                 stat["rewrapped"] = stat.get("rewrapped", 0) + 1
             for _i, (_r, _n) in enumerate(zip(_line_advs(rec), _line_advs(sup[off]))):
-                if _n > max(_r, 32): stat["wide"].append((off, f"line{_i}", _n, _r))
+                if _n > max(_r, MAX_SCENE_ADVANCE): stat["wide"].append((off, f"line{_i}", _n, _r))
         else:
             _w, _l = record_geometry(rec)
             # 원문 대사에는 F7(쪽 나눔)이 한 개도 없다. 3줄 안에 들어가면 F6 만
@@ -175,7 +175,7 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             _pb = _has_page_break(rec)
             # 작전목적(승리/패배조건) 블록은 원문 줄 수를 지켜야 한다 — 줄을 더
             # 넣으면 작전목적 창이 깨지고 게임이 멈춘다.
-            _adv = max(_w, 32)
+            _adv = max(_w, MAX_SCENE_ADVANCE)
             _lines = _l if off in _objective else max(_l, 3)
 
             def _lay(drop_breaks, squeeze=0):

@@ -99,7 +99,10 @@ def collect() -> dict:
 def step_quit(files):
     import inject_quit as Q
     for name, game in (("SECOND/SECOND.WAR", "second"), ("THIRD/THIRD.WAR", "third")):
-        out, rep = Q.inject(files[name], game, verbose=False)
+        # 앵커·경계는 **레트일**에서 찾는다. 중간 산출물이 이미 한 번 주입된
+        # 상태여도 번역을 고치면 항상 다시 반영된다.
+        retail = (_P.EXTRACTED / name).read_bytes()
+        out, rep = Q.inject(files[name], game, verbose=False, retail=retail)
         # 앵커는 일본어 원문이다. 주입기가 이미 한글 풀을 심어 둔 경우(제3차)에는
         # 하나도 안 잡히는데, 그건 실패가 아니라 '이미 됨' 이다.
         gone = [r for r in rep if str(r[1]).startswith("FOUND=")]
@@ -194,6 +197,13 @@ def step_leftover(files):
     print(f"  잔여 미번역 UI {n}건 보충")
 
 
+def step_residual(files):
+    """원문 바이트가 그대로 남아 뜻 모를 한글로 나오던 자리 제자리 교체."""
+    import fix_residual_jp as FR
+    n = FR.apply(files)
+    print(f"  원문 잔재 {n}곳 교체")
+
+
 def step_csmap(files):
     if not CSMAP.exists():
         print("  게임 선택 화면 그래픽 생성")
@@ -230,6 +240,7 @@ def main():
         print("  건너뜀")
     else:
         step_leftover(files)
+    step_residual(files)
     print("[7/8] 그래픽(게임 선택 화면 + 예고 타이틀 카드)")
     step_csmap(files)
 

@@ -14602,7 +14602,7 @@
      "source_raw_hex": "A8 11 C0 11 9B DF AF CF FF",
      "source_raw_sha256": "9a447bb0e8c7e5eb107f0d99ea4467ba7687f87749e5a3083fff0e633bcbb9df",
      "japanese": "ス-パ-ガンダム",
-     "korean": "슈퍼 건담",
+     "korean": "슈퍼건담",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14638,7 +14638,7 @@
      "source_raw_hex": "1C B6 92 C4 96 DF A4 11 FF",
      "source_raw_sha256": "98275e720913c72db43e6c416dedf7e4cdb5ce8e830915b4b3cb816976b3aad6",
      "japanese": "Gディフェンサ-",
-     "korean": "G 디펜서",
+     "korean": "G디펜서",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14656,7 +14656,7 @@
      "source_raw_hex": "2F 9B DF AF CF FF",
      "source_raw_sha256": "a49777e90f3729f81ab2406b05b97e6e873a63ad0bb3c0bf79c88277462635f9",
      "japanese": "Zガンダム",
-     "korean": "Z 건담",
+     "korean": "Z건담",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14692,7 +14692,7 @@
      "source_raw_hex": "2F 2F 9B DF AF CF FF",
      "source_raw_sha256": "8064155f4cff1e8bbdfac536f510c49414ab18a6f2f2c271d0ffadaab99a4a89",
      "japanese": "ZZガンダム",
-     "korean": "ZZ 건담",
+     "korean": "ZZ건담",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14710,7 +14710,7 @@
      "source_raw_hex": "1C 11 C4 98 11 B7 DB A8 FF",
      "source_raw_sha256": "bcc9bd304b384f5d66806d78fa00fa97da763f62cb56fe265450ba90e827be40",
      "japanese": "G-フォ-トレス",
-     "korean": "G 포트리스",
+     "korean": "G포트리스",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14764,7 +14764,7 @@
      "source_raw_hex": "23 29 11 31 91 DB B2 9E A8 FF",
      "source_raw_sha256": "47da651e52327c363bbbed2941f02251af53542b65d11e1754ead7851b480f11",
      "japanese": "NT-1アレックス",
-     "korean": "NT-1 알렉스",
+     "korean": "NT-1알렉스",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14800,7 +14800,7 @@
      "source_raw_hex": "1C 25 11 30 32 16 A4 93 A4 D9 A8 FF",
      "source_raw_sha256": "0705c86a7064f02584fe170d160c9629f64a7eb394ec70dedf34c90b4b50bf0f",
      "japanese": "GP-02Aサイサリス",
-     "korean": "GP-02A 사이살리스",
+     "korean": "GP-02A사이살리스",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14818,7 +14818,7 @@
      "source_raw_hex": "1C 25 11 30 33 B6 DF B8 DC C2 95 CF FF",
      "source_raw_sha256": "e4c2608507a42949567867ee792d9867c5fb94ef507c0e06a59d98d6183d2e11",
      "japanese": "GP-03デンドロビウム",
-     "korean": "GP-03 덴드로비움",
+     "korean": "GP-03덴드로비움",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14836,7 +14836,7 @@
      "source_raw_hex": "1C 25 11 30 33 28 A8 B5 93 D0 DF FF",
      "source_raw_sha256": "7767b916bd42865c454f4e6a11877cbd20cda4327de4d18f7c78d9b80be6f269",
      "japanese": "GP-03Sステイメン",
-     "korean": "GP-03S 스테이멘",
+     "korean": "GP-03S스테이멘",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14998,7 +14998,7 @@
      "source_raw_hex": "A1 B2 AE 11 31 FF",
      "source_raw_sha256": "7a97850acd9117a35a11bb2a4ab1bf0c6ad454a9549dbca6480bfc0bb3cbffd1",
      "japanese": "ゲッタ-1",
-     "korean": "겟타 1",
+     "korean": "겟타1",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15016,7 +15016,7 @@
      "source_raw_hex": "A1 B2 AE 11 32 FF",
      "source_raw_sha256": "41ac63dfa38f21891ab3ee4942d52e67d43ff92d1a9edf2c2f0b97c70989c7e9",
      "japanese": "ゲッタ-2",
-     "korean": "겟타 2",
+     "korean": "겟타2",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15034,7 +15034,7 @@
      "source_raw_hex": "A1 B2 AE 11 33 FF",
      "source_raw_sha256": "e4e92d1c0552789b11f07953e5fa59a68820aa0dec64f948322b8ab08297eb6b",
      "japanese": "ゲッタ-3",
-     "korean": "겟타 3",
+     "korean": "겟타3",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15052,7 +15052,7 @@
      "source_raw_hex": "A1 B2 AE 11 B8 D8 A3 DF FF",
      "source_raw_sha256": "71fbd55ce359e631dc09d6475249c0be069362e88ee1000c7f8d102559444211",
      "japanese": "ゲッタ-ドラゴン",
-     "korean": "겟타 드래곤",
+     "korean": "겟타드래곤",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15070,7 +15070,7 @@
      "source_raw_hex": "A1 B2 AE 11 D8 93 9B 11 FF",
      "source_raw_sha256": "6387829e9757d980f88bdc6126da616bdb8f28b7a1a59ee2608991da3524710a",
      "japanese": "ゲッタ-ライガ-",
-     "korean": "겟타 라이거",
+     "korean": "겟타라이거",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15088,7 +15088,7 @@
      "source_raw_hex": "A1 B2 AE 11 CC AA 93 B8 DF FF",
      "source_raw_sha256": "8efb7105516290f99c0eb402a67f0fd230323b5a36308f31af764a959e5cd14b",
      "japanese": "ゲッタ-ポセイドン",
-     "korean": "겟타 포세이돈",
+     "korean": "겟타포세이돈",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15106,7 +15106,7 @@
      "source_raw_hex": "CD A7 DF 9B 11 2F FF",
      "source_raw_sha256": "aa3b8acc3c2fb4eaa87070947f4e0ec0d74b58bd7612ef970c8700deb8a0811b",
      "japanese": "マジンガ-Z",
-     "korean": "마징가 Z",
+     "korean": "마징가Z",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15160,7 +15160,7 @@
      "source_raw_hex": "9F DB 11 B7 CD A7 DF 9B 11 FF",
      "source_raw_sha256": "ceaed1b0ba6554c1e5e1c81f73205a3b0fb0e3134d8db531150f39a345e38ad4",
      "japanese": "グレ-トマジンガ-",
-     "korean": "그레이트 마징가",
+     "korean": "그레이트마징가",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15178,7 +15178,7 @@
      "source_raw_hex": "91 C4 DC AF 93 16 FF",
      "source_raw_sha256": "db5df9312ff26e5e59aa08aa39cc0940178bc4291dfb073bc256775af557c2fa",
      "japanese": "アフロダイA",
-     "korean": "아프로다이 A",
+     "korean": "아프로다이A",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15196,7 +15196,7 @@
      "source_raw_hex": "AF 93 91 B9 DF 16 FF",
      "source_raw_sha256": "36f0c5030174489cc246bd8011d0e17ff081a0f4d349d179b9fe77d8ac0206ce",
      "japanese": "ダイアナンA",
-     "korean": "다이아난 A",
+     "korean": "다이아난A",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15232,7 +15232,7 @@
      "source_raw_hex": "C2 D4 11 B9 A8 16 FF",
      "source_raw_sha256": "c28a8b360d400974a1b0c0f1cd3b07d41c5a74d06dba4c5d0e502575c7e7de11",
      "japanese": "ビュ-ナスA",
-     "korean": "비너스 A",
+     "korean": "비너스A",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15268,7 +15268,7 @@
      "source_raw_hex": "BF B7 DA A7 96 B2 B7 FF",
      "source_raw_sha256": "ae7028b6c7e732b7aafb569ada5a622a08af9e1fbd87c82543b52439b6dbd6bb",
      "japanese": "バトルジェット",
-     "korean": "배틀 제트",
+     "korean": "배틀제트",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15286,7 +15286,7 @@
      "source_raw_hex": "BF B7 DA 9E D8 B2 A6 D2 11 FF",
      "source_raw_sha256": "92dd19e2ab3fd94d3a6c113b36bb14c636b030d30171fba2555225a8e0c9a499",
      "japanese": "バトルクラッシャ-",
-     "korean": "배틀 크래셔",
+     "korean": "배틀크래셔",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15304,7 +15304,7 @@
      "source_raw_hex": "BF B7 DA AE DF 9E FF",
      "source_raw_sha256": "d6ba84a9774d832e403c4c736023e1157ca6eb3a6cb0869755a9eae5a74186b5",
      "japanese": "バトルタンク",
-     "korean": "배틀 탱크",
+     "korean": "배틀탱크",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15322,7 +15322,7 @@
      "source_raw_hex": "BF B7 DA CD D9 DF FF",
      "source_raw_sha256": "b28b8776bfcae2f5713360ca8261f4b1693d8cb525348a7b79796e8288cbde49",
      "japanese": "バトルマリン",
-     "korean": "배틀 마린",
+     "korean": "배틀마린",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15340,7 +15340,7 @@
      "source_raw_hex": "BF B7 DA 9E D8 C4 B7 FF",
      "source_raw_sha256": "232c6b085227621d1ba5e28ac99de2995f792bc2cd20016342e9be7e5b79c75e",
      "japanese": "バトルクラフト",
-     "korean": "배틀 크래프트",
+     "korean": "배틀크래프트",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15358,7 +15358,7 @@
      "source_raw_hex": "AF 93 AE 11 DF 33 FF",
      "source_raw_sha256": "2054abdd0f35eb3db8cde2e865628c40fc42b03d9dc2baf73c0507baef2cd835",
      "japanese": "ダイタ-ン3",
-     "korean": "다이탄 3",
+     "korean": "다이탄3",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15502,7 +15502,7 @@
      "source_raw_hex": "CA DD 93 B7 C8 11 A8 FF",
      "source_raw_sha256": "a13bd2ee683c7d0d80f530863b226232f7e96fb12c7465511e0451721675ee51",
      "japanese": "ホワイトベ-ス",
-     "korean": "화이트 베이스",
+     "korean": "화이트베이스",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15664,7 +15664,7 @@
      "source_raw_hex": "A9 A3 B2 9E 1A FF",
      "source_raw_sha256": "4a167739f5fedf7f62c7ede16579f079365204e1c585258c60947b47f77dfbbf",
      "japanese": "ズゴックE",
-     "korean": "즈고크 E",
+     "korean": "즈고크E",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15958,7 +15958,7 @@
      "source_raw_hex": "CE BC DA BF 2D FF",
      "source_raw_sha256": "126e3851573d201965250678ba03d7ca32cbda1d88ca48f63105ac477934a086",
      "japanese": "ミネルバX",
-     "korean": "미네르바 X",
+     "korean": "미네르바X",
      "translation_source": "approved_glossary",
      "review": {
       "required": false,
@@ -15976,7 +15976,7 @@
      "source_raw_hex": "9F DC B2 A4 CF 2D 32 FF",
      "source_raw_sha256": "5f2794530c846ad5a1d76582dd4a525aaa7ace9cde3949b3de74b3b5179f5168",
      "japanese": "グロッサムX2",
-     "korean": "그롯삼 X2",
+     "korean": "그롯삼X2",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15994,7 +15994,7 @@
      "source_raw_hex": "C5 D8 B2 9B 11 28 31 FF",
      "source_raw_sha256": "5a4639173dc6cd3a21e8e086fed2fe1e721cfc0cfa5ccfa70cfa6ee712bc9b74",
      "japanese": "ブラッガ-S1",
-     "korean": "브랏가 S1",
+     "korean": "브랏가S1",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -16570,7 +16570,7 @@
      "source_raw_hex": "9B DA A8 1F FF",
      "source_raw_sha256": "2ab8188d1b9105edece4aaa6d62136523f55741bc99a71d5758900438f797df4",
      "japanese": "ガルスJ",
-     "korean": "갈루스 J",
+     "korean": "갈루스J",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -16714,7 +16714,7 @@
      "source_raw_hex": "B8 11 C8 DF 95 DA C4 FF",
      "source_raw_sha256": "9b6ba88843d0d5aa693447313759d5c4e0f59fb6adaa4e2917472467242d72c2",
      "japanese": "ド-ベンウルフ",
-     "korean": "도벤 울프",
+     "korean": "도벤울프",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17056,7 +17056,7 @@
      "source_raw_hex": "AF C5 D8 A8 22 32 FF",
      "source_raw_sha256": "0b2e33e1a3fa0af346e963be9cad91c932b877a36442730ec1a8ea8b61adab55",
      "japanese": "ダブラスM2",
-     "korean": "다브라스 M2",
+     "korean": "다브라스M2",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17074,7 +17074,7 @@
      "source_raw_hex": "9B D8 AF 20 37 FF",
      "source_raw_sha256": "bb5b0c9c2956b95aea6542b84f6e3b3ced5ac41096e3e5d5b6c09442372d18d9",
      "japanese": "ガラダK7",
-     "korean": "가라다 K7",
+     "korean": "가라다K7",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17092,7 +17092,7 @@
      "source_raw_hex": "B7 DC A8 19 37 FF",
      "source_raw_sha256": "f42ccddb134c6c7b207347cc3e5a44fac8d12709684aafba601bf94a9b002f27",
      "japanese": "トロスD7",
-     "korean": "토로스 D7",
+     "korean": "토로스D7",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17110,7 +17110,7 @@
      "source_raw_hex": "D8 93 DF 2D 31 FF",
      "source_raw_sha256": "2760c07a1a8259929d4ae8a3601b17d6ed93223ae27b77a6a7f01e9111da482d",
      "japanese": "ラインX1",
-     "korean": "라인 X1",
+     "korean": "라인X1",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17128,7 +17128,7 @@
      "source_raw_hex": "A7 96 BD BF 22 39 FF",
      "source_raw_sha256": "bf5068f8e70a87795e6b8953e5aae7e3ebbaad278f202789e2ca900e1d0fbde3",
      "japanese": "ジェノバM9",
-     "korean": "제노바 M9",
+     "korean": "제노바M9",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17146,7 +17146,7 @@
      "source_raw_hex": "A8 C0 DA AE DF 20 35 FF",
      "source_raw_sha256": "c1330ee35b4f58b015f59be9d80e46ded388a33ee6c8b52d4f7bd2df68cfe7a9",
      "japanese": "スパルタンK5",
-     "korean": "스파르탄 K5",
+     "korean": "스파르탄K5",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17164,7 +17164,7 @@
      "source_raw_hex": "91 C5 B8 D8 2A 36 FF",
      "source_raw_sha256": "41f3465b066a56ee6f04b19c0938539ff948d1cd3393f068f586ef1473d3f085",
      "japanese": "アブドラU6",
-     "korean": "아브도라 U6",
+     "korean": "아브도라U6",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17290,7 +17290,7 @@
      "source_raw_hex": "D0 9A 9D DA 9D DA 9B DF FF",
      "source_raw_sha256": "c754d0439420cf8b3e9edfd1f50038e14ed90d33229b622fb8674a6187065456",
      "japanese": "メカギルギルガン",
-     "korean": "메카 길길간",
+     "korean": "메카길길간",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17650,7 +17650,7 @@
      "source_raw_hex": "C2 B2 9F 9B DA 11 AF FF",
      "source_raw_sha256": "d7b89cc7ad2a4db282083a44858fc58040802340cacd31c0b3b42be3750a4dae",
      "japanese": "ビッグガル-ダ",
-     "korean": "빅 가루다",
+     "korean": "빅가루다",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17812,7 +17812,7 @@
      "source_raw_hex": "B7 DC 93 CA 11 A8 FF",
      "source_raw_sha256": "6e49970f0d57e61983528b4912b1fc22c7f25866c6a6662944ff6046fdb7fa8a",
      "japanese": "トロイホ-ス",
-     "korean": "트로이 호스",
+     "korean": "트로이호스",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17830,7 +17830,7 @@
      "source_raw_hex": "9F D8 11 C4 B3 96 C9 D9 DF FF",
      "source_raw_sha256": "900f3aa29c121e26271fc0ae509e3de7e5137cb56ef40a349c7a0e4e64aa52b2",
      "japanese": "グラ-フツェペリン",
-     "korean": "그라프 체펠린",
+     "korean": "그라프체펠린",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18100,7 +18100,7 @@
      "source_raw_hex": "A1 B2 AE 11 26 FF",
      "source_raw_sha256": "8ddb7badacbcf664ae5d92c9379612853e785fc688468e3e548b2d5e7bafe7b0",
      "japanese": "ゲッタ-Q",
-     "korean": "겟타 Q",
+     "korean": "겟타Q",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18190,7 +18190,7 @@
      "source_raw_hex": "AF C5 DA A8 C9 93 A5 11 FF",
      "source_raw_sha256": "1ea5d7400e21a4e5d486e764a10e6516ab3afa1f55a8ad83a39604afa8a02136",
      "japanese": "ダブルスペイザ-",
-     "korean": "더블 스페이저",
+     "korean": "더블스페이저",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18208,7 +18208,7 @@
      "source_raw_hex": "CD D9 DF A8 C9 93 A5 11 FF",
      "source_raw_sha256": "b03a2b87543adac36031bb5df5a395252f2bb22f8537340638b7dccbdd39b43b",
      "japanese": "マリンスペイザ-",
-     "korean": "마린 스페이저",
+     "korean": "마린스페이저",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18226,7 +18226,7 @@
      "source_raw_hex": "B8 D9 DA A8 C9 93 A5 11 FF",
      "source_raw_sha256": "dbc9334eb7cdd34f1f6d904021830b77d2b61d4bd898b80ecfb7d206888a9245",
      "japanese": "ドリルスペイザ-",
-     "korean": "드릴 스페이저",
+     "korean": "드릴스페이저",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18496,7 +18496,7 @@
      "source_raw_hex": "D9 B2 9E B6 92 91 A8 FF",
      "source_raw_sha256": "1c440c8cf283df1ece38e2978cc5ef8468ae27e2f15f1e70baf4bff666758fa1",
      "japanese": "リックディアス",
-     "korean": "릭 디아스",
+     "korean": "릭디아스",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18514,7 +18514,7 @@
      "source_raw_hex": "B6 92 A7 96 28 1A 11 27 FF",
      "source_raw_sha256": "4dfb59cae6200e0a2d82c19778f59f067a42eed4c9c95bf2c0513a4e809e65bc",
      "japanese": "ディジェSE-R",
-     "korean": "디제 SE-R",
+     "korean": "디제SE-R",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18622,7 +18622,7 @@
      "source_raw_hex": "B5 9C A4 A8 CD B2 9E FF",
      "source_raw_sha256": "5a9c60f18528081ff9dd60fd748276c08573dc94f0fd1de4860879d5e9e2ea80",
      "japanese": "テキサスマック",
-     "korean": "텍사스 맥",
+     "korean": "텍사스맥",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18712,7 +18712,7 @@
      "source_raw_hex": "A1 DA 9F 9F 22 FF",
      "source_raw_sha256": "f3fe9dffc719ebe40764de26c9492f12aecdb86c21ca851e2c4094c38a46f736",
      "japanese": "ゲルググM",
-     "korean": "겔구그 M",
+     "korean": "겔구그M",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18730,7 +18730,7 @@
      "source_raw_hex": "A1 DA 9F 9F 22 FF",
      "source_raw_sha256": "f3fe9dffc719ebe40764de26c9492f12aecdb86c21ca851e2c4094c38a46f736",
      "japanese": "ゲルググM",
-     "korean": "겔구그 M",
+     "korean": "겔구그M",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18784,7 +18784,7 @@
      "source_raw_hex": "C6 DC B7 A1 B2 AE 11 31 FF",
      "source_raw_sha256": "ad63a04e9bc79fb69257b01ff5bc3c093c06db06c3bd9f9bd773bf810438909f",
      "japanese": "プロトゲッタ-1",
-     "korean": "프로토 겟타 1",
+     "korean": "프로토겟타1",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18802,7 +18802,7 @@
      "source_raw_hex": "C6 DC B7 A1 B2 AE 11 32 FF",
      "source_raw_sha256": "c810efd765c569746ed94955e8981fd45c8eba4c6d74d258dd940cafd6b643f9",
      "japanese": "プロトゲッタ-2",
-     "korean": "프로토 겟타 2",
+     "korean": "프로토겟타2",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18820,7 +18820,7 @@
      "source_raw_hex": "C6 DC B7 A1 B2 AE 11 33 FF",
      "source_raw_sha256": "f872aa31a36f82e5b090e20627ef92c066ab6c5150e62a8b380ad9637cd62709",
      "japanese": "プロトゲッタ-3",
-     "korean": "프로토 겟타 3",
+     "korean": "프로토겟타3",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18874,7 +18874,7 @@
      "source_raw_hex": "A3 B2 B8 BF 11 B8 FF",
      "source_raw_sha256": "07b8220c4638861d49a79461bad1d4a5c8fcb0e2a916c12bbc7dcf50e8e2bf1f",
      "japanese": "ゴッドバ-ド",
-     "korean": "갓 버드",
+     "korean": "갓버드",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -19000,7 +19000,7 @@
      "source_raw_hex": "D0 9A 9B DF B5 FF",
      "source_raw_sha256": "3918a72092eb87838426e8dc454d2b61fe2b42826a9c9049dd0c0dc923177317",
      "japanese": "メカガンテ",
-     "korean": "메카 간테",
+     "korean": "메카간테",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -19882,7 +19882,7 @@
      "source_raw_hex": "1C 91 11 CD 11 FF",
      "source_raw_sha256": "aeeba91903755886163b053d424d98773fa7d711a136b8209194dd21904c2186",
      "japanese": "Gア-マ-",
-     "korean": "G 아머",
+     "korean": "G아머",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -19954,7 +19954,7 @@
      "source_raw_hex": "D0 9A 9D DA 9D DA 9B DF FF",
      "source_raw_sha256": "c754d0439420cf8b3e9edfd1f50038e14ed90d33229b622fb8674a6187065456",
      "japanese": "メカギルギルガン",
-     "korean": "메카 길길간",
+     "korean": "메카길길간",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -20656,7 +20656,7 @@
      "source_raw_hex": "A2 91 C5 11 A8 AE 11 FF",
      "source_raw_sha256": "879f1b555baf948b634649670567f75a640101ed332789985a48dd6f1f84b5a3",
      "japanese": "コアブ-スタ-",
-     "korean": "코어 부스터",
+     "korean": "코어부스터",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -21538,7 +21538,7 @@
      "source_raw_hex": "A1 DA 9F 9F 1F FF",
      "source_raw_sha256": "acabab7a12b183b819a7083df9e73ef7ef18af07bc06bf68f3c6979cc0133404",
      "japanese": "ゲルググJ",
-     "korean": "겔구그 J",
+     "korean": "겔구그J",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -21718,7 +21718,7 @@
      "source_raw_hex": "1C 25 11 30 32 16 A4 93 A4 D9 A8 FF",
      "source_raw_sha256": "0705c86a7064f02584fe170d160c9629f64a7eb394ec70dedf34c90b4b50bf0f",
      "japanese": "GP-02Aサイサリス",
-     "korean": "GP-02A 사이살리스",
+     "korean": "GP-02A사이살리스",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
