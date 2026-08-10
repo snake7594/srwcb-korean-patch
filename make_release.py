@@ -111,6 +111,7 @@ def main() -> None:
 
     if not a.skip_standalone:
         print("\n[3/4] 단독판 패치")
+        missing = []
         for key, src, out_img, name in (
             ("srw2", P.SRW2_IMG, P.WORK / "srw2" / "port" / "Super Robot Taisen 2 (Korean).img",
              "srw2-standalone-korean"),
@@ -120,7 +121,9 @@ def main() -> None:
              "srwex-standalone-korean"),
         ):
             if not (src and src.exists() and out_img.exists()):
-                print(f"  {key}: 건너뜀 (원본 또는 빌드 결과 없음)")
+                why = "원본 CD 경로 미지정" if not (src and src.exists()) else "빌드 결과 없음"
+                missing.append(f"{key}({why})")
+                print(f"  {key}: 건너뜀 — {why}")
                 continue
             p = xdelta(src, out_img, REL / f"{name}-{VER}.xdelta")
             if not verify(src, p, out_img):
@@ -129,6 +132,15 @@ def main() -> None:
             cue(c, out_img.name)
             assets += [p, c]
             print(f"  {name}: {p.stat().st_size:,}B  역적용 OK")
+        # 단독판이 조용히 빠지면 반쪽 릴리스가 나간다. 일부러 뺄 때만
+        # --skip-standalone 을 준다.
+        if missing:
+            raise SystemExit(
+                "[실패] 단독판 패치가 빠졌습니다: " + ", ".join(missing) + "\n"
+                "  원본 CD 경로를 지정하세요"
+                " (SRWCB_SRW2_IMG / SRWCB_SRW3_BIN / SRWCB_SRWEX_IMG)\n"
+                "  그리고 build_all.py 9단계로 단독판을 먼저 빌드하세요.\n"
+                "  정말 CB 만 낼 때는 --skip-standalone 을 주세요.")
     else:
         print("\n[3/4] 단독판 건너뜀")
 
