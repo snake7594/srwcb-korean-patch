@@ -119,7 +119,8 @@ def main() -> None:
         run("글리프 무결성", [str(REPO / "tr-ui" / "verify_tr_glyphs.py")])
         run("최종 이미지 검증", [str(REPO / "audit" / "verify_image.py"),
                           "--version", a.version])
-        run("예고 타이틀 카드 검증", [str(REPO / "audit" / "verify_eyecatch.py")])
+        run("예고 타이틀 카드 검증(CB)",
+            [str(REPO / "audit" / "verify_eyecatch.py"), "--cb-only"])
     if want(9):
         # 별매 CD 를 가진 사람만. 먼저 setup_standalone.py 로 준비한다.
         # 예고 타이틀 카드 그래픽은 네 디스크가 같은 파일을 쓴다 — 없으면 만든다.
@@ -139,6 +140,8 @@ def main() -> None:
             for desc, script in steps:
                 run(desc, [str(script)])
         run("단독판 검증", [str(REPO / "audit" / "verify_standalone.py")])
+        run("예고 타이틀 카드 검증(단독판 포함)",
+            [str(REPO / "audit" / "verify_eyecatch.py")])
 
     print(f"\n완료. 산출물: {P.OUT}")
 

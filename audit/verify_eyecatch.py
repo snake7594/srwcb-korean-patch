@@ -35,11 +35,13 @@ def effect_of(img: Path) -> bytes:
     return AI.read_file(img, e.lba, e.size)
 
 
-def images():
+def images(cb_only=False):
     # 버전 문자열은 사전순이 아니다(v0.11.9 > v0.11.22). 최신 파일로 고른다.
     def newest(g):
         return sorted(g, key=lambda q: q.stat().st_mtime)[-1:]
     out = [("컴플리트 박스", newest(_P.OUT.glob("*Korean*(Track 1).bin")))]
+    if cb_only:
+        return [(n, p[0]) for n, p in out if p]
     for key, pat in (("제2차 단독판", "srw2/port/*Korean*.img"),
                      ("제3차 단독판", "srw3/port/*Korean*.bin"),
                      ("EX 단독판", "srwex/port/*Korean*.img")):
@@ -48,6 +50,13 @@ def images():
 
 
 def main() -> None:
+    import argparse
+    ap = argparse.ArgumentParser()
+    # 단독판은 build_all 9단계에서 만들어진다. 8단계에서 검사하면 아직 옛
+    # 이미지라 애먼 실패가 나고, 그 바람에 9단계가 아예 안 돈다.
+    ap.add_argument("--cb-only", action="store_true",
+                    help="컴플리트 박스만 검사 (단독판 빌드 전)")
+    args = ap.parse_args()
     retail = (_P.EXTRACTED / "EFFECT.BIN").read_bytes()
     ko = (_P.BUILD / "gfx" / "EFFECT_ko.BIN").read_bytes()
     want = hashlib.sha256(ko).hexdigest()
@@ -74,7 +83,7 @@ def main() -> None:
             bad += 1
     print(f"멤버 {len(B.MEMBERS)}개: 레코드 표 동일, 제목 스트립 전부 교체" if not bad else "")
 
-    for name, img in images():
+    for name, img in images(args.cb_only):
         d = effect_of(img)
         got = hashlib.sha256(d).hexdigest()
         ok = (got == want) and len(d) == len(retail)

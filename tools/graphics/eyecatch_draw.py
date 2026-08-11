@@ -133,12 +133,46 @@ TITLE_SCHEME = (1, [3])
 HEAD_SCHEME = (1, [15, 14])
 
 
+def _ink_box(grid):
+    """0 이 아닌 픽셀의 바깥 사각형 (x0, y0, x1, y1). 없으면 None."""
+    h, w = len(grid), len(grid[0])
+    xs = [x for x in range(w) if any(grid[y][x] for y in range(h))]
+    ys = [y for y in range(h) if any(grid[y][x] for x in range(w))]
+    return (xs[0], ys[0], xs[-1], ys[-1]) if xs else None
+
+
 def redraw(buf, rec, text, scheme=TITLE_SCHEME):
-    """레코드 자리에 한글 text 를 그려 넣는다. text 의 '\\n' 이 줄바꿈."""
+    """레코드 자리에 한글 text 를 그려 넣는다. text 의 '\\n' 이 줄바꿈.
+
+    **원본 글자가 차지하던 사각형 안에** 그린다. 칸(w x h) 전체에 맞춰 그리면
+    글자 크기를 칸에 맞춘 뒤 테두리를 바깥에 덧그리는 만큼 넘쳐서, 위아래가
+    잘려 보인다(2026-08-10 제보). 원본 잉크 상자를 목표로 삼으면 잘림도 없고
+    화면에서 원본과 같은 자리에 앉는다.
+
+    칸 전체는 먼저 0(투명)으로 지운다 — 일본어 원문이 한 픽셀도 안 남는다.
+    """
     core, rings = scheme
+    w, h = rec["w"], rec["h"]
+    box = _ink_box(EC.read_sprite(bytes(buf), rec)) or (0, 0, w - 1, h - 1)
+    bx0, by0, bx1, by1 = box
+    bw, bh = bx1 - bx0 + 1, by1 - by0 + 1
     lines = text.split("\n")
-    mask = _mask(lines, rec["w"], rec["h"], len(rings))
-    EC.write_sprite(buf, rec, EC.paint_scheme(mask, core, rings))
+    pad = len(rings)
+    for shrink in range(0, 6):                 # 테두리까지 상자에 들어갈 때까지
+        mask = _mask(lines, bw, bh - shrink, pad)
+        painted = EC.paint_scheme(mask, core, rings)
+        ink = _ink_box(painted)
+        if ink is None:
+            break
+        if ink[3] - ink[1] + 1 <= bh and ink[2] - ink[0] + 1 <= bw:
+            break
+    grid = [[0] * w for _ in range(h)]
+    ph, pw = len(painted), len(painted[0])
+    oy = by0 + max(0, (bh - ph) // 2)
+    for y in range(min(ph, h - oy)):
+        for x in range(min(pw, w - bx0)):
+            grid[oy + y][bx0 + x] = painted[y][x]
+    EC.write_sprite(buf, rec, grid)
 
 
 def preview(buf, rec, scale=2):
