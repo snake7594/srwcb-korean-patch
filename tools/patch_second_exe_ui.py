@@ -463,7 +463,9 @@ UI_DISPLAY_COMPACTION.update({
     # retail renderer's actual (advance, wide-phase) state, not byte length or
     # Unicode character count.  The encoder below supplies only the remaining
     # invisible low/high padding required by the following VM token.
-    "ユニット能力　パイロット能力　武器性能": "유닛능력 파일럿능력 무기성능표",
+    # 세 칸의 시작 위치를 레트일과 맞춘다(0 / 8 / 17칸). 전각은 1+phase 칸씩
+    # 나아가서 한국어가 더 짧다 — 모자란 만큼 반각 빈칸으로 메운다.
+    "ユニット能力　パイロット能力　武器性能": "유닛능력  파일럿능력  무기성능",
     "精神ポイント": "정신 점수",
     "精神コマンド": "정신 명령",
     "クリティカル補正": "크리티컬보정",

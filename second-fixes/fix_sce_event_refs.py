@@ -39,7 +39,20 @@ from pathlib import Path
 R = str(_P.WORK)
 sys.path.insert(0, f"{R}/tools")
 from analyze_sce_relocation import (parse_scenarios, TEXT_POINTER_OPCODES,
-                                    iter_pointer_sites)
+                                    ARG_POINTER_FORMS, iter_pointer_sites)
+
+
+def operand_offset(buf, off):
+    """이 자리가 대사 포인터면 **피연산자 위치**, 아니면 None.
+
+    `B1/B3/B4` 는 옵코드 바로 뒤, `B6 00`/`B6 01`/`B9 03`/`B9 08` 은 옵코드+2 다.
+    """
+    op = buf[off]
+    if op in TEXT_POINTER_OPCODES:
+        return off + 1
+    if off + 1 < len(buf) and (op, buf[off + 1]) in ARG_POINTER_FORMS:
+        return off + 2
+    return None
 
 
 def scan_pool_refs(buf, scn):
@@ -105,7 +118,10 @@ def retarget(ko_bytes, jp_bytes, *, apply=False, verbose=True):
                 spurious_list.append(f"sc{si} rec[{host}]+{off_in_rec:#x} op{op:#x}")
                 continue
             new_tgt = sk.records[tgt_ord].start
-            opnd_k = off_k + (2 if op == 0xB6 else 1)
+            opnd_k = operand_offset(ko, off_k)
+            if opnd_k is None:
+                spurious += 1
+                continue
             new_disp = new_tgt - opnd_k
             if not (-0x8000 <= new_disp <= 0x7FFF):
                 problems.append(f"sc{si} @{off_k:#x}: 변위 범위초과 {new_disp:#x}")
@@ -124,6 +140,58 @@ def retarget(ko_bytes, jp_bytes, *, apply=False, verbose=True):
         for s in spurious_list[:8]:
             print("   ~ 우연매치 스킵:", s)
         for p in problems[:20]:
+            print("   !!", p)
+    return bytes(ko), fixed, problems
+
+
+def retarget_prepool(ko_bytes, jp_bytes, *, apply=False, verbose=True):
+    """**풀 앞 스크립트**(block_start..pool_start)의 대사 포인터를 재조준한다.
+
+    이 구간은 번역으로 바뀌지 않아 배포본과 레트일의 바이트 오프셋이 같다.
+    그래서 같은 자리에서 같은 옵코드를 확인하고 변위만 다시 쓰면 된다.
+
+    원래는 게임별 빌더(rebuild_second_sce 등)가 여기를 맡았는데, 빌더가 아는
+    옵코드 집합이 제각각이라 몇몇이 레트일 변위 그대로 남았다. 남은 것은
+    레코드 중간을 가리켜 그 대사만 화자가 사라지고 문장 중간부터 나온다
+    (2026-08-12 제보 #8, 제3차 12~16화). 여기서 **한 군데서** 마무리한다.
+    """
+    ko = bytearray(ko_bytes)
+    bj = parse_scenarios(jp_bytes)
+    bk = parse_scenarios(ko)
+    total = fixed = already = skipped = 0
+    problems = []
+    for si, (sj, sk) in enumerate(zip(bj, bk)):
+        if len(sj.records) != len(sk.records):
+            continue
+        if (sj.pool_start - sj.block_start) != (sk.pool_start - sk.block_start):
+            continue
+        starts_j = {r.start: i for i, r in enumerate(sj.records)}
+        for off_j, opnd_j, op in iter_pointer_sites(jp_bytes, sj.block_start,
+                                                    sj.pool_start):
+            tgt_j = opnd_j + struct.unpack_from("<h", jp_bytes, opnd_j)[0]
+            ordn = starts_j.get(tgt_j)
+            if ordn is None:
+                continue
+            total += 1
+            off_k = sk.block_start + (off_j - sj.block_start)
+            if off_k + 4 > len(ko) or ko[off_k] != op or operand_offset(ko, off_k) is None:
+                skipped += 1                     # 구조가 다르면 손대지 않는다
+                continue
+            opnd_k = off_k + (opnd_j - off_j)
+            new_disp = sk.records[ordn].start - opnd_k
+            if not (-0x8000 <= new_disp <= 0x7FFF):
+                problems.append(f"sc{si} @{off_k:#x}: 변위 범위초과 {new_disp:#x}")
+                continue
+            if struct.unpack_from("<h", ko, opnd_k)[0] == new_disp:
+                already += 1
+                continue
+            if apply:
+                struct.pack_into("<h", ko, opnd_k, new_disp)
+            fixed += 1
+    if verbose:
+        print(f"  풀앞 스크립트 참조 총 {total}  재조준 {fixed}  이미정상 {already}  "
+              f"건너뜀 {skipped}  문제 {len(problems)}")
+        for p in problems[:10]:
             print("   !!", p)
     return bytes(ko), fixed, problems
 
@@ -199,12 +267,13 @@ def _bad_operand_targets(buf, scn):
     """
     starts = {r.start for r in scn.records}
     out = set()
-    for off in range(scn.pool_start, scn.record_data_end - 2):
-        if buf[off] not in TEXT_POINTER_OPCODES:
+    for off in range(scn.pool_start, scn.record_data_end - 3):
+        opnd = operand_offset(buf, off)
+        if opnd is None:
             continue
-        if 0xFF not in buf[off + 1:off + 3]:
+        if 0xFF not in buf[opnd:opnd + 2]:
             continue
-        tgt = (off + 1) + struct.unpack_from("<H", buf, off + 1)[0]
+        tgt = opnd + struct.unpack_from("<H", buf, opnd)[0]
         if tgt in starts:
             out.add(tgt)
     return out
@@ -420,9 +489,11 @@ def _verify(ko_bytes, jp_bytes):
             host = record_index_containing(sj, off_j)
             off_in_rec = off_j - sj.records[host].start
             off_k = sk.records[host].start + off_in_rec
-            if off_k + 3 > len(ko_bytes) or ko_bytes[off_k] != op:
+            if off_k + 4 > len(ko_bytes) or ko_bytes[off_k] != op:
                 continue          # 우연 매치(텍스트 재번역으로 밀림) — 검증 대상 아님
-            opnd_k = off_k + (2 if op == 0xB6 else 1)
+            opnd_k = operand_offset(ko_bytes, off_k)
+            if opnd_k is None:
+                continue
             disp = struct.unpack_from("<h", ko_bytes, opnd_k)[0]
             if opnd_k + disp not in starts:
                 bad += 1

@@ -576,6 +576,53 @@ def _box_overrides() -> dict[str, str]:
 _EXACT_CUTS: list = []
 
 
+def _first_line_advance(buf: bytes) -> int:
+    from second_translation_codec import glyph_advance
+    a = p = ph = 0
+    while p < len(buf):
+        b = buf[p]
+        if b == 0xFF:
+            break
+        if b < 0xEB:
+            idx, n = b, 1
+        elif b <= 0xF5:
+            idx, n = ((b - 0xEB) << 8) | buf[p + 1], 2
+        else:
+            if b in (0xF6, 0xF7):
+                break
+            p += 1 + CONTROL_ARG.get(b, 0)
+            continue
+        st, ph = glyph_advance(idx, ph)
+        a += st
+        p += n
+    return a
+
+
+def _keep_leading_indent(old_raw: bytes, encoded: bytes, cap: int | None = None) -> bytes:
+    """레트일이 첫 줄에 준 **들여쓰기(선행 반각 빈칸)** 를 그대로 살린다.
+
+    선택지 레코드는 첫 줄만 반각 한 칸 들여 놓은 것이 많다. 번역이 그걸 흘리면
+    첫 줄만 반 칸 왼쪽으로 붙어 **둘째 줄과 어긋나 보인다**(2026-08-12 제보 #7,
+    제3차 15화 `DC를 추격한다 / 루나2에 돌입한다`).
+
+    앞에 붙이기만 하므로 줄바꿈·쪽 나눔 구조는 건드리지 않는다.
+    """
+    n = 0
+    while n < len(old_raw) and old_raw[n] == 0x00:
+        n += 1
+    if not n:
+        return encoded
+    have = 0
+    while have < len(encoded) and encoded[have] == 0x00:
+        have += 1
+    if have >= n:
+        return encoded
+    # 들여쓰기를 붙여 첫 줄이 상자를 넘치면 붙이지 않는다 — 정렬보다 잘림이 나쁘다.
+    if cap is not None and _first_line_advance(encoded) + (n - have) > cap:
+        return encoded
+    return bytes(n - have) + encoded
+
+
 def make_replacements(
     rows: list[dict[str, Any]],
     translations: dict[str, dict[str, Any]],
@@ -630,6 +677,7 @@ def make_replacements(
             row["japanese"]["translation_parts"], ko_parts, glyph_map,
             geometry=_g[:3], max_bytes=_g[3],
         )
+        encoded = _keep_leading_indent(old_raw, encoded, _g[0])
         if kind == "scenario" and _os.environ.get("SRWCB_EXACT_LEN", "") not in ("", "0"):
             if len(encoded) > len(old_raw):
                 _EXACT_CUTS.append((row["id"], row["source"]["offset"],

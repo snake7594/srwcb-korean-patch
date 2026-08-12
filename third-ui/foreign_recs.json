@@ -20,8 +20,8 @@
    "hex": "f8 03 f7 00 40 f3 e5 00 f0 be f6 f2 1a ec 9b f6 fc 09 fc f8 82 fc f9 02 f8 87 fe 00 ff"
   },
   "0x26205": {
-   "text": "[F7]␣ぁ[F8 03]미행동␣유닛이␣␣기␣있습니다[F6]페이즈␣종료?[F6][FC 10 fc][F8 82][FC fe 05]네[F6]아뇨[F6][FE 01]",
-   "hex": "f7 00 40 f8 03 ef 7a f4 b2 ed f5 00 f1 ef ed ae f2 0c 00 00 ec a0 00 f2 16 f0 e6 ed a7 ed b1 f6 f4 58 f2 0c f2 8c 00 f2 5c ee d3 14 f6 fc 10 fc f8 82 fc fe 05 ed 51 f6 f1 4a ed 7a f6 fe 01 ff"
+   "text": "[F7]␣ぁ[F8 03]미행동␣유닛이␣␣␣기␣있습니다[F6]페이즈␣종료?[F6][FC 0b fc][F8 82][FC 03 05]네[F6]아뇨[F6][FE 01]",
+   "hex": "f7 00 40 f8 03 ef 7a f4 b2 ed f5 00 f1 ef ed ae f2 0c 00 00 00 ec a0 00 f2 16 f0 e6 ed a7 ed b1 f6 f4 58 f2 0c f2 8c 00 f2 5c ee d3 14 f6 fc 0b fc f8 82 fc 03 05 ed 51 f6 f1 4a ed 7a f6 fe 01 ff"
   },
   "0x2625a": {
    "text": "[F7]␣ぁ[F8 03]페이즈␣종료[F6]진행?[F6][FC 07 01]네[F6]아뇨[F6][FE 01]",

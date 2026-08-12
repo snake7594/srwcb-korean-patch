@@ -94,8 +94,10 @@ KO_FIXUPS = {
     "SECOND/SECOND.WAR": [("끔켬", "무유")],
     "SLPS_020.70": [("끔켬", "무유")],
     "THIRD/THIRD.WAR": [
-        # 출격 화면 상단 — 두 라벨이 붙어 버린 것을 떼어 놓는다 (제보 #6)
-        ("출격유닛선택남은", "출격 유닛 남음"),
+        # 출격 화면 상단. 띄어쓰기를 빼 달라는 제보(#7)에 맞춰 붙여 쓴다.
+        # 남는 4바이트는 반각 빈칸으로 채워져 전체 폭은 레트일과 같은 13칸이라
+        # 뒤따르는 `12기`·`기력 100`·`LV순` 위치는 그대로다.
+        ("출격유닛선택남은", "출격유닛남음"),
     ],
 }
 
@@ -122,7 +124,8 @@ _SAVE_HEADER_ANCHOR = [("fc 07 00 f8 00 fc 09 00 f8 00",
 #   * 숫자 뒤의 글리프 0x1E1(機)은 번역이 안 돼 깨져 보인다 -> '기' (제보 #6)
 BYTE_FIXUPS = {
     "THIRD/THIRD.WAR": [
-        ("fc 10 fc f8 82 fc fe 05", "fc 0a fc f8 82 fc 04 05"),
+        # 숫자 자리(`FC dx dy` + `F8 82`)는 이제 third-ui/foreign_recs.json 이
+        # 직접 들고 있다 — 제3차·EX·트레이닝이 한꺼번에 맞는다.
         ("f8 82 ec e1", None),          # None = 뒤 2바이트를 '기' 로 (아래에서 처리)
     ] + _SAVE_HEADER_ANCHOR,
     "SECOND/SECOND.WAR": _SAVE_HEADER_ANCHOR,

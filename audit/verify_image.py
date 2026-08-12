@@ -311,6 +311,62 @@ def check_retail_leftovers(name, ko, jp, recs_ko, recs_jp, out):
         out.append((f"{name} 원문잔재", len(recs_ko), bad, 0, 0))
 
 
+def check_pointer_ordinals(name, ko, jp, out):
+    """대사 포인터가 **레트일과 같은 순번의 레코드**를 가리키는지.
+
+    한글은 원문보다 길어 레코드가 통째로 밀린다. 변위를 안 고치면 그 대사만
+    레코드 중간을 가리켜 화자가 사라지고 문장 중간부터 나온다. 재조준을 놓친
+    옵코드가 있으면(2026-08-12 의 `B9 03`, 세 게임 367곳) 여기서 잡힌다.
+
+    '레코드 시작을 가리킨다'만 보면 안 된다 — 레코드가 촘촘해서 어긋난 변위도
+    우연히 어떤 레코드의 시작에 맞는다. **순번**을 맞춰 봐야 한다.
+    """
+    import struct
+    sys.path.append(str(_P.REPO / "tools"))
+    from analyze_sce_relocation import parse_scenarios, iter_pointer_sites
+    bad = tot = 0
+    for x, y in zip(parse_scenarios(jp), parse_scenarios(ko)):
+        if len(x.records) != len(y.records):
+            continue
+        oj = {r.start: i for i, r in enumerate(x.records)}
+        ok_ = {r.start: i for i, r in enumerate(y.records)}
+        # 풀 앞 스크립트는 번역으로 안 바뀌지만 **블록 시작 자체가 밀린다**.
+        # 절대 오프셋이 아니라 블록 기준 상대 위치로 짝지어야 한다.
+        prepool_ok = ((x.pool_start - x.block_start) == (y.pool_start - y.block_start))
+        for lo, hi in ((x.block_start, x.pool_start), (x.pool_start, x.record_data_end)):
+            for off_j, opnd_j, op in iter_pointer_sites(jp, lo, hi):
+                tj = opnd_j + struct.unpack_from("<h", jp, opnd_j)[0]
+                if tj not in oj:
+                    continue
+                if off_j < x.pool_start:
+                    if not prepool_ok:
+                        continue
+                    off_k = y.block_start + (off_j - x.block_start)
+                else:
+                    host = next((i for i, r in enumerate(x.records)
+                                 if r.start <= off_j < r.end), None)
+                    if host is None:
+                        continue
+                    off_k = y.records[host].start + (off_j - x.records[host].start)
+                if off_k + 4 > len(ko) or ko[off_k] != op:
+                    continue          # 번역으로 밀린 자리 — 대조 대상이 아니다
+                opnd_k = off_k + (opnd_j - off_j)
+                tk = opnd_k + struct.unpack_from("<h", ko, opnd_k)[0]
+                tot += 1
+                if ok_.get(tk) != oj[tj]:
+                    bad += 1
+    # 아직 못 잡은 잔여. 두 곳 다 **레코드 0(이벤트 스크립트) 안의 촘촘한 포인터
+    # 표**인데, 변위를 고치면 그 2바이트가 레코드 훑기에서 0xFF 로 읽혀 경계가
+    # 움직이고, 다시 계산하면 또 어긋나 되풀이해도 수렴하지 않는다. 지금은
+    # 레트일 변위 그대로 둔다(대사가 밀리지만 진행에는 지장 없음).
+    # 여기 적힌 수보다 늘면 **새로 생긴 회귀**이므로 빌드를 세운다.
+    known = {"제2차": 1, "EX": 4}.get(name, 0)
+    if bad > known:
+        out.append((f"{name} 대사포인터", tot, 0, bad - known, 0))
+    elif bad:
+        print(f"  ({name} 대사포인터: 알려진 잔여 {bad}건 — 레코드 0 포인터 표)")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--version", default="v0.11.0")
@@ -332,6 +388,7 @@ def main():
         check_pages(f"{game} 대사", d, j, ko_recs, jp_recs, tbl, SCE_BOX_ADVANCE, rows)
         check_objective_block(game, d, j, tbl, rows)
         check_retail_leftovers(f"{game} 대사", d, j, ko_recs, jp_recs, rows)
+        check_pointer_ordinals(game, d, j, rows)
         d = A.read_iso(img, bmess)
         check(f"{game} 전투", d, A.bmess_records(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
         d = A.read_iso(img, dead)

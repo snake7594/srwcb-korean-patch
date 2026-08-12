@@ -142,13 +142,25 @@ def step_sce(files):
         _, need_n, probs = FX.retarget(files[name], jp, apply=False, verbose=False)
         if probs:
             raise SystemExit(f"{name}: 재조준 불가 {len(probs)}건")
-        fixed, _, _ = FX.retarget(files[name], jp, apply=True, verbose=False)
+        # 변위를 고치면 그 2바이트가 레코드 훑기에서 0xFF 로 읽힐 수 있어 레코드
+        # 경계가 움직인다. 그러면 같은 패스에서 계산해 둔 서수가 어긋나므로,
+        # 더 고칠 게 없을 때까지 되풀이한다.
+        fixed = files[name]
+        for _round in range(6):
+            fixed, n_now, _ = FX.retarget(fixed, jp, apply=True, verbose=False)
+            if not n_now:
+                break
         bad = FX._verify(fixed, jp)
         if bad:
             raise SystemExit(f"{name}: 재조준 후에도 스테일 참조 {bad}건")
+        # 풀 앞 스크립트는 게임별 빌더가 맡아 왔는데 아는 옵코드가 제각각이라
+        # 몇몇이 레트일 변위 그대로 남았다(제보 #8). 여기서 한 번에 마무리한다.
+        fixed, pre_n, probs = FX.retarget_prepool(fixed, jp, apply=True, verbose=False)
+        if probs:
+            raise SystemExit(f"{name}: 풀앞 재조준 불가 {len(probs)}건")
         files[name] = fixed
         _same_record_split(files[name], jp, name)
-        print(f"  {name}: 이벤트 참조 재조준 {need_n}곳")
+        print(f"  {name}: 이벤트 참조 재조준 {need_n}곳 (풀앞 {pre_n}곳)")
 
 
 def step_battle(files):
@@ -249,6 +261,10 @@ def main():
         step_leftover(files)
     step_port_second(files)
     step_residual(files)
+    # 뒤 단계(잔여 레코드 재배치 등)가 레코드를 옮기면 3단계에서 맞춰 둔 대사
+    # 포인터가 다시 어긋난다. 레코드를 건드리는 일이 다 끝난 **여기서** 한 번 더 맞춘다.
+    print("[6.5/8] 대사 포인터 재조준 마무리")
+    step_sce(files)
     print("[7/8] 그래픽(게임 선택 화면 + 예고 타이틀 카드)")
     step_csmap(files)
 
