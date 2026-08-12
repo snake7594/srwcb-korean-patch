@@ -116,6 +116,29 @@ KO_FIXUPS = {
 _SAVE_HEADER_ANCHOR = [("fc 07 00 f8 00 fc 09 00 f8 00",
                         "fc 07 00 f8 00 fc 0a 00 f8 00")]
 
+# 출격 유닛 선택 목록의 파일럿명·LV 칸을 한 칸 왼쪽으로 (제보 #7).
+#
+#   [F7]<창> [FB ff ff][F8 01]=유닛명 [FC 13 fe] [FB ff ff][F8 01]=파일럿명
+#   [FC 08 fe] [F8 00]=LV [FC 01 00] [F8 83]=레벨
+#
+# `FC dx dy` 는 **이름 칸 시작 기준** 상대 이동이라 열 위치가 이 값으로 정해진다.
+# 레트일이 19칸(0x13)이라 레벨 숫자가 x=294 에서 시작해 두 자리면 상자 오른쪽
+# 테두리(≈305)를 넘는다. 18칸(0x12)으로 당기면 286 에서 시작해 302 에서 끝나
+# 상자 안에 들어오고, 같은 목록을 쓰는 아군부대표 화면(0x11 + 창 원점 차이)과
+# 파일럿·LV·숫자 열이 정확히 같은 자리가 된다.
+_SORTIE_ROW = [("f7 00 40 fb ff ff f8 01 fc 13 fe fb ff ff f8 01 fc 08 fe f8 00 fc 01 00 f8 83",
+                "f7 00 40 fb ff ff f8 01 fc 12 fe fb ff ff f8 01 fc 08 fe f8 00 fc 01 00 f8 83")]
+
+# 아군부대표 목록의 **유닛명만** 한 칸 왼쪽으로 (제보 #7).
+#
+# 목록 창을 열기 직전 커서 이동이 출격 화면은 `FC 01 ff`(+1), 부대표는
+# `FC 02 ff`(+2) 다. 이 한 칸 때문에 부대표만 유닛명이 들여써져 보인다
+# (출격 x=39 / 부대표 x=47, 아이콘은 두 화면 다 24 근처).
+# +1 로 당기고, 뒤따르는 열 이동을 0x11 -> 0x12 로 되돌려 **파일럿·LV·레벨은
+# 있던 자리 그대로** 둔다. 창 여는 이동만 건드리므로 앞의 아이콘은 안 움직인다.
+_ROSTER_ROW = [("fc 02 ff f7 00 40 fb ff ff f8 01 fc 11 fe",
+                "fc 01 ff f7 00 40 fb ff ff f8 01 fc 12 fe")]
+
 # 바이트 그대로 바꿔야 하는 것 — (찾을 바이트, 바꿀 바이트). 길이가 같아야 한다.
 #   * `FC dx dy` 는 커서 이동이다. 원문은 첫 줄 16칸 자리에 숫자를 찍었는데
 #     한국어 문구가 짧아져 그 자리가 글자 위로 왔다(제보 #5). 숫자를 한국어
@@ -127,11 +150,13 @@ BYTE_FIXUPS = {
         # 숫자 자리(`FC dx dy` + `F8 82`)는 이제 third-ui/foreign_recs.json 이
         # 직접 들고 있다 — 제3차·EX·트레이닝이 한꺼번에 맞는다.
         ("f8 82 ec e1", None),          # None = 뒤 2바이트를 '기' 로 (아래에서 처리)
-    ] + _SAVE_HEADER_ANCHOR,
-    "SECOND/SECOND.WAR": _SAVE_HEADER_ANCHOR,
-    "EX/EX.WAR": _SAVE_HEADER_ANCHOR,
-    "TR.WAR": _SAVE_HEADER_ANCHOR,
-    # SLPS_020.70 은 이 화면의 라벨이 아직 원문(`セ-ブデ-タ`, 6칸)이라 그대로 둔다.
+    ] + _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW,
+    "SECOND/SECOND.WAR": _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW,
+    "EX/EX.WAR": _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW,
+    "TR.WAR": _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW,
+    # SLPS_020.70 은 세이브 머리글 라벨이 아직 원문(`セ-ブデ-タ`, 6칸)이라 앵커는
+    # 그대로 두고, 출격 목록 열만 같이 당긴다.
+    "SLPS_020.70": _SORTIE_ROW + _ROSTER_ROW,
 }
 
 
