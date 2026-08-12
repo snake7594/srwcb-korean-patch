@@ -121,6 +121,8 @@ def main() -> None:
                           "--version", a.version])
         run("이름 표기 사전 검증",
             [str(REPO / "audit" / "fix_name_spellings.py"), "--check"])
+        run("세이브 머리글 정렬 검증",
+            [str(REPO / "audit" / "verify_save_header.py"), "--version", a.version])
         run("예고 타이틀 카드 검증(CB)",
             [str(REPO / "audit" / "verify_eyecatch.py"), "--cb-only"])
     if want(9):

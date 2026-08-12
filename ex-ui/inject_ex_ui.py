@@ -319,7 +319,7 @@ for name, ptr, cnt, bound in TABLES:
 # 생년월일 피커/시나리오 번호/혈액형/기체 카운터 등 span_map이 못 잡는 1자 라벨.
 # 모든 ui_master 레코드에 적용되는 리터럴 치환(길이 동일 + 토큰 경계에서만).
 # 'はい'는 2바이트(가나×2)라 span_map minL=3에 안 걸리는데 선택지에 자주 나온다.
-GLOBAL_LITERAL = {"はい": "예"}
+GLOBAL_LITERAL = {"はい": "네"}
 def _literal_swap(rec, table):
     """토큰을 걸으며 '글리프 토큰 구간'에만 리터럴 치환. 컨트롤 인자는 절대 건드리지 않는다."""
     pairs = []
@@ -458,7 +458,8 @@ print("  명령 메뉴 @0x974b (76B) 한글")
 #   창 자체가 그려지지 않는다(제3차 실기에서 확인된 회귀).
 import pickle as _pickle
 _TH2EX = 0xbd39          # THIRD 오프셋 - EX 오프셋
-_FOREIGN = _pickle.load(open(f"{_P.REPO}/third-ui/foreign_recs.pkl", "rb"))
+_FOREIGN = {int(k, 16): bytes.fromhex(v["hex"]) for k, v in
+            json.load(open(f"{_P.REPO}/third-ui/foreign_recs.json", encoding="utf-8"))["records"].items()}
 _THRET = open(f"{ROOT}/extracted/THIRD/THIRD.WAR", "rb").read()
 def _mid_pad(body, pad):
     if pad <= 0: return bytes(body)

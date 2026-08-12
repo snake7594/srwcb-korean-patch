@@ -366,7 +366,9 @@ for name,ptr,cnt,bound in TABLES:
     repack(name,recs,pool_lo,min(max(rec_end(war,t) for t in recs),bound),pf)
 
 # ---------------- ui_master: RELOCATE-ALL (walk region stays byte-identical to retail) ----------------
-FOREIGN=pickle.load(open(f"{_P.REPO}/third-ui/foreign_recs.pkl","rb"))   # {offset: translated_record_bytes}
+# {오프셋: 심을 바이트}. 사람이 읽고 고치는 소스는 third-ui/foreign_recs.json 이다.
+FOREIGN={int(k,16):bytes.fromhex(v["hex"]) for k,v in
+         json.load(open(f"{_P.REPO}/third-ui/foreign_recs.json",encoding="utf-8"))["records"].items()}
 foreign_len={o:rec_end(war,o)-o for o in FOREIGN}          # original lengths (BEFORE any writes)
 MH,MC=0x247CC,107
 pool_lo=MH+4+4*MC; recs={}; pf=[]; hits=0

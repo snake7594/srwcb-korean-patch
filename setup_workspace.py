@@ -28,7 +28,8 @@ NEEDED = [
     "THIRD/THIRD.WAR", "THIRD/3_SCE.BIN", "THIRD/3_DEAD.BIN",
     "EX/EX.WAR", "EX/E_SCE.BIN", "EX/E_DEAD.BIN",
     "BMESS2.BIN", "BMESS3.BIN", "BMESS4.BIN",
-    "C_SMAP.BIN",
+    "C_SMAP.BIN",          # 게임 선택 화면 그래픽
+    "EFFECT.BIN",          # 시나리오 예고 타이틀 카드 그래픽
 ]
 
 #: 저장소 번역 자산 → 파이프라인이 읽는 작업 폴더 위치

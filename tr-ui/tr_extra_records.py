@@ -180,12 +180,13 @@ FOREIGN_VARIANT = {0x1a1d1: {"prefix": 24, "ko_swap": ("저장", "종료")}}
 def patch_foreign_records(war, retail, enc_ko, verbose=True):
     """ui_master 포인터 표에 없는 맵/시스템 레코드 5개.
 
-    제3차에서 폭 검증된 번역(foreign_recs.pkl)을 EX 경유로 TR 위치에 찍는다.
+    제3차에서 폭 검증된 번역(third-ui/foreign_recs.json)을 EX 경유로 TR 위치에 찍는다.
     패딩은 반드시 '마지막 F6 뒤'에 넣는다(끝에 넣으면 창이 안 그려진다).
     """
     import pickle
     ex_ret = open(f"{ROOT}/extracted/EX/EX.WAR", "rb").read()
-    F = pickle.load(open(f"{_P.REPO}/third-ui/foreign_recs.pkl", "rb"))
+    F = {int(k, 16): bytes.fromhex(v["hex"]) for k, v in
+         json.load(open(f"{_P.REPO}/third-ui/foreign_recs.json", encoding="utf-8"))["records"].items()}
     TH2EX = 0xbd39
 
     def mid_pad(body, pad):
