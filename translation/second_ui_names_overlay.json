@@ -1261,7 +1261,7 @@
      "source_raw_hex": "93 D9 91 FF",
      "source_raw_sha256": "83ec10febdb1753c201228acabe8b76b9e13954c49d2288a7a7fda61cc41835d",
      "japanese": "イリア",
-     "korean": "일리아",
+     "korean": "이리아",
      "translation_source": "canonical_pilot_component",
      "review": {
       "required": false,
@@ -1279,7 +1279,7 @@
      "source_raw_hex": "93 D9 91 FF",
      "source_raw_sha256": "83ec10febdb1753c201228acabe8b76b9e13954c49d2288a7a7fda61cc41835d",
      "japanese": "イリア",
-     "korean": "일리아",
+     "korean": "이리아",
      "translation_source": "canonical_pilot_component",
      "review": {
       "required": false,
@@ -2269,7 +2269,7 @@
      "source_raw_hex": "B7 B2 CC FF",
      "source_raw_sha256": "21c6c1db62854aac37d489405e12bfa6ed26b79075c0d6dacbb7e8328ed42a98",
      "japanese": "トッポ",
-     "korean": "톳타",
+     "korean": "톳포",
      "translation_source": "canonical_pilot_short_catalogue",
      "review": {
       "required": false,
@@ -3781,7 +3781,7 @@
      "source_raw_hex": "DA AA B2 B7 FF",
      "source_raw_sha256": "26558beb5bc9db59919656db49b41c302aa9cd8f9446deb5637d7294e5ccf9bf",
      "japanese": "ルセット",
-     "korean": "루셋",
+     "korean": "루세트",
      "translation_source": "canonical_pilot_component",
      "review": {
       "required": false,
@@ -8493,7 +8493,7 @@
      "source_raw_hex": "93 D9 91 E3 C0 AD CF FF",
      "source_raw_sha256": "6e1ac29823dc305ef3ab67a2b37927031ef81935ff997feba5aaf8c9b82ec4fb",
      "japanese": "イリア=パゾム",
-     "korean": "일리아 파좀",
+     "korean": "이리아 파좀",
      "translation_source": "canonical_pilot_catalogue",
      "review": {
       "required": false,
@@ -9105,7 +9105,7 @@
      "source_raw_hex": "EC 03 EC 04 EC 05 FF",
      "source_raw_sha256": "94de8f4701b8be18bdc813ff465f1431ac21cb23199a2dd35e505582fe34a05f",
      "japanese": "流竜馬",
-     "korean": "류마",
+     "korean": "료마",
      "translation_source": "canonical_pilot_catalogue",
      "review": {
       "required": false,
@@ -10995,7 +10995,7 @@
      "source_raw_hex": "DA AA B2 B7 E3 99 B6 C2 11 FF",
      "source_raw_sha256": "891c79d9bc9d1f04d13b2ea0503e46e0aef3b3db65509ee4ff0a1a526e803ae6",
      "japanese": "ルセット=オデビ-",
-     "korean": "루셋 오데비",
+     "korean": "루세트 오드비",
      "translation_source": "canonical_pilot_catalogue",
      "review": {
       "required": false,

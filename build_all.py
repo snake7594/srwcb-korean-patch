@@ -119,6 +119,8 @@ def main() -> None:
         run("글리프 무결성", [str(REPO / "tr-ui" / "verify_tr_glyphs.py")])
         run("최종 이미지 검증", [str(REPO / "audit" / "verify_image.py"),
                           "--version", a.version])
+        run("이름 표기 사전 검증",
+            [str(REPO / "audit" / "fix_name_spellings.py"), "--check"])
         run("예고 타이틀 카드 검증(CB)",
             [str(REPO / "audit" / "verify_eyecatch.py"), "--cb-only"])
     if want(9):
