@@ -223,6 +223,13 @@ def step_residual(files):
     print(f"  원문 잔재 {n}곳 교체")
 
 
+def step_bmess_unref(files):
+    """전투 대사 아카이브의 비참조 레코드 — 원장이 안 다루는 자리."""
+    import fix_bmess_unreferenced as FB
+    n = FB.apply(files)
+    print(f"  비참조 전투 대사 {n}곳 한글화")
+
+
 def step_csmap(files):
     if not CSMAP.exists():
         print("  게임 선택 화면 그래픽 생성")
@@ -261,6 +268,7 @@ def main():
         step_leftover(files)
     step_port_second(files)
     step_residual(files)
+    step_bmess_unref(files)
     # 뒤 단계(잔여 레코드 재배치 등)가 레코드를 옮기면 3단계에서 맞춰 둔 대사
     # 포인터가 다시 어긋난다. 레코드를 건드리는 일이 다 끝난 **여기서** 한 번 더 맞춘다.
     print("[6.5/8] 대사 포인터 재조준 마무리")

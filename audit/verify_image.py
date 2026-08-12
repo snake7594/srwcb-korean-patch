@@ -367,6 +367,36 @@ def check_pointer_ordinals(name, ko, jp, out):
         print(f"  ({name} 대사포인터: 알려진 잔여 {bad}건 — 레코드 0 포인터 표)")
 
 
+def check_bmess_unreferenced(name, data, tbl, out):
+    """전투 대사 아카이브의 **비참조 인용 레코드**에 일본어가 남았는지.
+
+    잎 노드가 안 가리키는데도 게임이 읽는 레코드가 아카이브마다 50여 개 있다.
+    원장이 잎 참조만 다뤄서 이쪽이 통째로 빠져 있었고, 전투 중에 일본어가 그대로
+    나왔다(2026-08-12 제보). `bmess_records()` 로 세는 검사는 참조 레코드만 보므로
+    여기를 절대 못 잡는다.
+    """
+    import re
+    sys.path.append(str(_P.REPO / "tools"))
+    from analyze_second_message_archives import parse_bmess
+    JPRE = re.compile(r"[぀-ヿ一-鿿]")
+    bad = tot = 0
+    for b in parse_bmess(data).blocks:
+        for _t, rec in b.unreferenced_quoted_records.items():
+            s, e = b.file_start + 15 + rec.start, b.file_start + 15 + rec.end
+            try:
+                txt = A.decode(data, s, e, tbl)
+            except Exception:
+                continue
+            letters = [c for c in txt if not c.isspace()]
+            if len(letters) < 3:
+                continue
+            tot += 1
+            if len(JPRE.findall(txt)) / len(letters) >= 0.3:
+                bad += 1
+    if bad:
+        out.append((f"{name} 전투(비참조)", tot, bad, 0, 0))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--version", default="v0.11.0")
@@ -391,6 +421,7 @@ def main():
         check_pointer_ordinals(game, d, j, rows)
         d = A.read_iso(img, bmess)
         check(f"{game} 전투", d, A.bmess_records(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
+        check_bmess_unreferenced(game, d, tbl, rows)
         d = A.read_iso(img, dead)
         check(f"{game} 사망", d, dead_live(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
 
