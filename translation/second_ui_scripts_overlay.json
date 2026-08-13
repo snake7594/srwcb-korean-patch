@@ -8959,7 +8959,7 @@
               "source_hex": "D5 BA B2 B7 EC 79 EC 2C",
               "source_sha256": "1c8044576761c40e7de16f640ac279ab293f72b5c6a278c1aea241e99e4ab665",
               "japanese_text": "ユニット能力",
-              "korean_text": "유닛 능력"
+              "korean_text": "유닛능력"
             },
             {
               "relative_start": 78,
@@ -9213,7 +9213,7 @@
               "source_hex": "C0 93 DC B2 B7 EC 79 EC 2C",
               "source_sha256": "32d2183cf393e2c40ea45ea0e0741304f6f23fc7d85a80091df1e5d2a64c52dd",
               "japanese_text": "パイロット能力",
-              "korean_text": "파일럿 능력"
+              "korean_text": "파일럿능력"
             },
             {
               "relative_start": 61,
@@ -10907,7 +10907,7 @@
               "source_hex": "D5 BA B2 B7 EC 4A EE AA",
               "source_sha256": "5ee939590adde865996a68d14784fe1a9dfa6855f91b6eb377b12f7d89f0e09c",
               "japanese_text": "ユニット改造",
-              "korean_text": "유닛 개조"
+              "korean_text": "유닛개조"
             },
             {
               "relative_start": 48,
@@ -10923,7 +10923,7 @@
               "source_hex": "D5 BA B2 B7 EC 79 EC 2C",
               "source_sha256": "1c8044576761c40e7de16f640ac279ab293f72b5c6a278c1aea241e99e4ab665",
               "japanese_text": "ユニット能力",
-              "korean_text": "유닛 능력"
+              "korean_text": "유닛능력"
             },
             {
               "relative_start": 66,
@@ -10931,7 +10931,7 @@
               "source_hex": "C0 93 DC B2 B7 EC 79 EC 2C",
               "source_sha256": "32d2183cf393e2c40ea45ea0e0741304f6f23fc7d85a80091df1e5d2a64c52dd",
               "japanese_text": "パイロット能力",
-              "korean_text": "파일럿 능력"
+              "korean_text": "파일럿능력"
             },
             {
               "relative_start": 76,
@@ -13432,7 +13432,7 @@
               "source_hex": "D5 BA B2 B7 EC 79 EC 2C",
               "source_sha256": "1c8044576761c40e7de16f640ac279ab293f72b5c6a278c1aea241e99e4ab665",
               "japanese_text": "ユニット能力",
-              "korean_text": "유닛 능력"
+              "korean_text": "유닛능력"
             }
           ]
         },

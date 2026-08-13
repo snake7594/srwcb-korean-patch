@@ -126,8 +126,15 @@ _SAVE_HEADER_ANCHOR = [("fc 07 00 f8 00 fc 09 00 f8 00",
 # 테두리(≈305)를 넘는다. 18칸(0x12)으로 당기면 286 에서 시작해 302 에서 끝나
 # 상자 안에 들어오고, 같은 목록을 쓰는 아군부대표 화면(0x11 + 창 원점 차이)과
 # 파일럿·LV·숫자 열이 정확히 같은 자리가 된다.
-_SORTIE_ROW = [("f7 00 40 fb ff ff f8 01 fc 13 fe fb ff ff f8 01 fc 08 fe f8 00 fc 01 00 f8 83",
-                "f7 00 40 fb ff ff f8 01 fc 12 fe fb ff ff f8 01 fc 08 fe f8 00 fc 01 00 f8 83")]
+#
+# ★ 행 끝의 `FC dc 02`(dx -36)는 **다음 줄 시작으로 돌아가는** 이동이다.
+#   한 줄의 dx 합(레트일 출격 -8 / 부대표 -10)을 그대로 둬야 줄마다 같은 x
+#   에서 시작한다. 열 이동만 줄이면 한 줄에 한 칸씩 **계단처럼 밀린다**
+#   (v0.11.31 에서 실제로 그랬다). 줄인 만큼 복귀 이동에서 되돌린다.
+_SORTIE_ROW = [("f7 00 40 fb ff ff f8 01 fc 13 fe fb ff ff f8 01 fc 08 fe"
+                " f8 00 fc 01 00 f8 83 fc dc 02",
+                "f7 00 40 fb ff ff f8 01 fc 12 fe fb ff ff f8 01 fc 08 fe"
+                " f8 00 fc 01 00 f8 83 fc dd 02")]
 
 # 아군부대표 목록의 **유닛명만** 한 칸 왼쪽으로 (제보 #7).
 #
@@ -136,8 +143,10 @@ _SORTIE_ROW = [("f7 00 40 fb ff ff f8 01 fc 13 fe fb ff ff f8 01 fc 08 fe f8 00 
 # (출격 x=39 / 부대표 x=47, 아이콘은 두 화면 다 24 근처).
 # +1 로 당기고, 뒤따르는 열 이동을 0x11 -> 0x12 로 되돌려 **파일럿·LV·레벨은
 # 있던 자리 그대로** 둔다. 창 여는 이동만 건드리므로 앞의 아이콘은 안 움직인다.
-_ROSTER_ROW = [("fc 02 ff f7 00 40 fb ff ff f8 01 fc 11 fe",
-                "fc 01 ff f7 00 40 fb ff ff f8 01 fc 12 fe")]
+_ROSTER_ROW = [("fc 02 ff f7 00 40 fb ff ff f8 01 fc 11 fe fb ff ff f8 01 fc 08 fe"
+                " f8 00 fc 01 00 f8 83 fc dc 02",
+                "fc 01 ff f7 00 40 fb ff ff f8 01 fc 12 fe fb ff ff f8 01 fc 08 fe"
+                " f8 00 fc 01 00 f8 83 fc db 02")]
 
 # 바이트 그대로 바꿔야 하는 것 — (찾을 바이트, 바꿀 바이트). 길이가 같아야 한다.
 #   * `FC dx dy` 는 커서 이동이다. 원문은 첫 줄 16칸 자리에 숫자를 찍었는데
