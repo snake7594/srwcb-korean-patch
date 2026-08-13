@@ -32,9 +32,11 @@ import assemble_image as AI         # noqa: E402
 EXES = ["SECOND/SECOND.WAR", "THIRD/THIRD.WAR", "EX/EX.WAR", "TR.WAR", "SLPS_020.70"]
 
 #: 목록 한 줄의 골격 — `FC`/`FB`/`F8` 만 남긴 뼈대로 찾는다. dx 값은 자유.
-#: (창 열기 `F7 00 40` 부터 복귀 이동 `FC .. 02` 까지)
+#:
+#: ★ **창 열기 직전 이동(`FC dx ff`)까지 포함**해야 한다. 그것도 행 루프 안이라
+#:   빼고 세면 거기서 생긴 어긋남을 놓친다 — v0.11.32 가 그렇게 새어 나갔다.
 _ROW = re.compile(
-    rb"\xf7\x00\x40\xfb..\xf8\x01\xfc(.)\xfe\xfb..\xf8\x01\xfc(.)\xfe"
+    rb"\xfc(.)\xff\xf7\x00\x40\xfb..\xf8\x01\xfc(.)\xfe\xfb..\xf8\x01\xfc(.)\xfe"
     rb"\xf8\x00\xfc(.)\x00\xf8\x83\xfc(.)\x02", re.S)
 
 
@@ -46,7 +48,7 @@ def rows(buf):
     """[(위치, dx 목록, 합)] — 목록 행 골격을 전부."""
     out = []
     for m in _ROW.finditer(buf):
-        dx = [_s8(m.group(i)[0]) for i in (1, 2, 3, 4)]
+        dx = [_s8(m.group(i)[0]) for i in range(1, 6)]
         out.append((m.start(), dx, sum(dx)))
     return out
 
