@@ -63,8 +63,19 @@ REPL = [
      '        for _k, _v in json.load(open(_eo, encoding="utf-8")).items():\n'
      '            _EX_OVR.setdefault(_k, []).extend(_v if isinstance(_v, list) else [_v])'),
     # ---- 맵 라벨 델타 ----
+    # TR 의 라벨 힙은 한 덩어리가 아니다 — 앞머리 42레코드가 +0x480, 나머지 310개가
+    # +0x47c 다(중간에 4바이트가 끼어 있다). 0x47c 하나로 잡으면 앞머리를 통째로
+    # 놓친다(2026-08-19 제보 #15e — 특수기능 레벨업의 조사 `が` 가 거기 있었다).
     ('LABEL_DELTA = 0x484      # EX (THIRD는 0x2dc) — source_hex 유일매칭으로 실측',
-     'LABEL_DELTA = 0x47c      # TR (EX는 0x484, THIRD는 0x2dc) — source_hex 유일매칭으로 실측'),
+     '''LABEL_DELTA = 0x47c      # TR 본문 (EX는 0x484, THIRD는 0x2dc)
+LABEL_DELTA_HEAD = 0x480     # TR 앞머리
+LABEL_HEAD_END = 0x9EA6      # 원장 오프셋 기준 경계'''),
+    ('''    _o = _x["offset"] + LABEL_DELTA''',
+     '''    _ds = ((LABEL_DELTA_HEAD, LABEL_DELTA) if _x["offset"] < LABEL_HEAD_END
+           else (LABEL_DELTA, LABEL_DELTA_HEAD))
+    _o = next((_x["offset"] + _d for _d in _ds
+               if war[_x["offset"] + _d:_x["offset"] + _d + len(_src)] == _src),
+              _x["offset"] + _ds[0])'''),
     # ---- 출력 ----
     ('out = f"{ROOT}/test_build/ex_full/runtime/EX/EX.WAR"',
      'out = f"{ROOT}/test_build/tr_full/runtime/TR.WAR"\n'

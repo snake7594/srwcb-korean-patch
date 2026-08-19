@@ -42,9 +42,13 @@ from typing import Any, Iterable, Iterator
 try:
     from .second_ui_phase_compaction import (
         FIXED_UI_PHASE_COMPACTION_BY_ASSET_SOURCE,
+        NO_DISPLAY_SPACE_ASSETS,
     )
 except ImportError:  # Direct script execution keeps tools/ on sys.path.
-    from second_ui_phase_compaction import FIXED_UI_PHASE_COMPACTION_BY_ASSET_SOURCE
+    from second_ui_phase_compaction import (
+        FIXED_UI_PHASE_COMPACTION_BY_ASSET_SOURCE,
+        NO_DISPLAY_SPACE_ASSETS,
+    )
 
 try:
     from .second_translation_codec import assemble_translated_record
@@ -1998,6 +2002,12 @@ def _select_fixed_pointer_overlay(
         full = current
     source_text = overlay.get("japanese_text", overlay.get("source_text"))
     source_text = source_text if isinstance(source_text, str) else ""
+
+    # 무기명은 띄어쓰기를 쓰지 않는다. 후보 사다리가 `add(full)` 부터 시작하므로
+    # 여기서 미리 지워야 '폭에 들어가면 띄어쓴 채로 채택' 되지 않는다(제보 #15a).
+    if asset_id in NO_DISPLAY_SPACE_ASSETS:
+        full = _without_display_spaces(full)
+        current = _without_display_spaces(current)
 
     _source_end, source_tokens = parse_renderer_record(
         source_raw, 0, len(source_raw)

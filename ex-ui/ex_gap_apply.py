@@ -31,18 +31,29 @@ DATA = _P.REPO / "ex-ui" / "data"
 def _line_advs(rec):
     """레코드 바이트에서 [F6]/[F7] 로 나뉜 줄마다 렌더러 advance 를 센다.
     advance 는 바이트 길이가 아니라 글리프 인덱스로 정해진다(0x101 미만은 항상 1)."""
-    out = [0]; ph = 0; i = 0
+    return [a for a, _p in _line_halves(rec)]
+
+
+def _line_halves(rec):
+    """줄마다 (advance, 줄끝 phase).
+
+    잘림 판정은 정수 advance 가 아니라 **반칸** `2*advance + 줄끝 phase` 로
+    한다 — `adv=31 & phase=1` 은 정수로는 합격이지만 마지막 전각 글자가 4px
+    잘린다(2026-08-19 제보 #14b).
+    """
+    out = [[0, 0]]; ph = 0; i = 0
     while i < len(rec):
         x = rec[i]
         if x == 0xFF: break
         if x < 0xEB: idx = x; i += 1
         elif x < 0xF6: idx = ((x - 0xEB) << 8) | rec[i + 1]; i += 2
         else:
-            if x in (0xF6, 0xF7): out.append(0); ph = 0
+            if x in (0xF6, 0xF7): out.append([0, 0]); ph = 0
             i += 1; continue
-        if idx < 0x101: out[-1] += 1
-        else: out[-1] += 1 + ph; ph ^= 1
-    return out
+        if idx < 0x101: out[-1][0] += 1
+        else: out[-1][0] += 1 + ph; ph ^= 1
+        out[-1][1] = ph
+    return [tuple(v) for v in out]
 
 
 def _load_gap_translations():
@@ -60,7 +71,8 @@ def _load_gap_translations():
 
 def build_ex_supplement(glyph_map, src_sce, idx2ch):
     from second_translation_codec import (normalise_for_font, LayoutState, record_geometry,
-                                      SQUEEZE_LADDER, _squeeze, MAX_SCENE_ADVANCE)
+                                      SQUEEZE_LADDER, _squeeze, MAX_SCENE_ADVANCE,
+                                      widest_half)
     from sce_gap_supplement import make_encoder, _tokens as _tok, _rec_end
     enc_ko = make_encoder(glyph_map, idx2ch)
     tr = _load_gap_translations()
@@ -128,8 +140,30 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             last -= 1
         head = rec[:toks[first][0]]
         tail = rec[toks[last][0] + toks[last][1]:]
+        # ★ 작전목적 '목표 변경' 레코드의 4바이트 이진 헤더 `04 00 <창폭> 00`.
+        #
+        #   글리프 0x00 은 폰트표에 문자가 없어(idx2ch[0] == "") 텍스트 추출에서
+        #   통째로 사라진다. 반대로 0x04 는 `'` 라는 문자가 있어 '첫 텍스트
+        #   글리프'로 잡히고, 그 바람에 head 가 비어 레코드 **전체가 번역문에서
+        #   새로 인코딩**된다. 그러면 `04 00 XX 00` 이 `04 XX` 로 줄어들고,
+        #   목표가 바뀌는 순간 창이 헤더를 잘못 읽어 게임이 멈춘다.
+        #   (EX 시나리오 9/11/27/45/49/58 — 2026-08-19 제보 #10·#11.
+        #    제2차·제3차는 같은 레코드를 fix_residual_jp 로 제자리 치환해 무사했다.)
+        #
+        #   `XX` 는 창 폭이다 — 세 게임 19곳 전수에서 그 레코드의 렌더 advance+1
+        #   과 일치한다. 그래서 문자가 아니라 데이터로 보고 그대로 보존한다.
+        _obj_hdr = (off in _objective and len(rec) > 5
+                    and rec[0] == 0x04 and rec[1] == 0x00 and rec[3] == 0x00)
+        if _obj_hdr:
+            head = rec[:4]
+            if ko[:2] == jp[:2]:       # 헤더가 문자로 새어 나온 앞 2글자 제거
+                ko = ko[2:]
+            if "<f6>" in ko or "<f7>" in ko:
+                raise SystemExit(
+                    f"EX 작전목적 0x{off:X}: 조건문에 줄바꿈이 들어 있다 — "
+                    f"줄이 늘면 작전목적 창이 깨져 게임이 멈춘다: {ko!r}")
         # 접두부에 스크립트 바이트가 있으면 세그먼트를 붙여서 평문 인코딩(접두부 보존)
-        segs = None if jp in KO_OVERRIDE else th_by_jp.get(jp)
+        segs = None if (jp in KO_OVERRIDE or _obj_hdr) else th_by_jp.get(jp)
         if segs:
             stat["reused_third"] += 1
         else:
@@ -148,9 +182,10 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             # 이 경로는 번역문을 그대로 붙이기만 해서 자동 줄바꿈이 없다. 줄이 상자
             # (폭 32)를 넘으면 화면에서 잘리므로, 넘칠 때만 본문을 다시 배치한다.
             _w, _l = record_geometry(rec)
-            _cap = max(_w, MAX_SCENE_ADVANCE)
+            _cap = (_w if _w > 40 else MAX_SCENE_ADVANCE)
             _lines_now = 1 + sum(1 for b in sup[off] if b in (0xF6, 0xF7))
-            if any(a > _cap for a in _line_advs(sup[off])) or _lines_now > max(_l, 3):
+            if (any(2 * a + p > 2 * _cap for a, p in _line_halves(sup[off]))
+                    or _lines_now > max(_l, 3)):
                 from build_second_expanded_patch import _has_page_break as _HPB
                 st = LayoutState(glyph_map, max_advance=_cap, max_lines=max(_l, 3),
                                  allow_page_break=_HPB(rec), strict_width=False)
@@ -175,7 +210,7 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
             _pb = _has_page_break(rec)
             # 작전목적(승리/패배조건) 블록은 원문 줄 수를 지켜야 한다 — 줄을 더
             # 넣으면 작전목적 창이 깨지고 게임이 멈춘다.
-            _adv = max(_w, MAX_SCENE_ADVANCE)
+            _adv = (_w if _w > 40 else MAX_SCENE_ADVANCE)
             _lines = _l if off in _objective else max(_l, 3)
 
             def _lay(drop_breaks, squeeze=0):
@@ -203,8 +238,9 @@ def build_ex_supplement(glyph_map, src_sce, idx2ch):
                     e, m = _lay(_drop, _sq)
                     if enc is None:
                         enc, _m = e, m
-                    wide = max((a for pg in m["page_advances"] for a in pg), default=0)
-                    if wide <= _adv and max(len(pg) for pg in m["pages"]) <= _lines:
+                    # 잘림은 정수 칸이 아니라 **반칸**으로 정해진다(제보 #14b)
+                    wide = widest_half(m)
+                    if wide <= 2 * _adv and max(len(pg) for pg in m["pages"]) <= _lines:
                         enc, _m = e, m
                         break
                 else:

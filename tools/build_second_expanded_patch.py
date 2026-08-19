@@ -82,6 +82,8 @@ from second_translation_codec import (  # noqa: E402
     EXTRA_GLYPH_START,
     MAX_LINE_ADVANCE,
     MAX_PAGE_LINES,
+    SCENE_FIRST_LINE_BONUS_HALF,
+    LayoutState,
     STRUCTURAL_GLYPH_INDICES,
     add_extra_glyph_mapping,
     assemble_translated_record,
@@ -565,6 +567,58 @@ def patch_second_battle_scratch(
     }
 
 
+def _choice_options() -> dict[str, list[str]]:
+    """선택지 레코드의 **항목별** 한국어 (레코드 id -> 항목 배열).
+
+    선택지 커서는 줄 단위로 움직인다. 항목 경계는 반드시 F6 여야 하고, 항목
+    하나가 두 줄로 접히면 하이라이트와 글이 어긋난다(제보 #13·#21b). 자동
+    재래핑에 맡기지 않고 여기 적힌 문장을 항목당 한 줄로 그대로 넣는다.
+    """
+    path = _P.TRANSLATION / "choice_options.json"
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8")).get("records", {})
+
+
+def _count_line_breaks(raw: bytes) -> int:
+    """레코드 안의 진짜 F6 개수 (2바이트 글리프·인자 바이트를 건너뛴다)."""
+    n = p = 0
+    while p < len(raw) and raw[p] != 0xFF:
+        b = raw[p]
+        if b < 0xEB:
+            p += 1
+        elif b <= 0xF5:
+            p += 2
+        else:
+            if b == 0xF6:
+                n += 1
+            p += 1 + CONTROL_ARG.get(b, 0)
+    return n
+
+
+def assemble_choice_record(options, glyph_map, max_advance):
+    """항목마다 정확히 한 줄. 항목 사이만 F6, 자동 줄바꿈이 일어나면 오류."""
+    state = LayoutState(glyph_map, max_advance=max_advance,
+                        max_lines=len(options), allow_page_break=False)
+    normalisation = []
+    for n, text in enumerate(options):
+        if n:
+            state._new_line_or_page()          # 항목 구분자 F6 (+ phase 리셋)
+        value, changes = normalise_for_font(text)
+        normalisation.extend(changes)
+        state.emit_text(value)
+        if len(state.pages[-1]) != n + 1:
+            raise ValueError(
+                f"선택지 항목 {n} 이 두 줄로 접혔습니다 "
+                f"(advance {state.page_advances[-1]} > {max_advance}): {value!r}")
+    encoded, layout = state.finish()
+    layout["normalisation"] = normalisation
+    layout["preserved_source_controls"] = []
+    layout["encoded_length"] = len(encoded)
+    layout["choice_options"] = list(options)
+    return encoded, layout
+
+
 def _box_overrides() -> dict[str, str]:
     """대사창에 도저히 안 들어가 문장을 다시 쓴 대사 (레코드 id -> 한국어)."""
     path = _P.TRANSLATION / "dialogue_box_overrides.json"
@@ -658,6 +712,7 @@ def make_replacements(
     # 그 레코드가 쓰던 줄수. 일본어가 들어갔던 크기라면 한국어도 확실히 들어간다.
     geo = _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources)
     overrides = _box_overrides()
+    choices = _choice_options()
 
     for row in rows:
         kind = row["kind"]
@@ -673,10 +728,33 @@ def make_replacements(
             only = next(iter(ko_parts))
             ko_parts = {only: ovr}
         _g = geo(kind, row["source"]["offset"], old_raw)
-        encoded, layout = assemble_translated_record(
-            row["japanese"]["translation_parts"], ko_parts, glyph_map,
-            geometry=_g[:3], max_bytes=_g[3],
-        )
+        options = choices.get(row["id"]) if kind == "scenario" else None
+        if kind == "scenario" and old_raw[:1] == b"\x00" and _count_line_breaks(old_raw):
+            # 선택지 레코드는 반드시 항목별 문안이 있어야 한다 — 자동 재래핑에
+            # 맡기면 항목 경계가 깨진다(제보 #13·#21b).
+            if not options:
+                raise ValueError(
+                    f"{row['id']}: 선택지 레코드인데 "
+                    f"translation/choice_options.json 에 항목이 없습니다")
+            if len(options) != _count_line_breaks(old_raw) + 1:
+                raise ValueError(
+                    f"{row['id']}: choice_options 항목 {len(options)}개 != "
+                    f"레트일 항목 {_count_line_breaks(old_raw) + 1}개")
+        elif options:
+            raise ValueError(
+                f"{row['id']}: 선택지 레코드가 아닌데 choice_options 에 있습니다")
+        if options:
+            encoded, layout = assemble_choice_record(options, glyph_map, _g[0])
+            ko_parts = {"p00": "".join(options)}   # 매니페스트에 실제 문구를 남긴다
+        else:
+            encoded, layout = assemble_translated_record(
+                row["japanese"]["translation_parts"], ko_parts, glyph_map,
+                geometry=_g[:3], max_bytes=_g[3],
+                # 대사창만 첫 줄 여유가 있을 수 있다(지금은 0). 전투·사망창은
+                # 원점을 실측한 적이 없으므로 어떤 경우에도 보너스를 주지 않는다.
+                first_line_bonus_half=(SCENE_FIRST_LINE_BONUS_HALF
+                                       if kind == "scenario" else 0),
+            )
         encoded = _keep_leading_indent(old_raw, encoded, _g[0])
         if kind == "scenario" and _os.environ.get("SRWCB_EXACT_LEN", "") not in ("", "0"):
             if len(encoded) > len(old_raw):
@@ -1023,9 +1101,21 @@ def _dialogue_geometry(source_sce, source_bmess, source_dead, rows, sources):
             # 작전목적 블록은 레트일 배치를 그대로 지켜야 하므로 **바이트 예산**도
             # 건다. 그래야 축약 단계가 먼저 돌고, 뒤에서 pin_objective_block 이
             # 자를 일이 거의 없다. 대사는 예산 없이 자유롭게 커진다.
+            # 선택지 레코드(레트일이 '선행 반각 1칸 + F6' 로 쓴 것)는 F6 가
+            # **항목 구분자**다. 선택지 커서는 줄 단위로 움직이므로 3줄 예산을
+            # 주면 항목 하나가 두 줄로 접혀 하이라이트와 글이 어긋난다
+            # (2026-08-19 제보 #13·#21b). 세 게임 시나리오 레코드 14,705개 중
+            # 이 판정에 걸리는 것은 정확히 13개이고 전부 실제 선택지다.
+            is_choice = bytes(raw)[:1] == b"\x00" and 0xF6 in bytes(raw)
             strict = offset in _strict_lines and _PIN_OBJECTIVE
-            box_lines = lines if strict else max(lines, MAX_PAGE_LINES)
-            return (max(width, MAX_SCENE_ADVANCE), box_lines,
+            box_lines = lines if (strict or is_choice) else max(lines, MAX_PAGE_LINES)
+            # 레트일이 31~34칸을 쓴 레코드가 있는데, 그건 그 줄이 **레코드 첫 줄**
+            # 이라 들어갔던 것이다(첫 줄만 원점이 한 칸 왼쪽). 그 폭을 이어지는
+            # 줄에 그대로 허용하면 8px 넘친다 — 대사창 레코드는 상자 폭으로 조인다.
+            # 폭 40 초과(60/271/273/276 등 5건)는 대사창이 아닌 특수 레코드라
+            # 건드리면 레이아웃이 깨지므로 그대로 둔다.
+            box_width = width if width > 40 else MAX_SCENE_ADVANCE
+            return (box_width, box_lines,
                     _has_page_break(bytes(raw)),
                     len(bytes(raw)) if strict else None)
         w, h = battle if kind == "battle_message" else death

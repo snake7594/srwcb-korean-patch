@@ -72,13 +72,15 @@ def main() -> None:
     ap.add_argument("--from", dest="start", type=int, default=1,
                     help="이 단계부터 시작 (1~9)")
     ap.add_argument("--only", type=int, help="이 단계만 실행")
+    ap.add_argument("--to", dest="stop", type=int, default=9,
+                    help="이 단계까지만 실행 (1~9)")
     ap.add_argument("--version", default="v0.11.0", help="완성 이미지 이름에 쓸 버전")
     a = ap.parse_args()
     P.ensure_dirs()
     need(P.EXTRACTED / "SECOND" / "SECOND.WAR", "추출된 게임 파일")
 
     def want(n: int) -> bool:
-        return a.only == n if a.only else n >= a.start
+        return a.only == n if a.only else a.start <= n <= a.stop
 
     print(f"작업 폴더: {P.WORK}")
     print("단계:", ", ".join(f"{k}.{v}" for k, v in STEPS.items()))
@@ -125,6 +127,10 @@ def main() -> None:
             [str(REPO / "audit" / "verify_save_header.py"), "--version", a.version])
         run("목록 행 커서 왕복 검증",
             [str(REPO / "audit" / "verify_list_rows.py"), "--version", a.version])
+        run("UI 런 폭·반칸 검증",
+            [str(REPO / "audit" / "verify_ui_runs.py"), "--version", a.version])
+        run("화자 검증",
+            [str(REPO / "audit" / "verify_speakers.py"), "--version", a.version])
         run("예고 타이틀 카드 검증(CB)",
             [str(REPO / "audit" / "verify_eyecatch.py"), "--cb-only"])
     if want(9):

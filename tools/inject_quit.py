@@ -44,6 +44,11 @@ SECOND_ORDER = [
     ("竜馬「そろそろ", ["竜馬p2"]),
 ]
 THIRD_ORDER = [
+    # 아기하 종료 메시지는 원래 세 레코드 한 장면이다(아기하 -> 시카로그 ->
+    # 아기하). 앵커 뒤 continuation 만 챙기고 **앵커 앞 두 레코드**를 놓쳐서
+    # 첫 줄이 일본어로 뜬 뒤 둘째 장으로 넘어갔다(2026-08-19 제보 #19c).
+    ("アギ-ハ「ねえ", []),
+    ("シカログ「", []),
     ("アギ-ハ「ま", []),
     ("ヴィガジ「これが", []),
     ("ヴィガジ「いいか", []),
@@ -55,6 +60,42 @@ THIRD_ORDER = [
     ("豹馬「おっと", ["豹馬p2"]),
     ("万丈「ごくろ", ["万丈p2", "万丈p3"]),
 ]
+
+# EX(=트레이닝 TR.WAR·부트 SLPS_020.70 도 같은 풀)의 타이틀 VM 종료 메시지.
+# 22 레코드 전부 손대지 않은 채로 남아 있었다 — inject_quit 에 EX 자체가 없었다
+# (2026-08-19 제보 #21d). 벨·엘은 바이트가 완전히 같은 두 벌이라 앵커가 2회
+# 걸린다. 아래 inject() 가 히트 전부에 같은 한국어를 쓴다.
+#
+# ★ EX 는 폰트 extras 배치가 ex-ui/inject_ex_ui.py 소관이라, 여기서 다른 extras
+#   목록으로 인코딩하면 엉뚱한 글자가 나온다. 그래서 EX 문안은 **extras 를 하나도
+#   쓰지 않게** 썼다(`…`(extras) 대신 `‥`, `응` 회피). EX_EXTRAS 는 비워 둔다.
+EX_EXTRAS = []
+EX_ORDER = [
+    ("サフィ-ネ「あら", []),
+    ("サフィ-ネ「うふふ", []),
+    ("モニカ「あらあら", []),
+    ("シュウ「モニカ", []),
+    ("ルオゾ-ル「なんと", []),
+    ("ヤンロン「そうか", []),
+    ("ヤンロン「何事", []),
+    ("リシェル「あ-ら", []),
+    ("リュ-ネ「あれ", []),
+    ("ベル「え-っ", []),           # 두 벌
+    ("エル「プレイヤ-", []),        # 두 벌
+    ("マサキ「あ?", []),
+    ("マサキ「おっと", []),
+    ("クロ「そうねぇ", []),
+    ("シロ「マサキ", []),
+    ("マサキ「俺は鳥", []),
+    ("ロドニ-「あ?", []),
+    ("ミオ「え?", []),
+    ("ミオ「ZZZZ", []),
+    ("ミオ「ちょっと", []),
+]
+
+ORDERS = {"second": SECOND_ORDER, "third": THIRD_ORDER, "ex": EX_ORDER}
+EXTRAS = {"second": SECOND_EXTRAS, "third": THIRD_EXTRAS, "ex": EX_EXTRAS}
+
 
 def enc_jp(s):
     o = bytearray()
@@ -100,9 +141,9 @@ def inject(buf, game, verbose=True, retail=None):
     영원히 안 들어갔다 — 2026-08-10).
     """
     buf = bytearray(buf)
-    order = SECOND_ORDER if game == "second" else THIRD_ORDER
+    order = ORDERS[game]
     texts = KO[game]
-    enc_ko = make_enc_ko(SECOND_EXTRAS if game == "second" else THIRD_EXTRAS)
+    enc_ko = make_enc_ko(EXTRAS[game])
     report = []
     written = 0
     ref = bytearray(retail) if retail is not None else buf
@@ -113,37 +154,40 @@ def inject(buf, game, verbose=True, retail=None):
         while at >= 0:
             hits.append(at)
             at = ref.find(pat, at + 1)
-        if len(hits) != 1:
-            report.append((anchor, "FOUND=%d" % len(hits), 0, 0, False))
+        if not hits:
+            report.append((anchor, "FOUND=0", 0, 0, False))
             continue
-        start = hits[0]
-        bounds = []
-        s = start
-        end = rec_end(ref, s)
-        bounds.append((s, end, texts[anchor]))
-        for ck in conts:
-            s = end
+        # 같은 문안이 두 벌 들어 있는 레코드가 있다(EX 의 벨·엘). 히트 전부에
+        # 같은 한국어를 쓴다 — 예전처럼 '1곳이 아니면 실패' 로 두면 EX 종료
+        # 메시지가 통째로 안 들어간다.
+        for start in hits:
+            bounds = []
+            s = start
             end = rec_end(ref, s)
-            bounds.append((s, end, texts[ck]))
-        plans, ok_all = [], True
-        for s, e, txt in bounds:
-            data = enc_ko(txt)
-            budget = e - s
-            ok = len(data) <= budget
-            # 한국어가 짧아 남는 꼬리에 원문이 그대로 있으면, 렌더러가 종료자
-            # 다음으로 넘어가면서 그 일본어를 다음 쪽으로 보여 준다(2026-08-10
-            # 제보 #4). 빈칸으로 채워 레코드를 정확히 메운다.
-            if ok and len(data) < budget:
-                data = data[:-1] + bytes(budget - len(data)) + bytes((0xFF,))
-            ok_all &= ok
-            plans.append((s, e, data, budget, ok))
-        for i, (s, e, data, budget, ok) in enumerate(plans):
-            tag = anchor if i == 0 else anchor + "#p%d" % i
-            report.append((tag, "0x%05x" % s, len(data), budget, ok))
-        if ok_all:
-            for s, e, data, budget, ok in plans:
-                buf[s:s + len(data)] = data
-                written += 1
+            bounds.append((s, end, texts[anchor]))
+            for ck in conts:
+                s = end
+                end = rec_end(ref, s)
+                bounds.append((s, end, texts[ck]))
+            plans, ok_all = [], True
+            for s, e, txt in bounds:
+                data = enc_ko(txt)
+                budget = e - s
+                ok = len(data) <= budget
+                # 한국어가 짧아 남는 꼬리에 원문이 그대로 있으면, 렌더러가 종료자
+                # 다음으로 넘어가면서 그 일본어를 다음 쪽으로 보여 준다(2026-08-10
+                # 제보 #4). 빈칸으로 채워 레코드를 정확히 메운다.
+                if ok and len(data) < budget:
+                    data = data[:-1] + bytes(budget - len(data)) + bytes((0xFF,))
+                ok_all &= ok
+                plans.append((s, e, data, budget, ok))
+            for i, (s, e, data, budget, ok) in enumerate(plans):
+                tag = anchor if i == 0 else anchor + "#p%d" % i
+                report.append((tag, "0x%05x" % s, len(data), budget, ok))
+            if ok_all:
+                for s, e, data, budget, ok in plans:
+                    buf[s:s + len(data)] = data
+                    written += 1
     if verbose:
         for tag, where, ln, bud, ok in report:
             print(f"  {tag:26s} {where:>9} ko={ln:>3} bud={bud:>3} {'OK' if ok else 'MISS'}")

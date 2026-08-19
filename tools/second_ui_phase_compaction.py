@@ -248,3 +248,14 @@ FIXED_UI_PHASE_COMPACTION_BY_ASSET_SOURCE: dict[str, dict[str, str]] = {
         "旧ザク": "구자",
     },
 }
+
+#: 띄어쓰기를 쓰지 않는 자산.
+#:
+#: 레트일 무기명은 전부 붙여 쓴다(`ダイタ-ンザンバ-`). 한국어도 칸을 벌리지
+#: 않는다. 예전에는 '폭이 모자랄 때만' 공백을 뺐기 때문에, 폭에 들어가는 172종
+#: (표 엔트리 1,175개)에만 공백이 남아 같은 표 안에서 표기가 갈렸다 —
+#: `다이탄미사일` 옆에 `다이탄 잔바`(2026-08-19 제보 #15a).
+#:
+#: 오버레이(`translation/second_ui_tables_overlay.json` 등)의 korean_text 는
+#: 띄어쓴 원본을 그대로 둔다. 공백은 **표시 단계에서** 지운다.
+NO_DISPLAY_SPACE_ASSETS = frozenset({"weapon_names"})

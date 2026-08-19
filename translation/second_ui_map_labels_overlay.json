@@ -252,14 +252,14 @@
    "budget_bytes": 1,
    "source_hex": "4B",
    "japanese_text": "が",
-   "korean_text": " "
+   "korean_text": "-"
   },
   {
    "offset": 40513,
    "budget_bytes": 7,
    "source_hex": "6A DB C8 DA 91 B2 C6",
    "japanese_text": "にレベルアップ",
-   "korean_text": "레벨업!"
+   "korean_text": " 레벨업"
   },
   {
    "offset": 40521,

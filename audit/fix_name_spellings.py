@@ -104,6 +104,13 @@ def main():
     print("[이름표]")
     n2 = fix_roster(g.get("roster_fixes", {}), a.write)
     print(f"\n대사 {n1}곳 / 이름표 {n2}곳" + ("" if a.write else "  (확인만 — 고치려면 --write)"))
+    # `--check` 는 build_all 8단계의 '이름 표기 사전 검증' 게이트다. 예전에는 이
+    # 값을 **한 번도 읽지 않아** 이형이 몇 곳이 남아 있든 종료코드 0 이었다
+    # (2026-08-19 확인). 이제 남아 있으면 빌드를 세운다.
+    if a.check and not a.write and (n1 + n2):
+        raise SystemExit(
+            f"[게이트] 이형 표기 {n1 + n2}곳이 남아 있습니다 — "
+            f"`python audit/fix_name_spellings.py --write` 로 고치고 다시 빌드하세요")
 
 
 if __name__ == "__main__":

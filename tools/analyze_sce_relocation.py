@@ -18,7 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import struct
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
@@ -33,7 +33,17 @@ CONTROL_ARG_LENGTHS = {
     0xFD: 2,
     0xFE: 1,
 }
-TEXT_POINTER_OPCODES = frozenset((0xB1, 0xB3, 0xB4))
+TEXT_POINTER_OPCODES = frozenset((0xB1, 0xB2, 0xB3, 0xB4))
+#: ``<옵코드> <변위16>`` 형태 — 피연산자가 옵코드+1 이다.
+#:
+#: `B2` 는 2026-08-19 제보 #12·#15·#17 을 파다가 뒤늦게 찾았다. 레트일 세 게임
+#: 전수로 **풀 안을 겨누는 18곳 전부가 레코드 시작**(18/18)이고, 레코드 시작을
+#: 겨눈 사이트 29곳(제3차 9·EX 19·제2차 1)은 뒤따르는 바이트가 `<u16> 0A 01`
+#: (선택지) 또는 `<u16> 62 00`(일반 대사)로 일관된다. 전 바이트 기준 적중률만
+#: 보면 0.95% 로 기준선(0.8%)과 비슷하지만, 재조준기는 '레트일에서 레코드 시작을
+#: 정확히 겨눈 자리'만 건드리므로 오탐이 바이트를 망가뜨리지 않는다.
+#: 이게 빠져 있어서 EX 마사키편 1화 ISS 설명 12줄이 통째로 엉뚱한 대사를 띄웠고
+#: (i12_2), 제3차 22~23화 북아메리카/아프리카 선택지가 깨졌다(i17_4).
 #: ``<옵코드> <1바이트 인자> <변위16>`` 형태 — 피연산자가 옵코드+2 다.
 #:
 #: 레트일 세 게임의 시나리오를 전수 조사해 골랐다(2026-08-12). 판정 기준은
@@ -412,6 +422,213 @@ def main() -> int:
     else:
         print(rendered, end="")
     return 0
+
+
+# --------------------------------------------------------------------------
+# 레코드 '안쪽 메시지 시작' 앵커
+#
+# FF 종단 레코드 하나에 `[F9 02]○○페이즈. 마사키「…」` 처럼 시스템문과 대사가
+# 붙어 있고, VM 이 그 **안쪽** 바이트를 직접 겨누는 포인터가 있다(제3차 12,
+# EX 45곳). 레코드를 쪼개면 번역 원장 키가 깨지므로, 배포본 레코드 안에서
+# **같은 메시지 경계를 다시 찾아** 변위만 고친다.
+# --------------------------------------------------------------------------
+#: 대사 인용부호 「 의 글리프 인덱스(1바이트). 레트일·한글 폰트 모두 같은 값이다.
+QUOTE_OPEN = 0x3E
+#: 화자 이름에는 절대 들어가지 않는 글리프 — 이름을 거꾸로 훑을 때 여기서 멈춘다.
+#: 반각공백 0x00 / ? 0x14 / ! 0x15 / , 0x3A / . 0x3B / 「 0x3E / 」 0x3F / 。 0xE4
+NAME_STOP_GLYPHS = frozenset((0x00, 0x14, 0x15, 0x3A, 0x3B, 0x3E, 0x3F, 0xE4))
+#: 화자 이름 최대 글리프 수 (레트일 최장 ベルト-チカ 6, 여유 있게)
+NAME_MAX_GLYPHS = 10
+#: 산출 앵커의 레코드 안 상대 위치가 레트일과 이만큼 넘게 다르면 버린다
+#: (실측 57곳의 최대 편차 0.107 → 0.25 는 두 배 이상 여유).
+ANCHOR_RATIO_TOLERANCE = 0.25
+#: 자동 산출이 실패한 곳만 손으로 적는 폴백.
+#: 키 = (게임 파일이름, 레트일 옵코드 절대오프셋)
+#: 값 = (KO 레코드 안 몇 번째 「 인가, 그 「 앞 화자 이름의 글리프 개수)
+#: 2026-08-19 실측으로는 **비어 있다**(57/57 자동 해결).
+ANCHOR_OVERRIDES: dict = {}
+
+
+def tokenize_record(data, start: int, end: int):
+    """레코드를 토큰으로 쪼갠다 -> [(오프셋, 종류, 값)].
+
+    종류: 'g' 글리프(값=글리프 인덱스) / 'c' 제어(값=옵코드) / 'e' 0xFF.
+    """
+    out = []
+    p = start
+    while p < end:
+        b = data[p]
+        if b < 0xEB:
+            out.append((p, 'g', b)); p += 1
+        elif b < 0xF6:
+            if p + 1 >= end:
+                break
+            out.append((p, 'g', ((b - 0xEB) << 8) | data[p + 1])); p += 2
+        elif b == 0xFF:
+            out.append((p, 'e', b)); p += 1
+        else:
+            out.append((p, 'c', b)); p += 1 + CONTROL_ARG_LENGTHS[b]
+    return out
+
+
+def _speaker_from(tokens, i: int):
+    """tokens[i:] 가 `이름「` 꼴로 시작하면 (이름 글리프 튜플, 「 토큰번호)."""
+    name = []
+    j = i
+    while j < len(tokens) and len(name) <= NAME_MAX_GLYPHS:
+        _off, kind, idx = tokens[j]
+        if kind != 'g':
+            return None
+        if idx == QUOTE_OPEN:
+            return (tuple(name), j) if name else None
+        if idx in NAME_STOP_GLYPHS:
+            return None
+        name.append(idx)
+        j += 1
+    return None
+
+
+@dataclass
+class AnchorContext:
+    """레트일-배포본 화자 이름 사전. 파일 한 쌍마다 한 번만 만든다."""
+    jp_names: set = field(default_factory=set)      # 레트일 화자 이름(글리프 튜플)
+    jp_to_ko: dict = field(default_factory=dict)    # 레트일 이름 -> {한글 이름: 빈도}
+    ko_names: set = field(default_factory=set)      # 한글 화자 이름 전체
+
+
+def build_anchor_context(jp: bytes, ko: bytes, jp_scenarios, ko_scenarios):
+    """`이름「` 로 **시작하는 레코드**에서 화자 이름 사전을 뽑는다.
+
+    레코드 시작 대사는 게임마다 수천 개라 이름 목록도 JP->KO 대응도 여기서
+    전부 나온다(제3차 175/168, EX 137/133, 제2차 97/87). 외부 이름 사전에
+    기대지 않으므로 번역이 바뀌어도 저절로 따라간다.
+    """
+    ctx = AnchorContext()
+    for s in jp_scenarios:
+        for r in s.records:
+            sp = _speaker_from(tokenize_record(jp, r.start, r.end), 0)
+            if sp:
+                ctx.jp_names.add(sp[0])
+    for sj, sk in zip(jp_scenarios, ko_scenarios):
+        if len(sj.records) != len(sk.records):
+            continue
+        for rj, rk in zip(sj.records, sk.records):
+            a = _speaker_from(tokenize_record(jp, rj.start, rj.end), 0)
+            b = _speaker_from(tokenize_record(ko, rk.start, rk.end), 0)
+            if b:
+                ctx.ko_names.add(b[0])
+            if a and b:
+                ctx.jp_to_ko.setdefault(a[0], {})
+                ctx.jp_to_ko[a[0]][b[0]] = ctx.jp_to_ko[a[0]].get(b[0], 0) + 1
+    return ctx
+
+
+def jp_message_anchor(jp: bytes, record, target: int, ctx: AnchorContext):
+    """레트일 포인터가 레코드 **안쪽 메시지 시작**을 겨누는가?
+
+    맞으면 {'name','quote_ordinal','ratio','rel'}, 아니면 None.
+
+    판정 기준은 두 가지뿐이고 둘 다 파일에서 스스로 뽑은 것이다.
+      (1) 목표가 토큰 경계이고, 거기서부터 `이름「` 꼴이 이어진다.
+      (2) 그 이름이 **레코드 시작 대사에서 실제로 쓰인 화자 이름**이다.
+    (2)가 없으면 이름 한복판(`ェンドロ「`, `-ネ「`, `ュウ「`)을 우연히 맞힌
+    잡음이 섞인다 — 레트일 실측 356 후보 중 (1)이 291곳, (2)가 다시 8곳을
+    걸러 내고 57곳만 남는다.
+    """
+    if not (record.start < target < record.end):
+        return None
+    tokens = tokenize_record(jp, record.start, record.end)
+    index = {t[0]: i for i, t in enumerate(tokens)}
+    i = index.get(target)
+    if i is None:
+        return None
+    sp = _speaker_from(tokens, i)
+    if sp is None or sp[0] not in ctx.jp_names:
+        return None
+    span = record.end - record.start
+    return {
+        "name": sp[0],
+        "quote_ordinal": sum(1 for t in tokens[:i]
+                             if t[1] == 'g' and t[2] == QUOTE_OPEN),
+        "ratio": (target - record.start) / span if span else 0.0,
+        "rel": target - record.start,
+    }
+
+
+def _name_start_before(tokens, quote_index: int, want_ko: dict, ko_names: set):
+    """KO 레코드에서 「 앞 화자 이름의 **시작 오프셋**을 고른다 -> (오프셋, 방법)."""
+    back = []
+    j = quote_index - 1
+    while j >= 0 and len(back) < NAME_MAX_GLYPHS + 4:
+        _off, kind, idx = tokens[j]
+        if kind != 'g' or idx in NAME_STOP_GLYPHS:
+            break
+        back.append(j)
+        j -= 1
+    if not back:
+        return None, None
+    back.reverse()
+    seq = tuple(tokens[j][2] for j in back)
+    for cand, _n in sorted(want_ko.items(), key=lambda kv: (-kv[1], -len(kv[0]))):
+        if 0 < len(cand) <= len(seq) and seq[len(seq) - len(cand):] == cand:
+            return tokens[back[len(seq) - len(cand)]][0], "namemap"
+    for length in range(min(len(seq), NAME_MAX_GLYPHS), 0, -1):
+        if seq[len(seq) - length:] in ko_names:
+            return tokens[back[len(seq) - length]][0], "lexicon"
+    return tokens[back[0]][0], "delimiter"
+
+
+_ANCHOR_HOW_RANK = {"namemap": 0, "lexicon": 1, "delimiter": 2}
+
+
+def ko_message_anchor(ko: bytes, record, info: dict, ctx: AnchorContext,
+                      override=None):
+    """배포본 레코드에서 같은 메시지 시작 오프셋을 찾는다 -> (오프셋, 방법).
+
+    실패하면 (record.start, 'record-start') — 레코드를 통째로 그리게 두는 편이
+    레트일 변위를 남겨 **엉뚱한 레코드 한복판**을 찌르는 것보다 안전하다.
+    """
+    tokens = tokenize_record(ko, record.start, record.end)
+    quotes = [i for i, t in enumerate(tokens)
+              if t[1] == 'g' and t[2] == QUOTE_OPEN]
+    if not quotes:
+        return record.start, "record-start"
+    if override is not None:
+        k, back = override
+        if k < len(quotes) and quotes[k] - back >= 0:
+            return tokens[quotes[k] - back][0], "override"
+    span = record.end - record.start
+    want_ko = ctx.jp_to_ko.get(info["name"], {})
+    best = None
+    for ordinal, qi in enumerate(quotes):
+        off, how = _name_start_before(tokens, qi, want_ko, ctx.ko_names)
+        if off is None:
+            continue
+        delta = abs((off - record.start) / span - info["ratio"]) if span else 0.0
+        if delta > ANCHOR_RATIO_TOLERANCE:
+            continue
+        score = (_ANCHOR_HOW_RANK[how],
+                 0 if ordinal == info["quote_ordinal"] else 1, delta)
+        if best is None or score < best[0]:
+            best = (score, off, how)
+    if best is None:
+        return record.start, "record-start"
+    return best[1], best[2]
+
+
+def resolve_inner_anchor(jp: bytes, ko: bytes, jp_record, ko_record, target: int,
+                         ctx: AnchorContext, game: str = "", opcode_offset: int = -1):
+    """레트일 앵커 -> 배포본 앵커. 앵커가 아니면 None.
+
+    `second-fixes/fix_sce_event_refs.py` 가 '목표가 레코드 시작이 아닐 때'
+    이 함수를 부른다.
+    """
+    info = jp_message_anchor(jp, jp_record, target, ctx)
+    if info is None:
+        return None
+    override = ANCHOR_OVERRIDES.get((game, opcode_offset))
+    off, how = ko_message_anchor(ko, ko_record, info, ctx, override)
+    return {"offset": off, "how": how, "info": info}
 
 
 if __name__ == "__main__":

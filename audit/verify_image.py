@@ -90,12 +90,27 @@ GAMES = [
 SCE_BOX_ADVANCE = 31   # 32칸을 꽉 채우면 게임에서 넘친다(v0.11.23)
 SCE_MAX_LINES = 3
 BATTLE_BOX_ADVANCE = 29
+# 대사창 첫 줄은 원점이 한 칸 왼쪽이라 이론상 반 칸 두 개를 더 쓸 수 있다.
+# 그런데 엔진이 연속 대사를 3줄 **쪽** 단위로 이어 그려서 '레코드의 첫 줄'이
+# 실제로는 쪽 한가운데인 경우가 많다(제보 #15c). 그래서 보너스는 0 이다 —
+# 모든 줄이 `2*advance + 줄끝 phase <= 2*상자폭` 을 지켜야 한다.
+SCE_FIRST_LINE_BONUS_HALF = 0
+# 전투창 오른쪽 끝은 실측한 적이 없다. 레트일이 실제로 낸 최대치(반칸 59, EX)
+# 까지만 봐준다 — 그 너머는 무조건 회귀다.
+BATTLE_CAP_HALF = 2 * BATTLE_BOX_ADVANCE + 1
 
 
 def _pages(buf, s, e):
-    """레코드를 쪽(F7)·줄(F6)로 갈라 줄별 advance 를 돌려준다."""
+    """레코드를 쪽(F7)·줄(F6)로 갈라 줄별 advance 를 돌려준다.
+
+    **줄 끝의 빈칸은 세지 않는다.** 글리프 0x00 은 아무것도 그리지 않으므로 줄
+    끝에 몇 개가 붙든 화면에는 안 보인다. 재배치기(`harden_against_ff_operands`)가
+    포인터 피연산자에 0xFF 가 생기지 않도록 레코드 꼬리에 빈칸을 채우는데, 그걸
+    폭으로 세면 멀쩡한 대사가 폭 초과로 잡힌다.
+    """
     from second_translation_codec import glyph_advance, CONTROL_ARGUMENT_BYTES as CA
     pages, phase, p = [[0]], 0, s
+    ink = [[[0, 0]]]                 # 줄별 [잉크까지의 폭, 줄끝 phase]
     while p < e:
         b = buf[p]
         if b == 0xFF:
@@ -106,14 +121,29 @@ def _pages(buf, s, e):
             idx, p = ((b - 0xEB) << 8) | buf[p + 1], p + 2
         else:
             if b == 0xF6:
-                pages[-1].append(0); phase = 0
+                pages[-1].append(0); ink[-1].append([0, 0]); phase = 0
             elif b == 0xF7:
-                pages.append([0]); phase = 0
+                pages.append([0]); ink.append([[0, 0]]); phase = 0
             p += 1 + CA.get(b, 0)
             continue
         step, phase = glyph_advance(idx, phase)
         pages[-1][-1] += step
-    return pages
+        if idx:                      # 0x00 = 빈칸, 잉크 없음
+            ink[-1][-1] = [pages[-1][-1], phase]
+    return ink
+
+
+def _half(pages, bonus=0):
+    """줄별 **반칸(4px)** 소요 = `2*advance + 줄끝 phase`.
+
+    커서는 `x = 원점 + 8*advance + 4*phase` 이고 전각 잉크는 12px 다. 그래서
+    '마지막 글자가 안 잘리는가' 는 정수 advance 가 아니라 이 값으로 정해진다.
+    `adv=31 & phase=1`(=63)은 정수로는 합격이지만 화면에서 4px 잘린다(#14b).
+    첫 줄 보너스는 미리 빼 두므로 그대로 `2*상자폭` 과 견주면 된다.
+    """
+    return [[2 * adv + ph - (bonus if (i == 0 and j == 0) else 0)
+             for j, (adv, ph) in enumerate(pg)]
+            for i, pg in enumerate(pages)]
 
 
 def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
@@ -129,6 +159,8 @@ def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
             txt = A.decode(ko, s, e, tbl)
             kp = _pages(ko, s, e)
             jpg = _pages(jp, sj, ej)
+            kh = _half(kp, SCE_FIRST_LINE_BONUS_HALF)
+            jh = _half(jpg, SCE_FIRST_LINE_BONUS_HALF)
         except Exception:
             broke += 1
             continue
@@ -136,17 +168,19 @@ def check_pages(name, ko, jp, recs_ko, recs_jp, tbl, box, out):
         if n >= 3 and tot and n / tot >= 0.5:
             jp_over += 1
         # 원문이 상자보다 크게 쓴 드문 레코드는 원문이 쓴 만큼까지 허용
-        wcap = max(box, max(max(pg) for pg in jpg))
+        wcap = max(2 * box, max(max(pg) for pg in jh))
         cap = max(SCE_MAX_LINES, max(len(pg) for pg in jpg))
         # ★ 원문이 안 쓴 쪽 나눔(F7)을 우리가 넣으면 안 된다. 대사창 경로는 F7 을
         #   처리하지 못해서 대사가 꼬이다가 게임이 멈춘다(제3차 8화).
-        if (any(max(pg) > wcap or len(pg) > cap for pg in kp)
+        if (any(max(pg) > wcap for pg in kh)
+                or any(len(pg) > cap for pg in kp)
                 or (isref and len(kp) > len(jpg))):
             wide += 1
     out.append((name, len(recs_ko), jp_over, wide, broke))
 
 
 def check(name, data, recs, tbl, width, lines, out):
+    """`width` 는 **반칸** 단위다(2*칸). 2026-08-19 부터 바뀌었다."""
     jp = wide = broke = 0
     for row in recs:
         s, e = row[-2], row[-1]
@@ -161,7 +195,9 @@ def check(name, data, recs, tbl, width, lines, out):
         if n >= 3 and tot and n / tot >= 0.5:
             jp += 1
         try:
-            ws, pages, _mx = A.line_widths(data, s, e)
+            pg = _pages(data, s, e)
+            ws = [v for page in _half(pg) for v in page]   # 반칸 단위
+            pages = [len(page) for page in pg]
         except Exception:
             broke += 1
             continue
@@ -183,10 +219,48 @@ def _is_dialogue(buf, s, e, tbl):
     return k >= 6 and k / max(len(t), 1) >= 0.45
 
 
+def _anchor_map(ko, jp):
+    """레트일 레코드 시작 -> (레트일 앵커, 배포본 앵커).
+
+    FF 종단 레코드 하나에 시스템문과 대사가 붙어 있고 VM 이 그 **안쪽**을 직접
+    겨누는 자리가 있다(제3차 12·EX 45곳). 이런 레코드는 화면에 **두 번, 서로
+    다른 시작점에서** 그려지므로, 폭·줄 검사도 레코드 통째가 아니라 앵커에서
+    잘라 두 토막으로 재야 한다. 레트일도 같은 구조라 원문 쪽도 같이 자른다.
+    """
+    import struct as _struct
+    sys.path.append(str(_P.REPO / "tools"))
+    from analyze_sce_relocation import (parse_scenarios, iter_pointer_sites,
+                                        build_anchor_context, jp_message_anchor,
+                                        ko_message_anchor)
+    SKIP = {(0xB6, 0x00)}
+    xs, ys = parse_scenarios(jp), parse_scenarios(ko)
+    ctx = build_anchor_context(jp, ko, xs, ys)
+    out = {}
+    for x, y in zip(xs, ys):
+        if len(x.records) != len(y.records):
+            continue
+        starts = {r.start for r in x.records}
+        for off_j, opnd_j, op in iter_pointer_sites(jp, x.block_start, x.pool_start):
+            tj = opnd_j + _struct.unpack_from("<h", jp, opnd_j)[0]
+            if tj in starts or (op, jp[off_j + 1]) in SKIP:
+                continue
+            host = next((i for i, r in enumerate(x.records)
+                         if r.start < tj < r.end), None)
+            if host is None:
+                continue
+            info = jp_message_anchor(jp, x.records[host], tj, ctx)
+            if info is None:
+                continue
+            koff, _how = ko_message_anchor(ko, y.records[host], info, ctx)
+            out[x.records[host].start] = (tj, koff)
+    return out
+
+
 def _paired(ko, jp, tbl):
     """같은 순번의 (패치본 대사, 레트일 대사) 짝 + 상자 크기 + 대사창 여부."""
     a = A.ASR.parse_scenarios(jp)
     b = A.ASR.parse_scenarios(ko)
+    anchors = _anchor_map(ko, jp)
     ko_out, jp_out = [], []
     for x, y in zip(a, b):
         if len(x.records) != len(y.records):
@@ -207,6 +281,22 @@ def _paired(ko, jp, tbl):
             # 그만큼 더 있고, 예전엔 그쪽이 통째로 검사에서 빠져 있었다.
             if is_choice(ko, ry.start, tbl) or not _is_dialogue(ko, ry.start, ry.end, tbl):
                 continue
+            anc = anchors.get(rx.start)
+            if anc:
+                # 앵커 레코드는 두 토막으로 잰다 — 머리(레코드 시작~앵커)와
+                # 꼬리(앵커~레코드 끝)가 화면에서 각각 따로 그려진다.
+                #
+                # 머리는 그 자체가 또 다른 앵커의 꼬리인 경우가 있어(레코드 하나에
+                # 메시지가 셋 이상) 어디서부터 그려지는지 확실하지 않다. 그래서
+                # 머리는 **레트일 레코드 전체**를 잣대로 삼아 예전과 같은 느슨한
+                # 기준을 유지하고, 우리가 다시 래핑한 꼬리만 레트일 꼬리와 엄격히
+                # 맞춘다.
+                ja, ka = anc
+                ko_out.append((ry.start, ka, bw, bh, False))
+                jp_out.append((rx.start, rx.end))
+                ko_out.append((ka, ry.end, bw, bh, rx.start in _refs))
+                jp_out.append((ja, rx.end))
+                continue
             ko_out.append((ry.start, ry.end, bw, bh, rx.start in _refs))
             jp_out.append((rx.start, rx.end))
     return ko_out, jp_out
@@ -225,7 +315,8 @@ def check_wrap_width():
     from second_translation_codec import (LayoutState, load_safe_glyph_map,
                                           normalise_for_font)
     gm = load_safe_glyph_map()
-    st = LayoutState(gm, max_advance=31, max_lines=3, allow_page_break=False)
+    st = LayoutState(gm, max_advance=31, max_lines=3, allow_page_break=False,
+                     first_line_bonus_half=SCE_FIRST_LINE_BONUS_HALF)
     st.emit_text(normalise_for_font("가나다라마바사아자차카타파하거너더러머버서어저처")[0])
     _enc, man = st.finish()
     first = man["page_advances"][0][0]
@@ -234,6 +325,47 @@ def check_wrap_width():
             f"[회귀] 레이아웃이 폭 32 상자를 {first} 칸에서 접었습니다 — "
             "emit_text/emit_control 이 self.max_advance 대신 상수를 보고 있습니다")
     return first
+
+
+def check_choice_options(name, ko, jp, out):
+    """선택지 레코드의 항목 경계(F6)가 레트일과 같은지.
+
+    선택지 커서는 **줄 단위**로 움직인다. 레트일이 F6 로 나눈 항목 하나가 우리
+    빌드에서 두 줄로 접히면 하이라이트와 글이 어긋난다(2026-08-19 제보 #13·#21b).
+    선택지 레코드는 '선행 반각 한 칸(0x00) + F6' 으로 알아본다 — 세 게임 시나리오
+    레코드 14,705개 중 이 판정에 걸리는 것은 13개이고 전부 실제 선택지다.
+    """
+    _ARG = {0xF8: 1, 0xF9: 1, 0xFB: 2, 0xFC: 2, 0xFD: 2, 0xFE: 1}
+
+    def _f6(buf, s, e):
+        n, i = 0, s
+        while i < e and buf[i] != 0xFF:
+            x = buf[i]
+            if x < 0xEB:
+                i += 1
+            elif x <= 0xF5:
+                i += 2
+            else:
+                if x == 0xF6:
+                    n += 1
+                i += 1 + _ARG.get(x, 0)
+        return n
+
+    tot = bad = 0
+    for x, y in zip(A.ASR.parse_scenarios(jp), A.ASR.parse_scenarios(ko)):
+        if len(x.records) != len(y.records):
+            continue
+        for rx, ry in zip(x.records, y.records):
+            if jp[rx.start] != 0x00:
+                continue
+            want = _f6(jp, rx.start, rx.end)
+            if want < 1:
+                continue
+            tot += 1
+            if _f6(ko, ry.start, ry.end) != want:
+                bad += 1
+    if tot:
+        out.append((f"{name} 선택지", tot, 0, bad, 0))
 
 
 def check_objective_block(name, ko, jp, tbl, out):
@@ -323,9 +455,15 @@ def check_pointer_ordinals(name, ko, jp, out):
     """
     import struct
     sys.path.append(str(_P.REPO / "tools"))
-    from analyze_sce_relocation import parse_scenarios, iter_pointer_sites
-    bad = tot = 0
-    for x, y in zip(parse_scenarios(jp), parse_scenarios(ko)):
+    from analyze_sce_relocation import (parse_scenarios, iter_pointer_sites,
+                                        build_anchor_context, jp_message_anchor,
+                                        ko_message_anchor)
+    #: `B6 00` 은 레코드 시작 적중률이 67%뿐이라 앵커 판정에서 뺀다(재조준기와 동일).
+    SKIP = {(0xB6, 0x00)}
+    xs, ys = parse_scenarios(jp), parse_scenarios(ko)
+    ctx = build_anchor_context(jp, ko, xs, ys)
+    bad = tot = a_bad = a_tot = 0
+    for x, y in zip(xs, ys):
         if len(x.records) != len(y.records):
             continue
         oj = {r.start: i for i, r in enumerate(x.records)}
@@ -336,25 +474,51 @@ def check_pointer_ordinals(name, ko, jp, out):
         for lo, hi in ((x.block_start, x.pool_start), (x.pool_start, x.record_data_end)):
             for off_j, opnd_j, op in iter_pointer_sites(jp, lo, hi):
                 tj = opnd_j + struct.unpack_from("<h", jp, opnd_j)[0]
+                host = info = None
                 if tj not in oj:
-                    continue
+                    # ★ 레코드 **안쪽 메시지 시작**을 겨누는 앵커 포인터도 본다.
+                    #   예전에는 여기서 그냥 넘어가서, 제3차 12곳·EX 45곳이
+                    #   레트일 변위 그대로여도 게이트가 통과시켰다(제보 #17·#18·#19).
+                    if (op, jp[off_j + 1]) in SKIP:
+                        continue
+                    host = next((i for i, r in enumerate(x.records)
+                                 if r.start < tj < r.end), None)
+                    if host is None:
+                        continue
+                    info = jp_message_anchor(jp, x.records[host], tj, ctx)
+                    if info is None:
+                        continue
                 if off_j < x.pool_start:
                     if not prepool_ok:
                         continue
                     off_k = y.block_start + (off_j - x.block_start)
                 else:
-                    host = next((i for i, r in enumerate(x.records)
-                                 if r.start <= off_j < r.end), None)
-                    if host is None:
+                    h2 = next((i for i, r in enumerate(x.records)
+                               if r.start <= off_j < r.end), None)
+                    if h2 is None:
                         continue
-                    off_k = y.records[host].start + (off_j - x.records[host].start)
+                    off_k = y.records[h2].start + (off_j - x.records[h2].start)
                 if off_k + 4 > len(ko) or ko[off_k] != op:
                     continue          # 번역으로 밀린 자리 — 대조 대상이 아니다
                 opnd_k = off_k + (opnd_j - off_j)
                 tk = opnd_k + struct.unpack_from("<h", ko, opnd_k)[0]
-                tot += 1
-                if ok_.get(tk) != oj[tj]:
-                    bad += 1
+                if info is None:
+                    tot += 1
+                    if ok_.get(tk) != oj[tj]:
+                        bad += 1
+                else:
+                    want, how = ko_message_anchor(ko, y.records[host], info, ctx)
+                    a_tot += 1
+                    # 산출 자체가 약한(delimiter/record-start) 곳도 실패로 센다
+                    if tk != want or how not in ("namemap", "lexicon", "override"):
+                        a_bad += 1
+    # 앵커는 기지의 실패가 없다 — 하나라도 어긋나면 회귀다.
+    if a_bad:
+        out.append((f"{name} 대사포인터앵커", a_tot, 0, a_bad, 0))
+    # 개수 자체도 못박는다(필터가 느슨해지거나 빡세지면 여기서 걸린다)
+    expect = {"제3차": 12, "EX": 45, "제2차": 0}.get(name)
+    if expect is not None and a_tot != expect:
+        out.append((f"{name} 앵커개수", a_tot, 0, abs(a_tot - expect), 0))
     # 아직 못 잡은 잔여. 두 곳 다 **레코드 0(이벤트 스크립트) 안의 촘촘한 포인터
     # 표**인데, 변위를 고치면 그 2바이트가 레코드 훑기에서 0xFF 로 읽혀 경계가
     # 움직이고, 다시 계산하면 또 어긋나 되풀이해도 수렴하지 않는다. 지금은
@@ -417,13 +581,14 @@ def main():
         ko_recs, jp_recs = _paired(d, j, tbl)
         check_pages(f"{game} 대사", d, j, ko_recs, jp_recs, tbl, SCE_BOX_ADVANCE, rows)
         check_objective_block(game, d, j, tbl, rows)
+        check_choice_options(game, d, j, rows)
         check_retail_leftovers(f"{game} 대사", d, j, ko_recs, jp_recs, rows)
         check_pointer_ordinals(game, d, j, rows)
         d = A.read_iso(img, bmess)
-        check(f"{game} 전투", d, A.bmess_records(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
+        check(f"{game} 전투", d, A.bmess_records(d), tbl, BATTLE_CAP_HALF, 0, rows)
         check_bmess_unreferenced(game, d, tbl, rows)
         d = A.read_iso(img, dead)
-        check(f"{game} 사망", d, dead_live(d), tbl, BATTLE_BOX_ADVANCE, 0, rows)
+        check(f"{game} 사망", d, dead_live(d), tbl, BATTLE_CAP_HALF, 0, rows)
 
     print(f"\n{'항목':12} {'레코드':>8} {'미번역':>7} {'폭/줄초과':>9} {'깨짐':>6}")
     bad = 0

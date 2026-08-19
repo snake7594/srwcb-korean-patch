@@ -148,7 +148,7 @@ labels=json.load(open(f"{_P.TRANSLATION}/second_ui_map_labels_overlay.json",enco
 # The map-label overlay and the system message pool are the SAME pointer-addressed pool.
 # Records the (reviewed 제2차) map-label section already translates byte-exact in place are
 # handled there; the message-pool section skips them to avoid double-writes.
-MAP_LABEL_OFFS={x["offset"]+LABEL_DELTA for x in labels if x.get("korean_text") and str(x["korean_text"]).strip()}
+MAP_LABEL_OFFS={x["offset"]+LABEL_DELTA for x in labels if x.get("korean_text") not in (None,"")}
 
 # ---------------- final glyph map + donor slots ----------------
 ko_all=list(jp2ko.values())+list(span_map.values())+[x["korean_text"] for x in labels if x.get("korean_text")]
@@ -355,6 +355,10 @@ for name,ptr,cnt,bound in TABLES:
         f=ptr+4+4*k; t=f+s32(f); pf.append((f,t))
         if not (pool_lo<=t and rec_end(war,t)<=bound) or t in recs: continue
         jp=decode(war,t); ko=jp2ko.get(jp)
+        # 무기명은 레트일이 붙여 쓴다. 사전(despace_nospace)에 등록된 것만 지우던
+        # 예전 방식은 폭에 들어가는 172종을 놓쳐 같은 표에서 표기가 갈렸다
+        # (2026-08-19 제보 #15a). 값이 어느 사전에서 왔든 **인코딩 직전** 여기서 건다.
+        if name=="weapon_names" and ko: ko=ko.replace(" ","").replace("　","")
         if name=="spirit_commands" and ko:
             adv,_ph=_sig(_idxs_of(enc_ko(ko)))
             if adv>SPIRIT_DESC_MAX:
@@ -546,7 +550,11 @@ repack("music_demo",recs,min(recs),max(rec_end(war,t) for t in recs),pf)
 ok=grew=skip=0; toolong=[]
 for x in labels:
     src=bytes.fromhex(x["source_hex"].replace(" ","")); ko=x.get("korean_text"); o=x["offset"]+LABEL_DELTA
-    if war[o:o+len(src)]!=src or not ko or not str(ko).strip(): skip+=1; continue
+    # 공백만 있는 번역은 "번역 없음"이 아니다 — 라벨 힙에서 원문 조사 한 글자를
+    # **빈칸으로 지우는** 정상 항목이다(특수기능 레벨업의 `が`, 원장 offset 40511
+    # budget 1). 예전 `not str(ko).strip()` 가 이걸 버려서 제3차·EX·트레이닝에
+    # 일본어 `が` 가 그대로 남았다 — 2026-08-19 제보 #15e.
+    if war[o:o+len(src)]!=src or ko is None or ko=="": skip+=1; continue
     e=enc_ko(ko)
     if len(e)>len(src): toolong.append((x["japanese_text"],ko,len(src),len(e))); grew+=1; continue
     war[o:o+len(src)]=e+b"\x00"*(len(src)-len(e)); ok+=1

@@ -3,7 +3,7 @@
   "purpose": "인물·기체·무기 이름의 표준 한글 표기. 이름표(로스터)와 대사가 서로 다르게 쓰던 것을 하나로 못박는다.",
   "how_it_is_used": [
     "audit/fix_name_spellings.py 가 variants 를 대사 오버레이 3종에 적용한다.",
-    "audit/verify_names.py 가 남은 이형 표기를 잡는다(빌드 게이트).",
+    "audit/fix_name_spellings.py --check 가 남은 이형 표기를 잡는다(빌드 게이트).",
     "표준 표기는 translation/second_ui_names_overlay.json 의 이름표와 같아야 한다."
   ],
   "notes": [

@@ -49,8 +49,8 @@ def main() -> None:
         where = {e.path.strip("/").split("/")[-1]: e.path.strip("/") for e in entries}
         tbl = A.ko_table(extras)
         for name, kind, w, lines in ((sce, "대사", 0, 0),
-                                     (bm, "전투", V.BATTLE_BOX_ADVANCE, 0),
-                                     (dead, "사망", V.BATTLE_BOX_ADVANCE, 0)):
+                                     (bm, "전투", V.BATTLE_CAP_HALF, 0),
+                                     (dead, "사망", V.BATTLE_CAP_HALF, 0)):
             d = A.read_iso(str(img), where[name])
             if kind == "대사":
                 j = (_P.EXTRACTED / retail_sce).read_bytes()

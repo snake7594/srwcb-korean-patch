@@ -95,7 +95,7 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
     # '<f6>' = explicit line break (choice rows / intended splits), '<f7>' = page break.
     from second_translation_codec import (LayoutState, record_geometry,
                                           SQUEEZE_LADDER as _LADDER,
-                                          MAX_SCENE_ADVANCE)
+                                          MAX_SCENE_ADVANCE, widest_half)
     from second_translation_codec import _squeeze
 
     def _lay(segs, adv, lines, pb, drop_breaks, squeeze=0):
@@ -125,7 +125,8 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
         _w, _l = record_geometry(_raw)
         from build_second_expanded_patch import _has_page_break
         _pb = _has_page_break(_raw)
-        _adv = max(_w, MAX_SCENE_ADVANCE)
+        # 레트일이 31칸 넘게 쓴 건 그게 레코드 첫 줄이라 들어갔던 것이다(#14b)
+        _adv = _w if _w > 40 else MAX_SCENE_ADVANCE
         _lines = _l if off in _strict else max(_l, 3)
         # 번역 데이터에 박아 둔 <f6> 를 그대로 쓰면 줄이 넘칠 수 있다.
         # 넘치면 그 줄바꿈은 버리고 상자에 맞춰 다시 흘린다.
@@ -142,7 +143,9 @@ def build_supplement(glyph_map, src_sce, idx2ch, sp_dir):
                 e, m = _lay(segs, _adv, _lines, _pb, _drop, _sq)
                 if enc is None:
                     enc, man = e, m
-                if (max(len(pg) for pg in m["pages"]) <= _lines
+                # 줄 수만 보면 폭 초과를 놓친다. 잘림은 **반칸** 기준이다(#14b).
+                if (widest_half(m) <= 2 * _adv
+                        and max(len(pg) for pg in m["pages"]) <= _lines
                         and (_cap is None or len(e) <= _cap)):
                     enc, man = e, m
                     break

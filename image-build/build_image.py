@@ -98,7 +98,10 @@ def collect() -> dict:
 
 def step_quit(files):
     import inject_quit as Q
-    for name, game in (("SECOND/SECOND.WAR", "second"), ("THIRD/THIRD.WAR", "third")):
+    # EX 의 종료 메시지 풀(22 레코드)은 EX.WAR·TR.WAR·SLPS_020.70 세 벌에 똑같이
+    # 들어 있는데 파이프라인에 아예 없어서 통째로 일본어였다(2026-08-19 제보 #21d).
+    for name, game in (("SECOND/SECOND.WAR", "second"), ("THIRD/THIRD.WAR", "third"),
+                       ("EX/EX.WAR", "ex"), ("TR.WAR", "ex"), ("SLPS_020.70", "ex")):
         # 앵커·경계는 **레트일**에서 찾는다. 중간 산출물이 이미 한 번 주입된
         # 상태여도 번역을 고치면 항상 다시 반영된다.
         retail = (_P.EXTRACTED / name).read_bytes()
@@ -155,9 +158,15 @@ def step_sce(files):
             raise SystemExit(f"{name}: 재조준 후에도 스테일 참조 {bad}건")
         # 풀 앞 스크립트는 게임별 빌더가 맡아 왔는데 아는 옵코드가 제각각이라
         # 몇몇이 레트일 변위 그대로 남았다(제보 #8). 여기서 한 번에 마무리한다.
-        fixed, pre_n, probs = FX.retarget_prepool(fixed, jp, apply=True, verbose=False)
+        fixed, pre_n, probs = FX.retarget_prepool(fixed, jp, apply=True, verbose=True,
+                                                  game=name)
         if probs:
             raise SystemExit(f"{name}: 풀앞 재조준 불가 {len(probs)}건")
+        # 앵커 포인터는 레코드 **중간**부터 그린다. 자동 줄바꿈은 레코드를 처음부터
+        # 그린다고 보고 F6 을 놓기 때문에 꼬리 첫 줄이 상자를 넘는다(57곳 중 5곳).
+        # 길이를 바꾸지 않고 `00`<->`F6` 만 맞바꿔 다시 나눈다.
+        fixed, wrapped = FX.rewrap_anchor_tails(fixed, jp, apply=True,
+                                                verbose=False, game=name)
         files[name] = fixed
         _same_record_split(files[name], jp, name)
         print(f"  {name}: 이벤트 참조 재조준 {need_n}곳 (풀앞 {pre_n}곳)")
@@ -200,6 +209,16 @@ def step_third_ui(files):
     out, n, menu = F3.apply(files["THIRD/THIRD.WAR"])
     files["THIRD/THIRD.WAR"] = out
     print(f"  한자 잔재 제자리 교체 {n}곳 / 맵 명령 메뉴: {menu}")
+
+
+def step_ex_tr_map_menu(files):
+    """EX·트레이닝의 맵 명령 메뉴를 전체 이름으로 (제보 #21c).
+
+    제3차는 `step_third_ui` 가 같은 일을 해 준다. EX·TR 은 그 단계가 없어서
+    `부대/반격/목적/정신` 두 글자짜리가 그대로 화면에 나왔다.
+    """
+    import fix_ex_tr_map_menu as FX
+    FX.apply(files)
 
 
 def step_leftover(files):
@@ -262,6 +281,7 @@ def main():
     step_menu(files)
     print("[6/8] 잔여 미번역 UI")
     step_third_ui(files)
+    step_ex_tr_map_menu(files)
     if a.skip_leftover:
         print("  건너뜀")
     else:

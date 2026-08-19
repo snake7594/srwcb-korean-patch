@@ -52,6 +52,18 @@ MAX_LINE_ADVANCE = 18
 # '미치루「왔어 메카자우루스야!잭, 준비됐어?」' = 정확히 32칸).
 # 그래서 한 칸 덜 채운다.
 MAX_SCENE_ADVANCE = 31
+# 대사창 첫 줄은 원점이 한 칸(8px) 왼쪽이라 이론상 두 반칸을 더 쓸 수 있다.
+# 그런데 엔진은 연속 대사를 3줄 **쪽** 단위로 이어 그려서, '레코드의 첫 줄'이
+# 실제로는 쪽 한가운데인 경우가 많다(제보 #15c 에서 확인). 그때 보너스를 주면
+# 바로 그 4px 넘침이 다시 난다. 그래서 지금은 0 으로 둔다 — 모든 줄이
+# `2*advance + 줄끝 phase <= 2*상자폭` 을 지킨다.
+# (원래 근거였던 실측: 첫 줄 pen native 55 / F6 뒤 63, 잘리는 마지막 픽셀 309)
+# (실측: 첫 줄 pen 원점 native 55 / F6 뒤 줄 63, 상자 안쪽 마지막 픽셀 309.
+#  레트일 원문도 첫 줄은 반칸 64까지 쓰고 이어지는 줄은 62를 넘지 않는다.)
+# 그래서 첫 줄만 반 칸 두 개를 더 쓸 수 있다.
+# 전투창·사망창은 원점을 실측한 적이 없고, 레트일도 반칸 58(EX만 59)을 넘지
+# 않으므로 보너스를 주지 않는다(0).
+SCENE_FIRST_LINE_BONUS_HALF = 0
 # 축약 사다리: 0=그대로, 11~19=띄어쓰기를 10~90%만 제거(읽기 좋게 조금씩),
 # 2=전부 제거, 3=말줄임표 축약, 4=한국어 축약, 5=화자 이름 생략(최후수단)
 SQUEEZE_LADDER = (0, 11, 13, 15, 17, 19, 2, 3, 4, 5)
@@ -68,6 +80,40 @@ def glyph_advance(index: int, phase: int) -> tuple[int, int]:
     if index < 0x101:
         return 1, phase
     return 1 + phase, phase ^ 1
+
+
+def line_cap_half(max_advance: int, first_line: bool = False,
+                  first_line_bonus_half: int = 0) -> int:
+    """이 줄이 실제로 쓸 수 있는 **반 칸(4px)** 예산.
+
+    커서는 x = 원점 + 8*advance + 4*phase 로 움직이고, 전각 글리프는 언제나
+    12px 를 전진하며 잉크는 그 앞 11px 이다. 따라서 '마지막 글자가 안 잘린다'
+    는 조건은 정수 advance 가 아니라
+
+        2*advance + 줄끝 phase  <=  2*상자폭 (+ 첫 줄 보너스)
+
+    이다. 정수만 비교하면 `adv=31 · phase=1`(=반칸 63) 인 줄을 합격시켜
+    마지막 전각 글자의 오른쪽 4px 이 잘린다(2026-08-19 제보 #14b).
+    """
+    return 2 * max_advance + (first_line_bonus_half if first_line else 0)
+
+
+def widest_half(manifest: dict[str, Any]) -> int:
+    """레코드가 상자 오른쪽 끝을 얼마나 밀어냈는지 **반 칸**으로.
+
+    첫 줄 보너스를 이미 뺀 값이라 그냥 ``2 * 상자폭`` 과 비교하면 된다.
+    """
+    bonus = manifest.get("first_line_bonus_half", 0)
+    phases = manifest.get("page_end_phases") or []
+    worst = 0
+    for i, page in enumerate(manifest["page_advances"]):
+        ends = phases[i] if i < len(phases) else []
+        for j, adv in enumerate(page):
+            ph = ends[j] if j < len(ends) else 0
+            worst = max(worst, 2 * adv + ph - (bonus if (i == 0 and j == 0) else 0))
+    return worst
+
+
 GLYPH_COUNT = 0xB00
 EXTRA_GLYPH_START = 0xA2F
 EXTRA_GLYPH_END = GLYPH_COUNT - 1
@@ -207,6 +253,8 @@ class LayoutState:
     pages: list[list[str]] = field(default_factory=lambda: [[""]])
     page_cell_counts: list[list[int]] = field(default_factory=lambda: [[0]])
     page_advances: list[list[int]] = field(default_factory=lambda: [[0]])
+    # 줄마다 **끝 phase**(0/1). 마지막 전각 글자가 반 칸 더 나갔는지를 이걸로 안다.
+    page_end_phases: list[list[int]] = field(default_factory=lambda: [[0]])
     phase: int = 0
     pending_spaces: int = 0
     inserted_line_breaks: int = 0
@@ -214,6 +262,8 @@ class LayoutState:
     preserved_page_breaks: int = 0
     whitespace_wraps: int = 0
     strict_width: bool = True
+    # 이 상자의 **첫 줄**이 더 쓸 수 있는 반 칸 수. 대사창만 2, 나머지는 0.
+    first_line_bonus_half: int = 0
 
     @property
     def current_line(self) -> str:
@@ -227,19 +277,31 @@ class LayoutState:
     def current_advance(self) -> int:
         return self.page_advances[-1][-1]
 
-    def _span_advance(self, text: str) -> int:
-        """Phase-aware renderer advance of ``text`` starting from the current phase."""
-        phase = self.phase
+    @property
+    def cap_half(self) -> int:
+        """지금 쓰고 있는 줄의 반칸 예산 (보너스는 레코드 첫 줄에만)."""
+        return line_cap_half(self.max_advance,
+                             len(self.pages) == 1 and len(self.pages[-1]) == 1,
+                             self.first_line_bonus_half)
+
+    def _span(self, text: str, phase: int | None = None) -> tuple[int, int]:
+        """(advance, 끝 phase). ``phase`` 를 안 주면 현재 phase 에서 잰다."""
+        ph = self.phase if phase is None else phase
         total = 0
         for char in text:
-            step, phase = glyph_advance(self.glyph_map[char], phase)
+            step, ph = glyph_advance(self.glyph_map[char], ph)
             total += step
-        return total
+        return total, ph
+
+    def _span_advance(self, text: str) -> int:
+        """Phase-aware renderer advance of ``text`` starting from the current phase."""
+        return self._span(text)[0]
 
     def _append_visual(self, text: str, cells: int, advance: int = 0) -> None:
         self.pages[-1][-1] += text
         self.page_cell_counts[-1][-1] += cells
         self.page_advances[-1][-1] += advance
+        self.page_end_phases[-1][-1] = self.phase
 
     def _new_line_or_page(self) -> None:
         self.phase = 0  # the renderer resets the wide phase at every F6/F7 break
@@ -248,12 +310,14 @@ class LayoutState:
             self.pages[-1].append("")
             self.page_cell_counts[-1].append(0)
             self.page_advances[-1].append(0)
+            self.page_end_phases[-1].append(0)
             self.inserted_line_breaks += 1
         else:
             self.data.append(0xF7)
             self.pages.append([""])
             self.page_cell_counts.append([0])
             self.page_advances.append([0])
+            self.page_end_phases.append([0])
             self.inserted_page_breaks += 1
 
     def _emit_char(self, char: str) -> None:
@@ -267,14 +331,17 @@ class LayoutState:
 
     def _emit_spaces(self, count: int) -> None:
         for _ in range(count):
-            if self.current_advance + 1 > self.max_advance:
+            # 공백은 저글리프(<0x101)라 한 칸 전진하고 phase 를 바꾸지 않는다
+            if 2 * (self.current_advance + 1) + self.phase > self.cap_half:
                 self._new_line_or_page()
             self._emit_char(" ")
 
     def _emit_word(self, word: str) -> None:
         for char in word:
-            advance, _ = glyph_advance(self.glyph_map[char], self.phase)
-            if self.current_advance and self.current_advance + advance > self.max_advance:
+            advance, next_phase = glyph_advance(self.glyph_map[char], self.phase)
+            if (self.current_advance
+                    and 2 * (self.current_advance + advance) + next_phase
+                    > self.cap_half):
                 self._new_line_or_page()
             self._emit_char(char)
 
@@ -288,13 +355,17 @@ class LayoutState:
             # 그때 줄을 바꾸면 지금 줄의 남은 칸을 통째로 버리게 된다 —
             # 띄어쓰기를 지운 뒤 문장이 한 덩어리가 되면 첫 줄이 12칸만 쓰이고
             # 넉 줄이 되어 상자를 넘치던 원인이 이것이다.
-            span = self._span_advance(token)
-            fits_alone = span <= self.max_advance
+            span, span_phase = self._span(token)
+            # 줄을 새로 시작하면 phase 0 에서 다시 재므로, '이 낱말이 한 줄에
+            # 들어가는가'는 phase 0 기준으로 봐야 한다.
+            alone, alone_phase = self._span(token, 0)
+            fits_alone = 2 * alone + alone_phase <= line_cap_half(self.max_advance)
             if self.pending_spaces:
                 # spaces advance one unit each (low glyph, no phase change)
                 needed = self.pending_spaces + span
                 if (self.current_advance and fits_alone
-                        and self.current_advance + needed > self.max_advance):
+                        and 2 * (self.current_advance + needed) + span_phase
+                        > self.cap_half):
                     # A layout break is the visible separator at a word
                     # boundary; no lexical space is deleted within a line.
                     self._new_line_or_page()
@@ -303,7 +374,8 @@ class LayoutState:
                     self._emit_spaces(self.pending_spaces)
                 self.pending_spaces = 0
             elif (self.current_advance and fits_alone
-                    and self.current_advance + span > self.max_advance):
+                    and 2 * (self.current_advance + span) + span_phase
+                    > self.cap_half):
                 # There was no legal word boundary.  Split a long token rather
                 # than alter or truncate it.
                 self._new_line_or_page()
@@ -311,13 +383,17 @@ class LayoutState:
 
     def emit_control(self, raw: bytes, visible_cells: int = 0) -> None:
         if self.pending_spaces:
-            if self.current_advance and self.current_advance + self.pending_spaces + visible_cells > self.max_advance:
+            if (self.current_advance
+                    and 2 * (self.current_advance + self.pending_spaces + visible_cells)
+                    + self.phase > self.cap_half):
                 self._new_line_or_page()
                 self.whitespace_wraps += 1
             else:
                 self._emit_spaces(self.pending_spaces)
             self.pending_spaces = 0
-        if visible_cells and self.current_advance and self.current_advance + visible_cells > self.max_advance:
+        if (visible_cells and self.current_advance
+                and 2 * (self.current_advance + visible_cells) + self.phase
+                > self.cap_half):
             self._new_line_or_page()
         self.data.extend(raw)
         label = "⟦" + raw.hex(" ").upper() + "⟧"
@@ -335,6 +411,7 @@ class LayoutState:
         self.pages.append([""])
         self.page_cell_counts.append([0])
         self.page_advances.append([0])
+        self.page_end_phases.append([0])
         self.phase = 0
         self.preserved_page_breaks += 1
 
@@ -343,7 +420,11 @@ class LayoutState:
         # 상자를 한 칸 넘기게 만든다.
         self.pending_spaces = 0
         if self.strict_width and any(
-                adv > self.max_advance for page in self.page_advances for adv in page):
+                2 * adv + ph > line_cap_half(self.max_advance, i == 0 and j == 0,
+                                             self.first_line_bonus_half)
+                for i, (page, ends) in enumerate(
+                    zip(self.page_advances, self.page_end_phases))
+                for j, (adv, ph) in enumerate(zip(page, ends))):
             raise AssertionError("layout exceeded line-advance (box width) limit")
         if self.allow_page_break and any(len(page) > self.max_lines for page in self.pages):
             raise AssertionError("layout exceeded lines-per-page limit")
@@ -351,6 +432,8 @@ class LayoutState:
         return bytes(self.data), {
             "pages": self.pages,
             "page_advances": self.page_advances,
+            "page_end_phases": self.page_end_phases,
+            "first_line_bonus_half": self.first_line_bonus_half,
             "page_cell_counts": self.page_cell_counts,
             "page_count": len(self.pages),
             "inserted_line_breaks": self.inserted_line_breaks,
@@ -564,16 +647,19 @@ def assemble_translated_record(
     glyph_map: dict[str, int],
     geometry: tuple[int, int] | None = None,
     max_bytes: int | None = None,
+    first_line_bonus_half: int = 0,
 ) -> tuple[bytes, dict[str, Any]]:
     adv, lines, page_break = (geometry or (MAX_LINE_ADVANCE, MAX_PAGE_LINES, True))
+    bonus = first_line_bonus_half
     if page_break:
         # 원문이 쪽을 나눈 레코드 — 우리도 나눠도 된다.
         narrowest = None
         for squeeze in SQUEEZE_LADDER:
             enc, man = _assemble(translation_parts, ko_parts, glyph_map,
-                                 adv, lines, True, squeeze, strict=False)
-            widest = max((a for pg in man["page_advances"] for a in pg), default=0)
-            if widest <= adv:
+                                 adv, lines, True, squeeze, strict=False,
+                                 first_line_bonus_half=bonus)
+            widest = widest_half(man)
+            if widest <= 2 * adv:
                 return enc, man
             if narrowest is None or widest < narrowest[0]:
                 narrowest = (widest, enc, man)
@@ -583,7 +669,8 @@ def assemble_translated_record(
         if narrowest is not None:
             return narrowest[1], narrowest[2]
         return _assemble(translation_parts, ko_parts, glyph_map,
-                         max(adv, SAFE_FALLBACK_ADVANCE), lines, True, 1)
+                         max(adv, SAFE_FALLBACK_ADVANCE), lines, True, 1,
+                         first_line_bonus_half=bonus)
 
     # 원문이 쪽을 안 나눈 레코드 — 대사창 경로는 F7 을 처리하지 못한다.
     # 바이트 상한이 주어지면 그 안에 들어갈 때까지 더 줄인다.
@@ -592,11 +679,12 @@ def assemble_translated_record(
     best = None                     # 상자에는 들어가는 것 중 가장 짧은 것
     for squeeze in SQUEEZE_LADDER:
         enc, man = _assemble(translation_parts, ko_parts, glyph_map,
-                             adv, lines, False, squeeze, strict=False)
-        widest = max((a for pg in man["page_advances"] for a in pg), default=0)
+                             adv, lines, False, squeeze, strict=False,
+                             first_line_bonus_half=bonus)
+        widest = widest_half(man)
         if first is None:
             first = (enc, man)
-        fits_box = (widest <= adv and max(len(pg) for pg in man["pages"]) <= lines)
+        fits_box = (widest <= 2 * adv and max(len(pg) for pg in man["pages"]) <= lines)
         if fits_box and (max_bytes is None or len(enc) <= max_bytes):
             return enc, man
         if fits_box and (best is None or len(enc) < len(best[0])):
@@ -609,7 +697,8 @@ def assemble_translated_record(
         enc, man = best
     else:
         enc, man = _assemble(translation_parts, ko_parts, glyph_map,
-                             adv, lines, False, 5, strict=False)
+                             adv, lines, False, 5, strict=False,
+                             first_line_bonus_half=bonus)
     man["overflow"] = True
     return enc, man
     return _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, 0)
@@ -697,9 +786,10 @@ def _squeeze(text: str, level: int) -> str:
 
 
 def _assemble(translation_parts, ko_parts, glyph_map, adv, lines, page_break, squeeze,
-              strict=True):
+              strict=True, first_line_bonus_half=0):
     state = LayoutState(glyph_map, max_advance=adv, max_lines=lines,
-                        allow_page_break=page_break, strict_width=strict)
+                        allow_page_break=page_break, strict_width=strict,
+                        first_line_bonus_half=first_line_bonus_half)
     normalisation: list[dict[str, Any]] = []
     original_controls: list[str] = []
     for part in translation_parts:

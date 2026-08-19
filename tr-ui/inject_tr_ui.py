@@ -313,6 +313,9 @@ for name, ptr, cnt, bound in TABLES:
         f = ptr + 4 + 4 * k; t = f + s32(f); pf.append((f, t))
         if not (pool_lo <= t and rec_end(war, t) <= bound) or t in recs: continue
         jp = decode(war, t); ko = jp2ko.get(jp)
+        # 무기명은 레트일이 붙여 쓴다 — 값이 어느 사전에서 왔든 인코딩 직전에 건다
+        # (2026-08-19 제보 #15a).
+        if name == "weapon_names" and ko: ko = ko.replace(" ", "").replace("　", "")
         if name == "spirit_commands" and ko:
             adv, _ = _sig(_idxs_of(enc_ko(ko)))
             if adv > SPIRIT_DESC_MAX:
@@ -467,13 +470,25 @@ print("  명령 메뉴 @0x9747 (76B) 한글")
 _XR.patch_foreign_records(war, RETAIL, enc_ko)
 
 # ---------------- 맵 라벨 힙: 바이트-정확 제자리 ----------------
-LABEL_DELTA = 0x47c      # TR (EX는 0x484, THIRD는 0x2dc) — source_hex 유일매칭으로 실측
+# TR 의 라벨 힙은 **한 덩어리가 아니다**. 앞머리(원장 0x9D34~0x9EA5, 42레코드)는
+# +0x480, 그 뒤(310레코드)는 +0x47c 다 — 중간에 4바이트가 끼어 있다.
+# 0x47c 하나로만 잡던 예전 코드는 앞머리 42개를 통째로 놓쳤고, 그 안에 특수기능
+# 레벨업의 조사 `が`(원장 0x9E3F)가 들어 있었다(2026-08-19 제보 #15e).
+LABEL_DELTA = 0x47c      # TR 본문 (EX는 0x484, THIRD는 0x2dc)
+LABEL_DELTA_HEAD = 0x480     # TR 앞머리
+LABEL_HEAD_END = 0x9EA6      # 원장 오프셋 기준 경계
 _labels = json.load(open(f"{_P.TRANSLATION}/second_ui_map_labels_overlay.json", encoding="utf-8"))["records"]
 _lok = _lskip = _llong = 0
 for _x in _labels:
     _src = bytes.fromhex(_x["source_hex"].replace(" ", "")); _ko = _x.get("korean_text")
-    _o = _x["offset"] + LABEL_DELTA
-    if war[_o:_o + len(_src)] != _src or not _ko or not str(_ko).strip(): _lskip += 1; continue
+    _ds = ((LABEL_DELTA_HEAD, LABEL_DELTA) if _x["offset"] < LABEL_HEAD_END
+           else (LABEL_DELTA, LABEL_DELTA_HEAD))
+    _o = next((_x["offset"] + _d for _d in _ds
+               if war[_x["offset"] + _d:_x["offset"] + _d + len(_src)] == _src),
+              _x["offset"] + _ds[0])
+    # 공백만 있는 번역은 "번역 없음"이 아니다 — 원문 조사 한 글자를 빈칸으로
+    # 지우는 정상 항목이다(특수기능 레벨업의 `が`). 제보 #15e.
+    if war[_o:_o + len(_src)] != _src or _ko is None or _ko == "": _lskip += 1; continue
     _e = enc_ko(_ko)
     if len(_e) > len(_src): _llong += 1; continue
     war[_o:_o + len(_src)] = _e + b"\x00" * (len(_src) - len(_e)); _lok += 1

@@ -69,11 +69,17 @@ REPLACEMENTS = {
         ("移動要塞を倒す事", "이동 요새 격파"),
         ("敵のせん滅", "적 섬멸"),
         ("敵の全滅", "적 전멸"),
+        # 시나리오 11(코럴 캐니언 다시) 1단계 승리조건. 레코드 0(이벤트 스크립트)
+        # 꼬리라 원장 번역 대상이 아니었고, 가나는 폰트 교체 뒤에도 가나로 남고
+        # 한자 2글자만 뜻 모를 한글로 떠 있었다(제보 #11 동반). 8바이트 = 8바이트.
+        ("リィナの救出", "리나구출"),
     ],
     "SECOND/SECOND.WAR": _SHIELD,
     "EX/EX.WAR": _SHIELD,
-    "TR.WAR": _SHIELD,
-    "SLPS_020.70": _SHIELD,
+    # 트레이닝 모드 종료 확인문. 라벨 힙에 있는데 번역이 안 들어가 한자 두 글자
+    # 자리가 뜻 모를 한글('꽂꽃')로 렌더됐다. 19바이트 자리, 18바이트로 들어간다.
+    "TR.WAR": _SHIELD + [("トレ-ニングモ-ドを終了しますか?", "훈련을 종료할까요?")],
+    "SLPS_020.70": _SHIELD + [("トレ-ニングモ-ドを終了しますか?", "훈련을 종료할까요?")],
     "THIRD/THIRD.WAR": [
         ("無有", "무유"),
         ("セ-ブ終了しました。ゲ-ムを続けますか?", "저장 완료. 계속할까요?"),
@@ -93,12 +99,12 @@ KO_FIXUPS = {
     # 아니라 있고 없고다 — 원문도 無/有 다.
     "SECOND/SECOND.WAR": [("끔켬", "무유")],
     "SLPS_020.70": [("끔켬", "무유")],
-    "THIRD/THIRD.WAR": [
-        # 출격 화면 상단. 띄어쓰기를 빼 달라는 제보(#7)에 맞춰 붙여 쓴다.
-        # 남는 4바이트는 반각 빈칸으로 채워져 전체 폭은 레트일과 같은 13칸이라
-        # 뒤따르는 `12기`·`기력 100`·`LV순` 위치는 그대로다.
-        ("출격유닛선택남은", "출격유닛남음"),
-    ],
+    # ※ 출격 머리글(`출격유닛선택남은` -> `출격유닛남음`)은 여기 있었는데
+    #   **셈이 한 칸 틀렸다** — 8전각(12칸)을 6전각(9칸)+반각4(4칸)=13칸으로
+    #   바꿔 한 칸이 늘었고, 뒤따르는 `10기`·`기력 100`·`LV순` 이 통째로 8px
+    #   오른쪽으로 밀렸다(제보 #18b). 게다가 제2차·SLPS 는 `선택` 뒤에 빈칸이
+    #   있어 이 패턴이 아예 안 맞았는데도 조용히 넘어갔다(제보 #9).
+    #   지금은 아래 `_SORTIE_HEADER` 가 세 형태를 전부 같은 결과로 맞춘다.
 }
 
 # 세이브/로드 화면 머리글의 앵커 보정 (제보 #6).
@@ -153,6 +159,63 @@ _ROSTER_ROW = [("fc 02 ff f7 00 40 fb ff ff f8 01 fc 11 fe fb ff ff f8 01 fc 08 
                 "fc 01 ff f7 00 40 fb ff ff f8 01 fc 12 fe fb ff ff f8 01 fc 08 fe"
                 " f8 00 fc 01 00 f8 83 fc dc 02")]
 
+# 출격 유닛 선택 화면 머리글 — 문구를 `출격유닛남음` 으로 통일하고 레트일과
+# 같은 **14칸 / phase 0** 으로 되돌린다 (제보 #9, #18b).
+#
+#   레트일:  `00` 出撃(전각2) ユニット(반각4) 選択(전각2) `00` あと(반각2) = 14칸
+#
+# 지금은 실행파일마다 세 형태로 갈려 있다.
+#   제2차·SLPS  `00 출격유닛선택 00 남은`        14칸 ✓ (문구만 옛것)
+#   EX·트레이닝 `00 출격유닛선택남은 00`         14칸 ✓ (문구만 옛것, 붙어 보임)
+#   제3차       `00 출격유닛남음 00×5`           **15칸 ✗** (KO_FIXUPS 의 셈 착오)
+#
+# 전각↔반각 교환은 칸 수를 딱 맞추기 어렵다. 전각 빈칸 `3FF`(EE FF)는 phase 0
+# 에서 1칸·phase 1 에서 2칸 나아가므로 **두 개를 이어 붙이면 정확히 3칸**이고
+# phase 도 제자리로 돌아온다. 그래서 세 형태 모두 같은 18바이트 결과로 맞춘다.
+#   `00` + 6전각(9칸) + 3FF(1칸) + 3FF(2칸) + `00`(1칸) = 14칸, phase 0
+_SORTIE_HEADER = [
+    # 제3차 (KO_FIXUPS 를 뺐으므로 다음 빌드부터는 아래 EX 형태로 나오지만,
+    #        옛 산출물에 다시 돌릴 때를 위해 남겨 둔다)
+    ("f8 00 00 f3 3c ec 3d f1 ef ed ae ed 2c f1 fd 00 00 00 00 00 f8 82",
+     "f8 00 00 f3 3c ec 3d f1 ef ed ae ed 2c f1 fd ee ff ee ff 00 f8 82"),
+    # EX·트레이닝·제3차: `출격유닛선택남은`(8전각)
+    ("f8 00 00 f3 3c ec 3d f1 ef ed ae f0 79 f3 d9 ed 2c f1 fa 00 f8 82",
+     "f8 00 00 f3 3c ec 3d f1 ef ed ae ed 2c f1 fd ee ff ee ff 00 f8 82"),
+    # 제2차·SLPS: `출격유닛선택 남은`
+    ("f8 00 00 f3 3c ec 3d f1 ef ed ae f0 79 f3 d9 00 ed 2c f1 fa f8 82",
+     "f8 00 00 f3 3c ec 3d f1 ef ed ae ed 2c f1 fd ee ff ee ff 00 f8 82"),
+]
+
+# 유닛 능력 화면 상단 세 칸 `유닛능력 / 파일럿능력 / 무기성능` (제보 #16).
+#
+# 칸 시작을 0 / 8 / 17 칸에 맞춘 것까지는 맞았는데 **phase 를 안 맞췄다**.
+# `파일럿능력` 은 전각 5개라 phase 를 뒤집어 놓고, 반각 빈칸은 phase 를 못
+# 되돌린다. 그래서 `무기성능` 이 17칸 + 반 칸 = x 140px 에서 시작해(레트일 136)
+# 오른쪽 테두리를 2px 침범했다. 한 칸(8px)이 아니라 **반 칸(4px)** 문제다.
+# 반각 두 칸을 전각 빈칸 하나로 바꾸면 폭은 그대로 2칸, phase 만 1 -> 0 이 된다.
+_UNIT_TABS = [("ee a7 ed a1 ee b4 00 00 ef 59",
+               "ee a7 ed a1 ee b4 ee ff ef 59")]
+
+# 개조 확인 메시지 (제보 #9, #17a).
+#
+# 엔진은 `<스탯명> ␠ <숫자1> <꼬리 첫 글리프 하나> <숫자2> <꼬리 나머지>` 로
+# 조립한다. 두 숫자 사이에 들어가는 건 **글리프 딱 한 개**다. 레트일은 반각
+# `が`(잉크 8px)라 깔끔했는데 우리는 전각 `이`(전진 8px인데 잉크 12px)를 넣어
+# 앞뒤 숫자에 1px 간격으로 달라붙었다 — 화면에서 `2400|250` 처럼 읽힌다.
+# 게다가 `,` 가 숫자2 뒤로 가서 `250、가 됨.` 이 됐다.
+# 자리가 한 글리프뿐이라 조사를 넣을 수 없다 -> 반각 `-` 로 간다.
+#   결과: 「한계반응 240-250으로 됨.」 / 「확인?」
+_UPGRADE_MSG = [("f2 0c 3a ec 01 00 ee 00 3b f6 f4 de f2 0e 14 00 00",
+                 "11 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00 00")]
+
+# SLPS_020.70 의 같은 레코드는 아직 원문 그대로다(44바이트 통째 교체).
+# 한자 자리가 뜻 모를 한글로 렌더되고 있었다 — 감사기 사각지대였다.
+_UPGRADE_MSG_JP = [(
+    "1d 25 00 1a 23 00 ed a6 ec 51 ed 01 00 ec 62 ec 01 00 ec 63 ec 64 ec 65 ec 66 00"
+    " 4b 3a 6a 69 89 7d 58 e4 f6 87 8c 56 43 66 58 4a 14",
+    "1d 25 00 1a 23 00 f1 d0 ed f5 f0 82 00 f2 25 ec 09 00 f4 a3 ec 48 ef 8b f5 38 00"
+    " 11 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00 00")]
+
 # 바이트 그대로 바꿔야 하는 것 — (찾을 바이트, 바꿀 바이트). 길이가 같아야 한다.
 #   * `FC dx dy` 는 커서 이동이다. 원문은 첫 줄 16칸 자리에 숫자를 찍었는데
 #     한국어 문구가 짧아져 그 자리가 글자 위로 왔다(제보 #5). 숫자를 한국어
@@ -164,18 +227,33 @@ BYTE_FIXUPS = {
         # 숫자 자리(`FC dx dy` + `F8 82`)는 이제 third-ui/foreign_recs.json 이
         # 직접 들고 있다 — 제3차·EX·트레이닝이 한꺼번에 맞는다.
         ("f8 82 ec e1", None),          # None = 뒤 2바이트를 '기' 로 (아래에서 처리)
-    ] + _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW,
-    "SECOND/SECOND.WAR": _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW,
-    "EX/EX.WAR": _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW,
-    "TR.WAR": _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW,
+    ] + _SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW
+      + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG,
+    "SECOND/SECOND.WAR": (_SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW
+                          + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG),
+    "EX/EX.WAR": (_SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW
+                  + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG),
+    "TR.WAR": (_SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW
+               + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG),
     # SLPS_020.70 은 세이브 머리글 라벨이 아직 원문(`セ-ブデ-タ`, 6칸)이라 앵커는
     # 그대로 두고, 출격 목록 열만 같이 당긴다.
-    "SLPS_020.70": _SORTIE_ROW + _ROSTER_ROW,
+    "SLPS_020.70": (_SORTIE_ROW + _ROSTER_ROW + _SORTIE_HEADER + _UNIT_TABS
+                    + _UPGRADE_MSG + _UPGRADE_MSG_JP),
 }
 
 
 def _byte_fixups(buf, name, ko_tab, log):
+    """(총 교체 수). 패턴별 일치 횟수를 로그로 남긴다.
+
+    옛 `KO_FIXUPS` 는 패턴이 **한 번도 안 맞아도 조용히 넘어갔다**. 그래서
+    제2차·SLPS 의 출격 머리글이 바이트 배치가 달라 아예 안 맞는데도 몇 판이나
+    모르고 지나갔다(제보 #9). 이제 0회도 로그에 남긴다 — 실패시키지는 않는다.
+    한 자리의 여러 형태를 대안으로 늘어놓는 묶음(`_SORTIE_HEADER`)이 있어서
+    0회가 정상인 패턴이 섞여 있기 때문이다. 실제 회귀 방지는 산출물의
+    advance/phase 를 레트일과 대조하는 `audit/verify_ui_runs.py` 가 한다.
+    """
     n = 0
+    zero = 0
     for pat, rep in BYTE_FIXUPS.get(name, []):
         src = bytes.fromhex(pat)
         if rep is None:
@@ -183,11 +261,17 @@ def _byte_fixups(buf, name, ko_tab, log):
         else:
             dst = bytes.fromhex(rep)
         assert len(dst) == len(src), f"{name}: 바이트 길이가 다르다 {pat}"
+        hit = 0
         at = buf.find(src)
         while at >= 0:
             buf[at:at + len(src)] = dst
-            n += 1
+            hit += 1
             at = buf.find(src, at + len(src))
+        n += hit
+        if hit == 0:
+            zero += 1
+    if zero:
+        log(f"    (안 맞은 패턴 {zero}개 — 대안 형태라면 정상)")
     return n
 
 

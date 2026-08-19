@@ -39,7 +39,14 @@ from pathlib import Path
 R = str(_P.WORK)
 sys.path.insert(0, f"{R}/tools")
 from analyze_sce_relocation import (parse_scenarios, TEXT_POINTER_OPCODES,
-                                    ARG_POINTER_FORMS, iter_pointer_sites)
+                                    ARG_POINTER_FORMS, iter_pointer_sites,
+                                    build_anchor_context, resolve_inner_anchor)
+
+#: 안쪽 앵커 재조준에서 뺄 포인터 형태. `B6 00` 은 레코드 시작 적중률이 67%뿐이라
+#: 잡음이 많다(f05). 레트일 실측으로 이 형태의 앵커 후보 146곳 중 화자이름 필터를
+#: 통과하는 건 EX sc37(`エマ「?‥‥何か外がさわがしいわね`) 단 1곳이라, 빼도
+#: 잃는 게 거의 없다. 나중에 확인되면 이 집합만 비우면 된다.
+ANCHOR_SKIP_FORMS = frozenset(((0xB6, 0x00),))
 
 
 def operand_offset(buf, off):
@@ -144,22 +151,24 @@ def retarget(ko_bytes, jp_bytes, *, apply=False, verbose=True):
     return bytes(ko), fixed, problems
 
 
-def retarget_prepool(ko_bytes, jp_bytes, *, apply=False, verbose=True):
+def retarget_prepool(ko_bytes, jp_bytes, *, apply=False, verbose=True, game=""):
     """**풀 앞 스크립트**(block_start..pool_start)의 대사 포인터를 재조준한다.
 
     이 구간은 번역으로 바뀌지 않아 배포본과 레트일의 바이트 오프셋이 같다.
     그래서 같은 자리에서 같은 옵코드를 확인하고 변위만 다시 쓰면 된다.
 
-    원래는 게임별 빌더(rebuild_second_sce 등)가 여기를 맡았는데, 빌더가 아는
-    옵코드 집합이 제각각이라 몇몇이 레트일 변위 그대로 남았다. 남은 것은
-    레코드 중간을 가리켜 그 대사만 화자가 사라지고 문장 중간부터 나온다
-    (2026-08-12 제보 #8, 제3차 12~16화). 여기서 **한 군데서** 마무리한다.
+    2026-08-19 추가 — 목표가 레코드 시작이 아니라 **레코드 안쪽 메시지 시작**인
+    포인터(제3차 12·EX 45곳)도 여기서 함께 맞춘다. 레코드를 쪼개지 않고
+    배포본 레코드 안에서 `k번째 「 앞 화자 이름의 시작`을 다시 찾는다
+    (`analyze_sce_relocation.jp_message_anchor` 참고). 번역 원장은 손대지 않는다.
     """
     ko = bytearray(ko_bytes)
     bj = parse_scenarios(jp_bytes)
     bk = parse_scenarios(ko)
-    total = fixed = already = skipped = 0
+    ctx = build_anchor_context(jp_bytes, ko_bytes, bj, bk)
+    total = fixed = already = skipped = anchors = 0
     problems = []
+    weak = []
     for si, (sj, sk) in enumerate(zip(bj, bk)):
         if len(sj.records) != len(sk.records):
             continue
@@ -170,15 +179,34 @@ def retarget_prepool(ko_bytes, jp_bytes, *, apply=False, verbose=True):
                                                     sj.pool_start):
             tgt_j = opnd_j + struct.unpack_from("<h", jp_bytes, opnd_j)[0]
             ordn = starts_j.get(tgt_j)
+            res = None
             if ordn is None:
-                continue
+                # ★ 레코드 '안쪽 메시지 시작'을 겨누는 포인터
+                if (op, jp_bytes[off_j + 1]) in ANCHOR_SKIP_FORMS:
+                    continue
+                host = next((i for i, r in enumerate(sj.records)
+                             if r.start < tgt_j < r.end), None)
+                if host is None:
+                    continue
+                res = resolve_inner_anchor(jp_bytes, ko_bytes, sj.records[host],
+                                           sk.records[host], tgt_j, ctx,
+                                           game, off_j)
+                if res is None:
+                    continue                 # 앵커가 아니다 — 우연히 맞은 바이트
             total += 1
             off_k = sk.block_start + (off_j - sj.block_start)
             if off_k + 4 > len(ko) or ko[off_k] != op or operand_offset(ko, off_k) is None:
-                skipped += 1                     # 구조가 다르면 손대지 않는다
+                skipped += 1                 # 구조가 다르면 손대지 않는다
                 continue
             opnd_k = off_k + (opnd_j - off_j)
-            new_disp = sk.records[ordn].start - opnd_k
+            if res is None:
+                new_tgt = sk.records[ordn].start
+            else:
+                new_tgt = res["offset"]
+                anchors += 1
+                if res["how"] not in ("namemap", "lexicon", "override"):
+                    weak.append(f"sc{si} @{off_j:#x} {res['how']}")
+            new_disp = new_tgt - opnd_k
             if not (-0x8000 <= new_disp <= 0x7FFF):
                 problems.append(f"sc{si} @{off_k:#x}: 변위 범위초과 {new_disp:#x}")
                 continue
@@ -190,10 +218,91 @@ def retarget_prepool(ko_bytes, jp_bytes, *, apply=False, verbose=True):
             fixed += 1
     if verbose:
         print(f"  풀앞 스크립트 참조 총 {total}  재조준 {fixed}  이미정상 {already}  "
-              f"건너뜀 {skipped}  문제 {len(problems)}")
+              f"건너뜀 {skipped}  안쪽앵커 {anchors}  문제 {len(problems)}")
+        for w in weak[:10]:
+            print("   ~ 앵커 확신 낮음:", w)
         for p in problems[:10]:
             print("   !!", p)
     return bytes(ko), fixed, problems
+
+
+def rewrap_anchor_tails(ko_bytes, jp_bytes, *, apply=False, verbose=True, game=""):
+    """앵커부터 그리는 꼬리의 줄바꿈을 다시 잡는다 (0x00 <-> 0xF6, 길이 불변).
+
+    자동 줄바꿈은 레코드를 처음부터 그린다고 보고 F6 을 놓는다. 앵커 포인터는
+    레코드 중간부터 그리므로 꼬리 첫 줄이 상자를 넘는다(57곳 중 5곳).
+    KO 장면 레코드의 F6 은 반각공백을 대신 쓴 것이라, 맞바꾸기만 하면 길이가
+    안 변해 재배치·원장·게이트가 그대로다.
+    """
+    from second_translation_codec import (glyph_advance, MAX_SCENE_ADVANCE,
+                                          MAX_PAGE_LINES, record_geometry)
+    from analyze_sce_relocation import (parse_scenarios, iter_pointer_sites,
+                                        build_anchor_context, resolve_inner_anchor,
+                                        tokenize_record)
+    ko = bytearray(ko_bytes)
+    bj, bk = parse_scenarios(jp_bytes), parse_scenarios(ko)
+    ctx = build_anchor_context(jp_bytes, ko_bytes, bj, bk)
+    touched = 0
+    for sj, sk in zip(bj, bk):
+        if len(sj.records) != len(sk.records):
+            continue
+        if (sj.pool_start - sj.block_start) != (sk.pool_start - sk.block_start):
+            continue
+        starts_j = {r.start for r in sj.records}
+        for off_j, opnd_j, op in iter_pointer_sites(jp_bytes, sj.block_start,
+                                                    sj.pool_start):
+            tgt = opnd_j + struct.unpack_from("<h", jp_bytes, opnd_j)[0]
+            if tgt in starts_j or (op, jp_bytes[off_j + 1]) in ANCHOR_SKIP_FORMS:
+                continue
+            host = next((i for i, r in enumerate(sj.records)
+                         if r.start < tgt < r.end), None)
+            if host is None:
+                continue
+            res = resolve_inner_anchor(jp_bytes, ko_bytes, sj.records[host],
+                                       sk.records[host], tgt, ctx, game, off_j)
+            if res is None or res["how"] == "record-start":
+                continue
+            s, e = res["offset"], sk.records[host].end
+            # 상자는 **레트일 꼬리가 실제로 쓴 크기**를 따른다. 레코드 전체로
+            # 재면 안 된다 — 머리(시스템문)는 더 넓은 창에서 그려져서 폭이
+            # 60~276 까지 나오고, 그 값을 꼬리에 쓰면 꼬리가 전혀 안 접힌다.
+            _w, _h = record_geometry(bytes(jp_bytes[tgt:sj.records[host].end]))
+            CAP = max(_w, MAX_SCENE_ADVANCE)
+            MAX_LINES = max(_h, MAX_PAGE_LINES)
+            toks = tokenize_record(ko, s, e)
+            adv = phase = 0
+            lines = 1
+            changed = False
+            for i, (off, kind, v) in enumerate(toks):
+                breakable = (kind == 'g' and v == 0x00) or (kind == 'c' and v == 0xF6)
+                if not breakable:
+                    if kind == 'g':
+                        st, phase = glyph_advance(v, phase)
+                        adv += st
+                    continue
+                w, ph = 0, phase          # 다음 끊을 자리까지의 폭을 미리 잰다
+                for o2, k2, v2 in toks[i + 1:]:
+                    if k2 == 'e' or (k2 == 'g' and v2 == 0x00) or (k2 == 'c' and v2 == 0xF6):
+                        break
+                    if k2 == 'g':
+                        st, ph = glyph_advance(v2, ph)
+                        w += st
+                # 잘림은 정수 칸이 아니라 **반칸**으로 정해진다 —
+                # `31칸 + 반칸`(=63)은 정수로는 합격이지만 4px 잘린다(#14b).
+                if 2 * (adv + 1 + w) + ph > 2 * CAP and lines < MAX_LINES:
+                    want, adv, phase, lines = 0xF6, 0, 0, lines + 1
+                else:
+                    want = 0x00
+                    st, phase = glyph_advance(0x00, phase)
+                    adv += st
+                if ko[off] != want:
+                    changed = True
+                    if apply:
+                        ko[off] = want
+            touched += 1 if changed else 0
+    if verbose:
+        print(f"  앵커 꼬리 재래핑: {touched}곳")
+    return bytes(ko), touched
 
 
 def scan_f0_refs(buf, scn):
@@ -217,7 +326,17 @@ def scan_f0_refs(buf, scn):
 
 
 def retarget_f0(ko_bytes, jp_bytes, *, apply=False, verbose=True):
-    """풀 상대 오프셋(F0) 참조를 같은 서수 레코드의 새 위치로 다시 겨눈다."""
+    """★ 쓰지 말 것 — 검출이 통계적으로 무의미하다 (2026-08-18 재측정).
+
+    풀 앞 스크립트의 0xF0 은 맵·유닛 데이터의 흔한 채움값이라 EX 만 27,811개다.
+    그중 off+2 의 u16 이 레코드 시작과 맞는 비율은 **1.85%** 로, 전 바이트 기준선
+    1.11% 와 사실상 같다(진짜 포인터 형태인 B1/B2/B3/B4/B6 00/B9 03 은 94~100%).
+    즉 드라이런이 내놓는 '재조준 필요 474곳'은 전부 오탐이다.
+
+    `apply=True` 로 배선하면 EX 474곳, 제2차 152곳, 제3차 276곳의 **멀쩡한 데이터
+    바이트**를 덮어쓴다. 지금 빌드가 이 함수를 한 번도 부르지 않아서 무사한 것이니,
+    '재조준이 이렇게 많이 남았네' 하고 연결하지 말 것.
+    """
     ko = bytearray(ko_bytes)
     bj = parse_scenarios(jp_bytes)
     bk = parse_scenarios(ko)

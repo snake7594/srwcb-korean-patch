@@ -305,6 +305,9 @@ for name, ptr, cnt, bound in TABLES:
         f = ptr + 4 + 4 * k; t = f + s32(f); pf.append((f, t))
         if not (pool_lo <= t and rec_end(war, t) <= bound) or t in recs: continue
         jp = decode(war, t); ko = jp2ko.get(jp)
+        # 무기명은 레트일이 붙여 쓴다 — 값이 어느 사전에서 왔든 인코딩 직전에 건다
+        # (2026-08-19 제보 #15a).
+        if name == "weapon_names" and ko: ko = ko.replace(" ", "").replace("　", "")
         if name == "spirit_commands" and ko:
             adv, _ = _sig(_idxs_of(enc_ko(ko)))
             if adv > SPIRIT_DESC_MAX:
@@ -487,7 +490,9 @@ _lok = _lskip = _llong = 0
 for _x in _labels:
     _src = bytes.fromhex(_x["source_hex"].replace(" ", "")); _ko = _x.get("korean_text")
     _o = _x["offset"] + LABEL_DELTA
-    if war[_o:_o + len(_src)] != _src or not _ko or not str(_ko).strip(): _lskip += 1; continue
+    # 공백만 있는 번역은 "번역 없음"이 아니다 — 원문 조사 한 글자를 빈칸으로
+    # 지우는 정상 항목이다(특수기능 레벨업의 `が`). 제보 #15e.
+    if war[_o:_o + len(_src)] != _src or _ko is None or _ko == "": _lskip += 1; continue
     _e = enc_ko(_ko)
     if len(_e) > len(_src): _llong += 1; continue
     war[_o:_o + len(_src)] = _e + b"\x00" * (len(_src) - len(_e)); _lok += 1
