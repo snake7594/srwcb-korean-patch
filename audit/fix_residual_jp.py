@@ -196,17 +196,29 @@ _SORTIE_HEADER = [
 _UNIT_TABS = [("ee a7 ed a1 ee b4 00 00 ef 59",
                "ee a7 ed a1 ee b4 ee ff ef 59")]
 
-# 개조 확인 메시지 (제보 #9, #17a).
+# 개조 확인 메시지 (제보 #9, #17a, #22, #25).
 #
-# 엔진은 `<스탯명> ␠ <숫자1> <꼬리 첫 글리프 하나> <숫자2> <꼬리 나머지>` 로
-# 조립한다. 두 숫자 사이에 들어가는 건 **글리프 딱 한 개**다. 레트일은 반각
-# `が`(잉크 8px)라 깔끔했는데 우리는 전각 `이`(전진 8px인데 잉크 12px)를 넣어
-# 앞뒤 숫자에 1px 간격으로 달라붙었다 — 화면에서 `2400|250` 처럼 읽힌다.
-# 게다가 `,` 가 숫자2 뒤로 가서 `250、가 됨.` 이 됐다.
-# 자리가 한 글리프뿐이라 조사를 넣을 수 없다 -> 반각 `-` 로 간다.
-#   결과: 「한계반응 240-250으로 됨.」 / 「확인?」
+# 이 레코드는 실행파일의 **282엔트리 UI 문자열표**(필드상대 s32, 4바이트 비정렬)가
+# 안쪽을 일곱 군데 겨눈다. 엔진은 `[ptr[n], ptr[n+1])` 구간을 한 런으로 그린다.
+#
+#   idx21 `HP␠` idx22 `EN␠` idx23 `운동성␠` idx24 `장갑␠` idx25 `한계반응␠`
+#   idx26 = **두 숫자 사이 자리**  idx27 = 숫자2 뒤 나머지
+#
+# ★ **idx26 자리는 정확히 2바이트다.** 레트일은 반각 두 개(`が` `,`), v0.11.33 은
+#   전각 하나(`이`) — 둘 다 글리프 경계라 문제가 없었다. v0.11.34 가 여기에
+#   **반각 하나(`-`, 1바이트)** 를 넣는 바람에 idx27 이 다음 전각 글리프
+#   `f1 f8`(으)의 **둘째 바이트 0xF8** 을 겨눴고, 0xF8 은 텍스트 VM 의 '치환'
+#   옵코드라 폭 0x6E 로 폭주해 **유닛 개조 확정 순간 게임이 멈췄다**(제보 #22).
+#   무기 개조는 다른 레코드를 써서 멀쩡했다.
+#
+# 그래서 반각 **두 개**(`-` + 빈칸)로 채운다 — 레트일과 같은 2칸·phase 불변이고
+# 제보 #23 의 '숫자 사이에 간격이 있으면 좋겠다' 도 함께 만족한다.
+#   결과: 「한계반응 240- 250으로 됨.」 / 「확인?」
 _UPGRADE_MSG = [("f2 0c 3a ec 01 00 ee 00 3b f6 f4 de f2 0e 14 00 00",
-                 "11 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00 00")]
+                 "11 00 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00"),
+                # v0.11.34 가 심어 놓은 1바이트짜리도 되돌린다(핫패치본 대비)
+                ("11 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00 00",
+                 "11 00 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00")]
 
 # SLPS_020.70 의 같은 레코드는 아직 원문 그대로다(44바이트 통째 교체).
 # 한자 자리가 뜻 모를 한글로 렌더되고 있었다 — 감사기 사각지대였다.
@@ -214,7 +226,50 @@ _UPGRADE_MSG_JP = [(
     "1d 25 00 1a 23 00 ed a6 ec 51 ed 01 00 ec 62 ec 01 00 ec 63 ec 64 ec 65 ec 66 00"
     " 4b 3a 6a 69 89 7d 58 e4 f6 87 8c 56 43 66 58 4a 14",
     "1d 25 00 1a 23 00 f1 d0 ed f5 f0 82 00 f2 25 ec 09 00 f4 a3 ec 48 ef 8b f5 38 00"
-    " 11 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00 00")]
+    " 11 00 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00")]
+
+
+# 옵션 > 버튼 설정 값 표 (4바이트 고정 스트라이드, 45바이트).
+#
+# EX.WAR·TR.WAR 만 주입기 표 목록에서 빠져 **레트일 그대로**였다. ○✕△□ 는
+# 레트일 글리프 0x8F8~0x8FB 를 가리키는데 그 슬롯이 한글로 덮여 화면에
+# `톄톈토톡` 으로 떴다(2026-08-20 제보 #23·#25). 제2차 번역본을 바이트 그대로
+# 가져온다 — 항목 스트라이드가 같아 자리가 하나도 안 움직인다.
+_BUTTON_ROW = [(
+    "69 56 00 00 f3 f8 00 00 f3 f9 00 00 f3 fa 00 00 f3 fb 00 00"
+    " 21 31 00 00 27 31 00 00 21 32 00 00 27 32 00 00"
+    " a8 ae 11 b7 aa db 9e b7 ff",
+    "f1 7c f1 fd f5 36 00 00 f5 2f 00 00 f5 35 00 00 f5 34 00 00"
+    " 21 31 00 00 27 31 00 00 21 32 00 00 27 32 00 00"
+    " f0 e9 f2 1b f0 79 f3 d9 ff")]
+
+# EX 작전목적(승리조건) 잔여 미번역 10곳 (2026-08-20 제보 #23).
+#
+# 이 문구들은 시나리오 헤더 레코드(이벤트 스크립트) 안이라 **원장 번역 대상이
+# 아니다**. 길이를 바이트 단위로 정확히 맞추고 남는 만큼 0x00(빈칸)으로 메운다.
+# REPLACEMENTS 가 먼저 도므로 일부는 **치환 뒤 바이트**를 패턴으로 쓴다.
+_EX_OBJECTIVES = [
+    ("bf c4 98 11 cf 3c a7 d6 9f 3d 6d ec 1c ec b2",
+     "ef 87 f4 6f 3c f2 54 ec 95 3d 00 f4 38 ec 69"),                       # 바폼(조그) 파괴
+    ("b6 d1 df a3 11 db cf 8e ec e9 ec ee 54 5a 8a ec a6",
+     "ed db ef 43 ec 51 ee af 00 f2 3c ef 3a 00 00 00 00"),                 # 데몬골렘 전멸
+    ("35 ae 11 df ed 0d ed 89 6a ec 93 8e ec e9 ec ee 54 5a 8a ec a6",
+     "35 f3 e5 00 f2 0c ed 35 00 f2 3b 00 f2 3c ef 3a 00 00 00 00 00"),     # 5턴 이내 적 전멸
+    ("9a 11 9e a8 ec a4 ec a5 8e ee 0b 58 ec a6",
+     "f3 63 f3 bf f0 e0 00 ec 3d f4 38 00 00 00"),                          # 카크스 격파
+    ("b8 db 93 9e 3c 95 92 da 95 92 c6 a8 3d 8e ee 0b 58 ec a6",
+     "ee 1b ee ab f2 0c f3 bf 00 ec 3d f4 38 00 00 00 00 00 00"),           # 드레이크 격파
+    ("f2 3b 00 f2 3c ef 3a 3a f5 26 6e 38 ae 11 df ee 25 60 52 5e 47 8a ec a6",
+     "f2 3b 00 f2 3c ef 3a 00 ee 5b ed 9a 00 38 f3 e5 00 ef 94 f1 72 00 00 00"),
+    ("a6 d4 95 3c 9f d8 df ad df 3d 8e ee 0b 58 ec a6",
+     "f0 da f1 ce 3c ec 95 ee 8f f2 56 3d ec 3d f4 38"),                    # 슈우(그랑존) 격파
+    ("31 30 ae 11 df ed 0d ed 89 6a ec 93 8e ec e9 ec ee 54 5a 8a ec a6",
+     "31 30 f3 e5 00 f2 0c ed 35 00 f2 3b 00 f2 3c ef 3a 00 00 00 00 00"),
+    ("ec 06 ee 26 6a ef 79 ed a9 56 3a d1 ba 9a ef 11 ec 29 8e 54 88 62 65 ed 59 8a ec a6",
+     "f0 eb f2 3c f1 83 00 f2 21 f2 14 f4 aa 00 ef 40 ed a7 f3 63 00 ed 2d f3 59 00 00 00"),
+    ("f2 3b 00 f2 3c ef 3a 4a 37 ae 11 df ee 25 60 52 5e 47 8a ec a6",
+     "f2 3b 00 f2 3c ef 3a 00 ee 5b ed 9a 00 37 f3 e5 00 ef 94 f1 72"),
+]
 
 # 바이트 그대로 바꿔야 하는 것 — (찾을 바이트, 바꿀 바이트). 길이가 같아야 한다.
 #   * `FC dx dy` 는 커서 이동이다. 원문은 첫 줄 16칸 자리에 숫자를 찍었는데
@@ -232,13 +287,22 @@ BYTE_FIXUPS = {
     "SECOND/SECOND.WAR": (_SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW
                           + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG),
     "EX/EX.WAR": (_SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW
-                  + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG),
+                  + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG + _BUTTON_ROW),
     "TR.WAR": (_SAVE_HEADER_ANCHOR + _SORTIE_ROW + _ROSTER_ROW
-               + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG),
+               + _SORTIE_HEADER + _UNIT_TABS + _UPGRADE_MSG + _BUTTON_ROW),
+    "EX/E_SCE.BIN": _EX_OBJECTIVES,
     # SLPS_020.70 은 세이브 머리글 라벨이 아직 원문(`セ-ブデ-タ`, 6칸)이라 앵커는
     # 그대로 두고, 출격 목록 열만 같이 당긴다.
     "SLPS_020.70": (_SORTIE_ROW + _ROSTER_ROW + _SORTIE_HEADER + _UNIT_TABS
                     + _UPGRADE_MSG + _UPGRADE_MSG_JP),
+    # 제3차 시나리오 2·48 의 무언 대사 `エマ(‥‥‥‥)`. 원장 추출기가 `이름「」`
+    # 봉투가 아니라고 버려서 번역 대상에 아예 없었다(2026-08-20 제보 #25).
+    # 13바이트 자리에 13바이트로 넣는다 — `‥` 는 2바이트 글리프라 넷을 셋으로
+    # 줄여야 들어간다(advance 8, 끝 phase 0 로 원문과 동일).
+    "THIRD/3_SCE.BIN": [
+        ("97 cd 3c eb f2 eb f2 eb f2 eb f2 3d ff",
+         "f1 83 ef 06 3c eb f2 eb f2 eb f2 3d ff"),
+    ],
 }
 
 

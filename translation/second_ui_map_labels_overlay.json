@@ -2268,7 +2268,7 @@
    "budget_bytes": 24,
    "source_hex": "EC 6F EC 81 EC FF EC 66 6D 8E 6A 56 7D 58 E4 F6 87 8C 56 43 66 58 4A 14",
    "japanese_text": "地形適応のをにします。[F6]よろしいですか?",
-   "korean_text": "지형적응 변경.[F6]확인?"
+   "korean_text": "지형적응 - 변경.[F6]확인?"
   },
   {
    "offset": 44398,

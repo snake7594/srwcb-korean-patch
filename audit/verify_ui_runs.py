@@ -25,6 +25,7 @@
 레트일 파일 안에 그대로 있으면 죽은 사본으로 보고 건너뛴다.
 """
 import os
+import struct
 import sys
 from pathlib import Path
 
@@ -63,7 +64,88 @@ FORBIDDEN = [
     # SLPS_020.70 에만 남아 있던 원문 그대로의 개조 확인 메시지(감사기 사각지대)
     ("개조 확인 메시지 원문 잔재",
      "4b 3a 6a 69 89 7d 58 e4 f6 87 8c 56 43 66 58 4a 14"),
+    # v0.11.34 의 유닛 개조 프리징 — 숫자 사이 칸을 1바이트로 줄여 문자열표
+    # 엔트리가 전각 글리프 한가운데(0xF8)를 겨눴다(제보 #22).
+    ("개조 확인 메시지 1바이트 칸(프리징)",
+     "11 f1 f8 ee c0 00 ee 00 3b f6 f4 de f2 0e 14 00 00"),
 ]
+
+
+# ---------------------------------------------------------------------------
+# 공용 UI 문자열표(282엔트리) — 엔트리는 반드시 **글리프 경계**를 겨눠야 한다
+#
+# 실행파일마다 하나씩 있는 필드상대 s32 표(4바이트 비정렬)가 개조·지형적응 확인
+# 메시지 레코드의 **안쪽**을 여덟 군데 겨눈다. 엔진은 `[ptr[n], ptr[n+1])` 구간을
+# 한 런으로 그린다. 그래서 엔트리가 2바이트 글리프 한가운데에 떨어지면
+#
+#   * 착지 바이트가 0xF6 이상이면 **텍스트 VM 옵코드로 오독**된다 — v0.11.34 는
+#     0xF8(치환, 폭 0x6E)에 떨어져 유닛 개조 확정 순간 게임이 멈췄다(제보 #22).
+#   * 그 미만이면 글자만 깨진다(지형적응 메시지가 v0.11.28 부터 그 상태였다).
+#
+# 기존 게이트는 전부 **레코드를 처음부터** 읽어서 이걸 못 봤다. 표는 개조 확인
+# 레코드(`HP\0EN\0` 로 시작)를 겨누는 포인터를 씨앗으로 **자기탐색**한다.
+# ---------------------------------------------------------------------------
+_TBL_ARG = {0xF6: 0, 0xF7: 0, 0xF8: 1, 0xF9: 1, 0xFA: 0,
+            0xFB: 2, 0xFC: 2, 0xFD: 2, 0xFE: 1}
+_TBL_ANCHOR = bytes.fromhex("1d25001a2300")       # `HP\0EN\0`
+
+
+def _tbl_valid(buf, f):
+    d = struct.unpack_from("<i", buf, f)[0]
+    t = f + d
+    return 0x800 <= t < len(buf) and 0 < d < 0x40000
+
+
+def string_table(buf):
+    """(표 시작, 표 끝) 파일 오프셋. 못 찾으면 None."""
+    rec = buf.find(_TBL_ANCHOR)
+    while rec >= 0 and (rec < 0x800 or buf[rec - 1] != 0xFF):
+        rec = buf.find(_TBL_ANCHOR, rec + 1)
+    if rec < 0:
+        return None
+    seed = None
+    for f in range(0x800, len(buf) - 4):
+        if f + struct.unpack_from("<i", buf, f)[0] == rec:
+            seed = f
+            break
+    if seed is None:
+        return None
+    lo = hi = seed
+    while lo - 4 >= 0x800 and _tbl_valid(buf, lo - 4):
+        lo -= 4
+    while hi + 4 < len(buf) - 4 and _tbl_valid(buf, hi + 4):
+        hi += 4
+    return lo, hi
+
+
+def _tbl_aligned(buf, t):
+    s, n = t, 0
+    while s > 0x800 and buf[s - 1] != 0xFF and n < 4000:
+        s -= 1
+        n += 1
+    p = s
+    while p < t:
+        x = buf[p]
+        p += 1 if x == 0xFF else (1 if x < 0xEB else
+                                  (2 if x <= 0xF5 else 1 + _TBL_ARG.get(x, 0)))
+    return p == t
+
+
+def check_string_table(buf, name):
+    """([치명], [경고]) — 치명은 착지 바이트가 VM 옵코드(>= 0xF6)인 경우."""
+    span = string_table(buf)
+    if span is None:
+        return [f"{name}: UI 문자열표를 못 찾음(앵커가 번역됐나?)"], []
+    lo, hi = span
+    fatal, warn = [], []
+    for f in range(lo, hi + 1, 4):
+        t = f + struct.unpack_from("<i", buf, f)[0]
+        if _tbl_aligned(buf, t):
+            continue
+        msg = (f"{name}: 문자열표 0x{f:X} -> 0x{t:X} 가 글리프 한가운데"
+               f" (착지 바이트 0x{buf[t]:02X})")
+        (fatal if buf[t] >= 0xF6 else warn).append(msg)
+    return fatal, warn
 
 
 def _find_all(buf, pat):
@@ -139,6 +221,12 @@ def main() -> None:
                 bad += 1
             else:
                 print(f"  {rel:20} {name}: {got} (레트일과 동일)")
+        fatal, warn = check_string_table(ko, rel)
+        for m in fatal:
+            print(f"  [실패] {m}")
+        bad += len(fatal)
+        for m in warn:
+            print(f"  (경고) {m}")
         for name, pat_hex in FORBIDDEN:
             pat = bytes.fromhex(pat_hex.replace(" ", ""))
             n = len(_find_all(ko, pat))

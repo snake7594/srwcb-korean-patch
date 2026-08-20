@@ -177,6 +177,25 @@ for s in ko_all:
     for ch in normalise_for_font(s)[0]:
         i = gm.get(ch)
         if i is not None: used.add(i)
+# 뒤 단계(image-build)가 심는 문안의 글리프도 도너에서 빼야 한다. 종료 메시지
+# (`tools/inject_quit.py`)와 잔재 교체(`audit/fix_residual_jp.py`)는 이 주입기보다
+# **늦게** 도는데, 그 글자 슬롯이 도너로 넘어가면 화면에서 깨진 그림이 나온다
+# (2026-08-20 제보 #25 `묵`=0x45A, #23 `됨`=0x300).
+# ★ `ko_all` 이 아니라 `used` 에만 더한다 — ko_all 에 넣으면 EXTRAS 가 흔들려
+#   final_extras assert 가 터진다.
+_late_ko = ["-으로 됨.", "확인?", "무유", "훈련을 종료할까요?",
+            "지형적응 - 변경.", "리나구출", "적 전멸", "적 섬멸", "아군 전멸"]
+_qp = f"{_P.TRANSLATION}/quit_messages_ko.json"
+if os.path.exists(_qp):
+    _qj = json.load(open(_qp, encoding="utf-8"))
+    for _g in ("ex", "second", "third"):
+        _late_ko += [v for v in _qj.get(_g, {}).values() if v]
+for _s in _late_ko:
+    for _ch in normalise_for_font(_s.replace("[F6]", ""))[0]:
+        _i = gm.get(_ch)
+        if _i is not None:
+            used.add(_i)
+
 keep = set(range(0x000, 0x101)) | used
 keep |= {i for i, c in idx2ch.items() if c in "○×△□◎☆★↑↓→←"}
 font_off = next(v for k, v in FONT_EXE_LAYOUT.items() if str(k).replace("\\", "/").endswith("EX/EX.WAR"))
@@ -362,20 +381,20 @@ MH, MC = 0x188C4, 107
 # 같은 문자라도 게임이 중복 글리프 인덱스를 쓸 수 있어 enc_jp(텍스트)로 만든 바이트가
 # 레코드와 일치하지 않는다(챕터 선택 줄이 그랬음). 그래서 레코드에서 스팬 바이트를 직접 뽑는다.
 # 부분 문자열로 등록하면 나머지가 일본어로 남아 깨져 렌더되므로 반드시 '줄 전체'로.
-# 챕터 선택 화면. 한 줄이 EE FF(0x3FF) 전각 스페이서로 [장 이름][난도] 두 칸으로
+# 챕터 선택 화면. 한 줄이 EE FF(0x3FF) 전각 스페이서로 [장 이름][레벨] 두 칸으로
 # 나뉘므로 반드시 SPACER 를 넣어야 한다(빠지면 두 칸이 합쳐져 글자가 겹친다).
 # 각 칸의 advance 는 레트일 칸(마사키の章=5 / リュ-ネの章=6 / シュウの章=5) 이하로.
 # 이름 칸은 레트일 칸 폭(마사키の章=5 / リュ-ネの章=6 / シュウの章=5)에 딱 맞게
-# 공백으로 채운다. 그러지 않으면 남은 폭이 뒤 칸 패딩으로 흘러가 난도 칸이 넘친다.
+# 공백으로 채운다. 그러지 않으면 남은 폭이 뒤 칸 패딩으로 흘러가 레벨 칸이 넘친다.
 _LINE_OVERRIDES = {
 # 이름 칸은 전각(한글) 글리프 수가 홀수여야 한다. 레트일 'マサキの章' 은 전각이 章
 # 하나뿐이라 칸 끝 phase 가 1 이고, 뒤따르는 전각 스페이서 폭이 2 가 된다.
-# 짝수로 만들면 스페이서가 1 로 줄어 모자란 폭이 뒤 칸 패딩으로 흘러 난도 칸이 넘친다.
-    "マサキの章難度やさしい":      "마사키 " + SPACER + " 난도 쉬움",
-    "リュ-ネの章難度ふつう":       "류네편  " + SPACER + "난도 보통",
-    "シュウの章難度むずかしい":    "슈우편 " + SPACER + " 난도 어려움",
-    "リュ-ネの章難度ふ":           "류네편  " + SPACER + "난도 보",
-    "シュウの章難度む":            "슈우편 " + SPACER + " 난도 어",
+# 짝수로 만들면 스페이서가 1 로 줄어 모자란 폭이 뒤 칸 패딩으로 흘러 레벨 칸이 넘친다.
+    "マサキの章難度やさしい":      "마사키 " + SPACER + " 레벨 쉬움",
+    "リュ-ネの章難度ふつう":       "류네편  " + SPACER + "레벨 보통",
+    "シュウの章難度むずかしい":    "슈우편 " + SPACER + " 레벨 어려움",
+    "リュ-ネの章難度ふ":           "류네편  " + SPACER + "레벨 보",
+    "シュウの章難度む":            "슈우편 " + SPACER + " 레벨 어",
     "マサキの章ISSを使いますか?":  "마사키 " + SPACER + " ISS 사용?",
     "何それ?": "뭐야?",
 }
