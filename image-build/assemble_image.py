@@ -139,13 +139,24 @@ class Writer:
         self.f.close()
 
     def put_file(self, lba: int, data: bytes) -> None:
-        for i in range(sectors(len(data))):
+        n = sectors(len(data))
+        for i in range(n):
             chunk = data[i * UDS:(i + 1) * UDS]
             self.f.seek((lba + i) * SEC)
             sec = bytearray(self.f.read(SEC))
             if len(sec) != SEC:
                 raise SystemExit(f"이미지 끝을 넘어 씁니다 (LBA {lba + i})")
             sec[UDO:UDO + UDS] = chunk.ljust(UDS, b"\x00")
+            # ── MODE2 서브헤더를 반드시 다시 쓴다 ────────────────────────
+            # 사용자 데이터만 갈아끼우면 그 섹터의 **옛 서브헤더**가 남는다.
+            # 서브모드 비트7(0x80)은 EOF 이고 레트일은 파일의 **마지막
+            # 섹터에만** 세운다(그 외는 0x08). 재배치로 남의 옛 자리를 쓰면
+            # 그 파일이 찍어 둔 EOF 를 물려받고, 새로 이어붙인 꼬리에는 EOF
+            # 가 아예 없게 된다. CD 읽기는 EOF 섹터에서 끊기므로 파일 앞부분만
+            # 올라오고, 그 뒤를 참조하는 스크립트가 빈 메모리로 굴러떨어진다
+            # (EX 전투 후 커서 소실·입력 무반응. 2026-08-21 세이브스테이트로 확정).
+            # EDC 는 0x10(서브헤더)부터 계산하므로 rebuild 앞에서 써야 한다.
+            sec[0x10:0x18] = bytes([0, 0, 0x89 if i == n - 1 else 0x08, 0]) * 2
             rebuild_mode2_form1(sec)
             self.f.seek((lba + i) * SEC)
             self.f.write(sec)
