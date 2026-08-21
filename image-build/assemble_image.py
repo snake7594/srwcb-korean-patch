@@ -203,6 +203,13 @@ def assemble(retail: Path, out: Path, files: dict[str, bytes], quiet=False) -> d
         else:
             freed.append([lo, hi])
 
+    # 진단용: SRWCB_NO_PACK=1 이면 v0.11.36 이전처럼 전부 디스크 끝에 이어 붙인다.
+    # (23화 정지가 배치 때문인지 가르는 A/B 시험판을 만들 때 쓴다.)
+    if _os.environ.get("SRWCB_NO_PACK") == "1":
+        freed = []
+        if not quiet:
+            print("  [진단] SRWCB_NO_PACK=1 — 안쪽 채우기 없이 전부 끝에 붙입니다")
+
     # 자주 읽는 것부터 best-fit 으로 안쪽 빈 구간에 넣는다. 안 들어가면 끝에 붙인다.
     order = [p for p in NEAR_FIRST if p in append]
     order += [p for p in append if p not in order]
