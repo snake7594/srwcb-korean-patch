@@ -53,6 +53,23 @@ APPEND_ORDER = [
     "BMESS3.BIN", "THIRD/3_SCE.BIN", "THIRD/3_DEAD.BIN",
     "EX/E_SCE.BIN", "BMESS4.BIN", "EX/E_DEAD.BIN",
 ]
+#: 안쪽(레트일 자리) 배치 우선순위 — **자주 읽는 것부터**.
+#:
+#: 레트일은 게임 데이터를 전부 LBA 23~27,427 에 몰아 놓았다. 우리가 커진 파일을
+#: 디스크 **맨 끝**(240,000번대, 무비 뒤)에 이어 붙이면서, 전투 한 번마다
+#: `EX.WAR`(25,521) <-> `BMESS4`(242,802) 처럼 **217,000 섹터 풀스트로크 시크**가
+#: 생겼다. 레트일의 최대 거리는 25,000 섹터 남짓이다. 턴 종료 뒤 적 페이즈처럼
+#: 전투 대사를 연달아 읽는 구간에서 로딩이 몇 배로 길어진다(2026-08-21 제보 #26).
+#:
+#: 그래서 **재배치되는 파일이 비우고 간 자리**(합 2,435섹터)에 다시 채워 넣는다.
+#: 필요량이 2,735섹터라 300 이 모자라는데, `SECOND.WAR` 은 제2차를 시작할 때
+#: 한 번 읽는 오버레이라 그것만 끝으로 보내면 나머지가 전부 들어간다.
+NEAR_FIRST = [
+    "BMESS4.BIN", "EX/E_SCE.BIN", "BMESS3.BIN", "THIRD/3_SCE.BIN",
+    "BMESS2.BIN", "SECOND/2_SCE.BIN",
+    "EX/E_DEAD.BIN", "THIRD/3_DEAD.BIN", "SECOND/2_DEAD.BIN",
+    "SECOND/SECOND.WAR",
+]
 # 원래 자리에 덮어쓰는 것 (크기 불변)
 IN_PLACE = ["SLPS_020.70", "C_SMAP.BIN", "THIRD/THIRD.WAR", "EX/EX.WAR", "TR.WAR"]
 
@@ -164,12 +181,43 @@ def assemble(retail: Path, out: Path, files: dict[str, bytes], quiet=False) -> d
 
     end = retail.stat().st_size // SEC
     plan = {}
+
+    # 재배치되는 파일이 레트일에서 쓰던 자리를 **빈 구간**으로 회수한다.
+    # 인접한 것끼리는 합친다(사이에 그대로 두는 파일이 없을 때만).
+    spans = sorted((ent[p].lba, ent[p].lba + sectors(ent[p].size)) for p in append)
+    freed = []
+    for lo, hi in spans:
+        if freed and lo <= freed[-1][1]:
+            freed[-1][1] = max(freed[-1][1], hi)
+        else:
+            freed.append([lo, hi])
+
+    # 자주 읽는 것부터 best-fit 으로 안쪽 빈 구간에 넣는다. 안 들어가면 끝에 붙인다.
+    order = [p for p in NEAR_FIRST if p in append]
+    order += [p for p in append if p not in order]
     lba = end
-    for p in append:
-        plan[p] = (lba, len(files[p]))
-        lba += sectors(len(files[p]))
+    for p in order:
+        n = sectors(len(files[p]))
+        best = None
+        for r in freed:
+            room = r[1] - r[0]
+            if room >= n and (best is None or room < best[1] - best[0]):
+                best = r
+        if best is not None:
+            plan[p] = (best[0], len(files[p]))
+            best[0] += n
+        else:
+            plan[p] = (lba, len(files[p]))
+            lba += n
     for p in inplace:
         plan[p] = (ent[p].lba, len(files[p]))
+
+    if not quiet:
+        far = [p for p in append if plan[p][0] >= end]
+        hot = [plan[p][0] for p in plan if plan[p][0] < end]
+        print(f"  배치: 안쪽 {len(append) - len(far)}개 / 끝에 붙임 {len(far)}개"
+              + (f" ({', '.join(far)})" if far else "")
+              + f" — 안쪽 최대 LBA {max(hot):,}")
 
     # 제3차 로더는 3_SCE/3_DEAD 위치를 실행파일에 박아 둔다 — 새 LBA 로 다시 쓴다.
     refs = json.loads(LBA_REFS.read_text(encoding="utf-8"))
