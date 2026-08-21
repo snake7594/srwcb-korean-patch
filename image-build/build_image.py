@@ -249,6 +249,17 @@ def step_bmess_unref(files):
     print(f"  비참조 전투 대사 {n}곳 한글화")
 
 
+def step_battle_scratch(files):
+    """전투 텍스트 조립 스크래치를 넓힌다(제3차) — 한글이 레트일 256B 슬롯을 넘긴다.
+
+    제2차는 tools/build_second_expanded_patch.py 가 이미 같은 수술을 한다.
+    자세한 건 audit/expand_battle_scratch.py.
+    """
+    import expand_battle_scratch as BS
+    n = BS.apply(files)
+    print(f"  전투 스크래치 확장 {n}개 실행파일")
+
+
 def step_harden_vm(files):
     """텍스트 VM 의 치환 패딩 루프에 하한 검사를 넣는다(프리징 안전망).
 
@@ -337,6 +348,7 @@ def main():
     step_residual(files)
     step_bmess_unref(files)
     step_bmess_tables(files)
+    step_battle_scratch(files)
     step_harden_vm(files)
     # 뒤 단계(잔여 레코드 재배치 등)가 레코드를 옮기면 3단계에서 맞춰 둔 대사
     # 포인터가 다시 어긋난다. 레코드를 건드리는 일이 다 끝난 **여기서** 한 번 더 맞춘다.
