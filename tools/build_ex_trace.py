@@ -199,8 +199,15 @@ def main() -> None:
     w.put_file(e.lba, new)
     w.close()
     cue = out.with_suffix(".cue")
-    cue.write_bytes((f'FILE "{out.name}" BINARY\r\n  TRACK 01 MODE2/2352\r\n'
-                     f'    INDEX 01 00:00:00\r\n').encode())
+    # 레트일 컴플리트 박스는 **2트랙**이다(트랙 2 = CD-DA). 트랙 2 를 빠뜨리면
+    # CD-DA 를 읽는 장면에서 정식 빌드와 다르게 동작한다 — 진단 빌드가 원판과
+    # 다르게 굴면 진단이 무의미하므로 정식 릴리스와 같은 cue 를 쓴다.
+    src_cue = src.with_suffix(".cue")
+    if src_cue.exists():
+        cue.write_bytes(src_cue.read_bytes().replace(src.name.encode(),
+                                                     out.name.encode()))
+    else:
+        raise SystemExit(f"[없음] 원본 cue: {src_cue}")
     print(f"\nOUT {out}")
     print(f"    로그 버퍼 RAM 0x{log_base:08X}")
 
