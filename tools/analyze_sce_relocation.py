@@ -158,8 +158,37 @@ def iter_pointer_sites(data: bytes, start: int, end: int):
       세 게임 합쳐 367곳이라, 12~16화의 대사가 통째로 밀렸다(2026-08-12 제보 #8).
 
     변위는 **부호 있는 16비트**다 (0x800CB2F4: sll 16 / sra 16).
+
+    ## `F0 00 <변위16>` 안쪽은 건너뛴다 (2026-08-21)
+
+    이벤트 스크립트에는 `F0 00 <변위16>` 4바이트 명령(공통 서브루틴 호출)이 아주
+    많다. 그 **변위 바이트가 우연히 포인터 옵코드처럼 보이면**, 여기서 그 자리를
+    옵코드로 인정해 버리고 재조준기가 옵코드+2(= **다음 명령**)를 변위로 덮어쓴다.
+
+        레트일  f0 00 b6 00 | b9 02 63 7a      <- `b6 00` 은 F0 의 변위
+        우리    f0 00 b6 00 | 73 03 63 7a      <- B9 02 옵코드가 사라졌다
+
+    레트일 변위가 우연히 레코드 시작을 정확히 겨누면 재조준기의 필터도 통과한다.
+    EX sc23 이 그 경우였고, 볼크루스 전투 뒤 스크립트가 통째로 탈선해 인터프리터가
+    빈 힙을 기어다녔다(커서 소실·입력 무반응·음악은 계속). 세이브스테이트에 심은
+    제어흐름 추적으로 확정했다. 전수 조사 결과 EX 6곳 · 제3차 2곳 · 제2차 0곳.
+
+    그래서 `F0 00` 뒤 2바이트(변위 자리)에서 시작하는 후보는 인정하지 않는다.
     """
+    f0_operand = bytearray(end - start)
+    off = start
+    while off < end - 3:
+        if data[off] == 0xF0 and data[off + 1] == 0x00:
+            for k in (2, 3):
+                if off + k < end:
+                    f0_operand[off + k - start] = 1
+            off += 4
+        else:
+            off += 1
+
     for off in range(start, end - 2):
+        if f0_operand[off - start]:
+            continue                      # `F0 00 <변위16>` 의 변위 자리
         op = data[off]
         if op in TEXT_POINTER_OPCODES:
             yield off, off + 1, op
