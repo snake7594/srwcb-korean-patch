@@ -139,6 +139,8 @@ def main() -> None:
             [str(REPO / "audit" / "verify_submode.py"), "--version", a.version])
         run("이벤트 스크립트 검증",
             [str(REPO / "audit" / "verify_sce_script.py"), "--version", a.version])
+        run("대사 페이지 길이 검증",
+            [str(REPO / "audit" / "verify_page_bytes.py"), "--version", a.version])
         run("예고 타이틀 카드 검증(CB)",
             [str(REPO / "audit" / "verify_eyecatch.py"), "--cb-only"])
     if want(9):
