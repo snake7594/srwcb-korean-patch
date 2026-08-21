@@ -131,6 +131,8 @@ def main() -> None:
             [str(REPO / "audit" / "verify_ui_runs.py"), "--version", a.version])
         run("화자 검증",
             [str(REPO / "audit" / "verify_speakers.py"), "--version", a.version])
+        run("VM 치환 루프 하한 검사 검증",
+            [str(REPO / "audit" / "verify_vm_hardening.py"), "--version", a.version])
         run("예고 타이틀 카드 검증(CB)",
             [str(REPO / "audit" / "verify_eyecatch.py"), "--cb-only"])
     if want(9):

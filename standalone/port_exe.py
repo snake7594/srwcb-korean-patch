@@ -16,6 +16,7 @@ Music-pool pointer fields are 1-byte-unaligned, handled explicitly (same self-re
 import struct, json, bisect, hashlib, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "audit"))
 import config
 
 rs=open(config.CB_RETAIL_SECOND,"rb").read()
@@ -119,5 +120,11 @@ print("stats:",st)
 if prob: print("PROBLEMS:",prob[:20])
 assert len(out)==SLPS_LEN
 config.OUT_DIR.mkdir(parents=True, exist_ok=True)
+# --- 텍스트 VM 치환 패딩 루프 하한 검사 (프리징 안전망) ---
+# `F8 <인자>` 의 정적 폭보다 런타임 치환값이 길면 부호 없는 카운트다운이 RAM 을
+# 밀어 버린다. 컴플리트 박스 쪽과 같은 패치를 단독판 실행파일에도 넣는다.
+import harden_text_vm as _HV
+out, _hard_n = _HV.harden(out, "SLPS_024.06")
+print("  치환 패딩 루프 하한 검사 %d곳" % _hard_n)
 open(config.PATCHED_EXE,"wb").write(out)
 print("wrote",config.PATCHED_EXE.name,hex(len(out)),"sha256",hashlib.sha256(out).hexdigest()[:16])

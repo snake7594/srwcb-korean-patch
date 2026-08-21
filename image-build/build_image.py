@@ -249,6 +249,53 @@ def step_bmess_unref(files):
     print(f"  비참조 전투 대사 {n}곳 한글화")
 
 
+def step_harden_vm(files):
+    """텍스트 VM 의 치환 패딩 루프에 하한 검사를 넣는다(프리징 안전망).
+
+    `F8 <인자>` 의 정적 폭보다 런타임 치환값이 길면 부호 없는 카운트다운이
+    RAM 을 밀어 버린다(v0.11.34 유닛 개조 프리징). 같은 엔진의 생산자 쪽은
+    `blez` 로 막는데 소비자만 빠져 있다. 자세한 건 audit/harden_text_vm.py.
+    """
+    import harden_text_vm as HV
+    n = HV.apply(files)
+    print(f"  치환 패딩 루프 하한 검사 {n}곳")
+
+
+def step_bmess_tables(files):
+    """실행파일에 박힌 BMESS2/3/4 외부 오프셋표를 재패킹본 표로 전부 교체.
+
+    각 실행파일은 세 게임의 표를 **모두** 품고 있는데, 지금까지는 자기 게임
+    것만 갱신됐다(TR.WAR 만 예외 — 세 게임 전투를 다 돌려서 셋 다 필요했다).
+    나머지는 그 게임에서 선택되지 않는 죽은 사본이지만, 표가 스테일이면 전투가
+    그대로 멈추는 부류라 실행파일 안에 스테일 표를 남기지 않는다.
+    """
+    import struct as _st
+    tabs = []
+    for name in ("BMESS2", "BMESS3", "BMESS4"):
+        key = f"{name}.BIN"
+        if key not in files:
+            continue
+        old = (_P.EXTRACTED / key).read_bytes()
+        new = files[key]
+        tabs.append((name,
+                     old[:_st.unpack_from("<I", old, 0)[0]],
+                     new[:_st.unpack_from("<I", new, 0)[0]]))
+    done = 0
+    for exe in ("SECOND/SECOND.WAR", "THIRD/THIRD.WAR", "EX/EX.WAR", "TR.WAR",
+                "SLPS_020.70"):
+        if exe not in files:
+            continue
+        buf = bytearray(files[exe])
+        for name, old_t, new_t in tabs:
+            if old_t == new_t or bytes(buf).count(old_t) != 1:
+                continue
+            at = bytes(buf).find(old_t)
+            buf[at:at + len(new_t)] = new_t
+            done += 1
+        files[exe] = bytes(buf)
+    print(f"  BMESS 외부표 {done}개 갱신")
+
+
 def step_csmap(files):
     if not CSMAP.exists():
         print("  게임 선택 화면 그래픽 생성")
@@ -289,6 +336,8 @@ def main():
     step_port_second(files)
     step_residual(files)
     step_bmess_unref(files)
+    step_bmess_tables(files)
+    step_harden_vm(files)
     # 뒤 단계(잔여 레코드 재배치 등)가 레코드를 옮기면 3단계에서 맞춰 둔 대사
     # 포인터가 다시 어긋난다. 레코드를 건드리는 일이 다 끝난 **여기서** 한 번 더 맞춘다.
     print("[6.5/8] 대사 포인터 재조준 마무리")
