@@ -736,6 +736,15 @@ RELAXED_COLUMN_NAME_ASSETS = {
     # 그 결과 제2차만 '초바주카·대태풍' 같은 의역이 남아 제3차·EX 와 갈렸다.
     # 표 전체의 레트일 최대 advance 를 상한으로 쓴다(2026-08-22 용어 통일).
     "weapon_names",
+    # 아래 다섯도 같은 이유다. 레코드별 자기 폭에 묶어 두니 제2차만 축약 사다리로
+    # 떨어져 '언덕'->'언', '바다'->'해', '사랑'->'애' 가 되었고 제3차·EX·TR 과 갈렸다.
+    # 네 게임의 표 상한이 **정확히 같으므로**(지형 10 · 정신기 33 · 강화파츠 33 ·
+    # 특기 9 · 능력 10) 표 상한을 쓰는 것이 옳다 (2026-08-22 전면 용어 검사).
+    "terrain_names",
+    "spirit_commands",
+    "enhancement_parts",
+    "pilot_skills",
+    "unit_abilities",
 }
 
 # These retail numeric slots intentionally identify different characters in

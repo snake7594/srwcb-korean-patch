@@ -128,6 +128,13 @@ def relocate_pointed_records(war, retail, enc_ko, arena_alloc, verbose=True):
     ex_ret = open(f"{ROOT}/extracted/EX/EX.WAR", "rb").read()
     lo = json.load(open(f"{_P.REPO}/ex-ui/data/ex_leftover.json", encoding="utf-8"))
     sp = json.load(open(f"{_P.REPO}/ex-ui/data/second_span_jp2ko.json", encoding="utf-8"))
+    # 이 경로는 span_map 을 안 거치므로 정규화표(despace_nospace)를 여기서 직접 건다.
+    # 안 걸면 BGM·데모 제목이 제2차(붙임)와 EX·TR(띄움)에서 갈린다(2026-08-22 전면 검사).
+    _dnp = f"{_P.TRANSLATION}/despace_nospace.json"
+    if os.path.exists(_dnp):
+        _nm = json.load(open(_dnp, encoding="utf-8"))
+        _st = lambda t: t.replace(" ", "").replace("　", "")
+        sp = {k: _nm.get(_st(v), v) for k, v in sp.items()}
     plain = lambda s: re.sub(r"<f[67]>|\[..\]|_", "", s)
     fidx = _field_index(retail)
 
