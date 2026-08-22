@@ -731,6 +731,11 @@ RELAXED_COLUMN_NAME_ASSETS = {
     "pilot_short_names",
     "pilot_full_names",
     "unit_names",
+    # 무기명도 이름표와 같은 취급이다. 레코드마다 자기 일본어 폭을 상한으로 두면
+    # 음차 표기(하이퍼바주카·그레이트타이푼)가 전부 거부돼 축약 사다리로 떨어지고,
+    # 그 결과 제2차만 '초바주카·대태풍' 같은 의역이 남아 제3차·EX 와 갈렸다.
+    # 표 전체의 레트일 최대 advance 를 상한으로 쓴다(2026-08-22 용어 통일).
+    "weapon_names",
 }
 
 # These retail numeric slots intentionally identify different characters in
@@ -2526,6 +2531,13 @@ def _prepare_pointer_group(
         source_raw = _verify_record_guard(executable, source_row, grammar=grammar)
         if not source_raw.endswith(b"\xFF"):
             raise ValueError(f"guarded UI record at 0x{source_offset:X} has no FF terminator")
+        if overlay is not None and asset_id == "weapon_names":
+            # 무기명만 공백을 지운다(사용자 지시 2026-08-22). 인명·기체명은 규범표
+            # translation/name_canon.json 이 게임마다 같은 값을 박아 두므로 손대지 않는다.
+            _kt = overlay.get("korean_text")
+            if isinstance(_kt, str) and (" " in _kt or "　" in _kt):
+                overlay = dict(overlay)
+                overlay["korean_text"] = _kt.replace(" ", "").replace("　", "")
         if overlay is not None and asset_id in FIXED_POINTER_TEXT_ASSETS:
             try:
                 overlay = _select_fixed_pointer_overlay(

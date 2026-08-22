@@ -1783,7 +1783,7 @@
      "source_raw_hex": "81 89 81 89 EC 48 EC 49 FF",
      "source_raw_sha256": "b90ac6418c0d7f050ad9cec6f48dbd4c8c44b0242525679e3f08c421034d8ed8",
      "japanese": "もりもり博士",
-     "korean": "모리모리 박사",
+     "korean": "모리모리박사",
      "translation_source": "approved_glossary",
      "review": {
       "required": false,
@@ -1999,7 +1999,7 @@
      "source_raw_hex": "EC 27 EC 28 EC 29 EC 48 EC 49 FF",
      "source_raw_sha256": "1a6a51483f75ac11093ad1153d10993d610c8ca8b0cc6beb4fe6585d17f02412",
      "japanese": "早乙女博士",
-     "korean": "사오토메 박사",
+     "korean": "사오토메박사",
      "translation_source": "approved_glossary",
      "review": {
       "required": false,
@@ -4555,7 +4555,7 @@
      "source_raw_hex": "EC 08 EE 83 ED 86 EC 79 EC 4A FF",
      "source_raw_sha256": "adc568777b476cf606e2cc07b79bfd5272efeec9b6b08d211426dc943ed3696b",
      "japanese": "人工知能改",
-     "korean": "개량 인공지능",
+     "korean": "개량인공지능",
      "translation_source": "canonical_pilot_short_catalogue",
      "review": {
       "required": false,
@@ -6445,7 +6445,7 @@
      "source_raw_hex": "CE BC DA BF 2D FF",
      "source_raw_sha256": "126e3851573d201965250678ba03d7ca32cbda1d88ca48f63105ac477934a086",
      "japanese": "ミネルバX",
-     "korean": "미네르바 X",
+     "korean": "미네르바X",
      "translation_source": "approved_glossary",
      "review": {
       "required": false,
@@ -7039,7 +7039,7 @@
      "source_raw_hex": "EC 08 EE 83 ED 86 EC 79 EC 4A FF",
      "source_raw_sha256": "adc568777b476cf606e2cc07b79bfd5272efeec9b6b08d211426dc943ed3696b",
      "japanese": "人工知能改",
-     "korean": "개량 인공지능",
+     "korean": "개량인공지능",
      "translation_source": "canonical_pilot_short_catalogue",
      "review": {
       "required": false,
@@ -8061,7 +8061,7 @@
      "source_raw_hex": "D8 93 D8 E3 CE D8 E3 D8 93 D8 FF",
      "source_raw_sha256": "f55360537068108cc040fb73978bc2f1a91e97bad0802e9ca250213b9cf5df3c",
      "japanese": "ライラ=ミラ=ライラ",
-     "korean": "라일라 미라 라이라",
+     "korean": "라이라 미라 라이라",
      "translation_source": "canonical_pilot_catalogue",
      "review": {
       "required": false,
@@ -8997,7 +8997,7 @@
      "source_raw_hex": "81 89 81 89 EC 48 EC 49 FF",
      "source_raw_sha256": "b90ac6418c0d7f050ad9cec6f48dbd4c8c44b0242525679e3f08c421034d8ed8",
      "japanese": "もりもり博士",
-     "korean": "모리모리 박사",
+     "korean": "모리모리박사",
      "translation_source": "approved_glossary",
      "review": {
       "required": false,
@@ -9213,7 +9213,7 @@
      "source_raw_hex": "EC 27 EC 28 EC 29 EC 48 EC 49 FF",
      "source_raw_sha256": "1a6a51483f75ac11093ad1153d10993d610c8ca8b0cc6beb4fe6585d17f02412",
      "japanese": "早乙女博士",
-     "korean": "사오토메 박사",
+     "korean": "사오토메박사",
      "translation_source": "approved_glossary",
      "review": {
       "required": false,
@@ -11780,7 +11780,7 @@
      "source_raw_hex": "EC 08 EE 83 ED 86 EC 79 EC 4A FF",
      "source_raw_sha256": "adc568777b476cf606e2cc07b79bfd5272efeec9b6b08d211426dc943ed3696b",
      "japanese": "人工知能改",
-     "korean": "개량 인공지능",
+     "korean": "개량인공지능",
      "translation_source": "canonical_pilot_catalogue",
      "review": {
       "required": false,
@@ -13670,7 +13670,7 @@
      "source_raw_hex": "CE BC DA BF 2D FF",
      "source_raw_sha256": "126e3851573d201965250678ba03d7ca32cbda1d88ca48f63105ac477934a086",
      "japanese": "ミネルバX",
-     "korean": "미네르바 X",
+     "korean": "미네르바X",
      "translation_source": "approved_glossary",
      "review": {
       "required": false,
@@ -14264,7 +14264,7 @@
      "source_raw_hex": "EC 08 EE 83 ED 86 EC 79 EC 4A FF",
      "source_raw_sha256": "adc568777b476cf606e2cc07b79bfd5272efeec9b6b08d211426dc943ed3696b",
      "japanese": "人工知能改",
-     "korean": "개량 인공지능",
+     "korean": "개량인공지능",
      "translation_source": "canonical_pilot_catalogue",
      "review": {
       "required": false,
@@ -14620,7 +14620,7 @@
      "source_raw_hex": "9B DF AF CF 07 08 01 FF",
      "source_raw_sha256": "5c3726aa05ee9e38cfa3a824965ebe9046f13ea15f1e238feec9151ebcfb3cca",
      "japanese": "ガンダムmkⅡ",
-     "korean": "건담 Mk-II",
+     "korean": "건담MkII",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -14872,7 +14872,7 @@
      "source_raw_hex": "A5 9E 02 EC 4A FF",
      "source_raw_sha256": "28fe8506e6429164354dc5335d8d0382186ad5603a1c08190cf4d0d512aae948",
      "japanese": "ザクⅢ改",
-     "korean": "자쿠 III 개량형",
+     "korean": "자쿠III 개량형",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15430,7 +15430,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 3C 22 28 3D FF",
      "source_raw_sha256": "a9afdbad60697492746cd195634300c2c779f631525949db5bc13af7f26d03cb",
      "japanese": "サイコガンダム(MS)",
-     "korean": "사이코 건담(MS)",
+     "korean": "사이코건담(MS)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15448,7 +15448,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 3C 22 16 3D FF",
      "source_raw_sha256": "f2b5d4ac00d65f03b9a92eeaa8a4d316d51c793d633046f61c31f61e5c000a90",
      "japanese": "サイコガンダム(MA)",
-     "korean": "사이코 건담(MA)",
+     "korean": "사이코건담(MA)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15466,7 +15466,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 07 08 01 3C 22 28 3D FF",
      "source_raw_sha256": "c63d8b3ece890c350bfd483a0bccb9935a04a5a2e1fdd9aebbfff8f732388f5c",
      "japanese": "サイコガンダムmkⅡ(MS)",
-     "korean": "사이코 건담 Mk-II(MS)",
+     "korean": "사이코건담MkII(MS)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15484,7 +15484,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 07 08 01 3C 22 16 3D FF",
      "source_raw_sha256": "b518e160057a7d7cc3ec427ec9b3a9ff1b9ce18f34c0779b893d7d422ee2366a",
      "japanese": "サイコガンダムmkⅡ(MA)",
-     "korean": "사이코 건담 Mk-II(MA)",
+     "korean": "사이코건담MkII(MA)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15520,7 +15520,7 @@
      "source_raw_hex": "A5 9E 01 FF",
      "source_raw_sha256": "91e9ebabc122b7f9f31e6c79cfba11bc9a7a7e0474e40de8cbe5d20b0ce53a6d",
      "japanese": "ザクⅡ",
-     "korean": "자쿠 II",
+     "korean": "자쿠II",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15736,7 +15736,7 @@
      "source_raw_hex": "9F A6 99 A8 F4 00 02 FF",
      "source_raw_sha256": "1c813b7c9db17e878f1d8bc833617692add89a6a7994486e8ce22264f186ce8e",
      "japanese": "グシオスおⅢ",
-     "korean": "구시오스 베타 III",
+     "korean": "구시오스베타III",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -15778,7 +15778,7 @@
      "source_raw_hex": "A4 93 BF A8 AE 11 FF",
      "source_raw_sha256": "313ff6ba8c358d9b589e7ad55c8e33d7c2f96798e903b8bf0f94642470eab5c0",
      "japanese": "サイバスタ-",
-     "korean": "사이버스타",
+     "korean": "사이바스터",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -16030,7 +16030,7 @@
      "source_raw_hex": "B8 CF 01 FF",
      "source_raw_sha256": "806480e0d445393e266723b2263f1b55c02a42c5201e9b56eb38e2f39fb4c43c",
      "japanese": "ドムⅡ",
-     "korean": "돔 II",
+     "korean": "돔II",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -16210,7 +16210,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 3C 22 28 3D FF",
      "source_raw_sha256": "a9afdbad60697492746cd195634300c2c779f631525949db5bc13af7f26d03cb",
      "japanese": "サイコガンダム(MS)",
-     "korean": "사이코 건담(MS)",
+     "korean": "사이코건담(MS)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -16228,7 +16228,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 3C 22 16 3D FF",
      "source_raw_sha256": "f2b5d4ac00d65f03b9a92eeaa8a4d316d51c793d633046f61c31f61e5c000a90",
      "japanese": "サイコガンダム(MA)",
-     "korean": "사이코 건담(MA)",
+     "korean": "사이코건담(MA)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -16336,7 +16336,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 07 08 01 3C 22 28 3D FF",
      "source_raw_sha256": "c63d8b3ece890c350bfd483a0bccb9935a04a5a2e1fdd9aebbfff8f732388f5c",
      "japanese": "サイコガンダムmkⅡ(MS)",
-     "korean": "사이코 건담 Mk-II(MS)",
+     "korean": "사이코건담MkII(MS)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -16354,7 +16354,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 07 08 01 3C 22 16 3D FF",
      "source_raw_sha256": "b518e160057a7d7cc3ec427ec9b3a9ff1b9ce18f34c0779b893d7d422ee2366a",
      "japanese": "サイコガンダムmkⅡ(MA)",
-     "korean": "사이코 건담 Mk-II(MA)",
+     "korean": "사이코건담MkII(MA)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -16552,7 +16552,7 @@
      "source_raw_hex": "9C D4 C8 DB 93 07 08 01 FF",
      "source_raw_sha256": "cde9e0d145a8a6a5349f81574fed9776c41ac6804b1e5a072d331ae67147082d",
      "japanese": "キュベレイmkⅡ",
-     "korean": "큐베레이 Mk-II",
+     "korean": "큐베레이MkII",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17002,7 +17002,7 @@
      "source_raw_hex": "AB DF 01 FF",
      "source_raw_sha256": "73c1c3009c13ebaefc185df1a573615c693f56c5e2e07fe3d8a4879e717a26d7",
      "japanese": "ゼンⅡ",
-     "korean": "젠 II",
+     "korean": "젠II",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -17884,7 +17884,7 @@
      "source_raw_hex": "CF A4 93 EC 4A FF",
      "source_raw_sha256": "035703db3180ef8e30243c563e9bfbfed1070e2c7e8deb32cd0b3a203cf2b25e",
      "japanese": "ムサイ改",
-     "korean": "개량형 무사이",
+     "korean": "무사이 개량형",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18388,7 +18388,7 @@
      "source_raw_hex": "A5 9E 01 FF",
      "source_raw_sha256": "91e9ebabc122b7f9f31e6c79cfba11bc9a7a7e0474e40de8cbe5d20b0ce53a6d",
      "japanese": "ザクⅡ",
-     "korean": "자쿠 II",
+     "korean": "자쿠II",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -18406,7 +18406,7 @@
      "source_raw_hex": "A5 9E 01 FF",
      "source_raw_sha256": "91e9ebabc122b7f9f31e6c79cfba11bc9a7a7e0474e40de8cbe5d20b0ce53a6d",
      "japanese": "ザクⅡ",
-     "korean": "자쿠 II",
+     "korean": "자쿠II",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -19162,7 +19162,7 @@
      "source_raw_hex": "E0 90 DA A6 99 DF EC 4A FF",
      "source_raw_sha256": "d4579b9c45463a7d046356654c1d660a146f5eec6e34ea3cfdc6df18bcff0c36",
      "japanese": "ヴァルシオン改",
-     "korean": "개량형 발시온",
+     "korean": "발시온 개량형",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -19270,7 +19270,7 @@
      "source_raw_hex": "9B DF AF CF 07 08 01 FF",
      "source_raw_sha256": "5c3726aa05ee9e38cfa3a824965ebe9046f13ea15f1e238feec9151ebcfb3cca",
      "japanese": "ガンダムmkⅡ",
-     "korean": "건담 Mk-II",
+     "korean": "건담MkII",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -20008,7 +20008,7 @@
      "source_raw_hex": "A4 93 A2 9B DF AF CF 3C 22 16 3D FF",
      "source_raw_sha256": "f2b5d4ac00d65f03b9a92eeaa8a4d316d51c793d633046f61c31f61e5c000a90",
      "japanese": "サイコガンダム(MA)",
-     "korean": "사이코 건담(MA)",
+     "korean": "사이코건담(MA)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -20674,7 +20674,7 @@
      "source_raw_hex": "A5 9E 02 FF",
      "source_raw_sha256": "050dcde547d4a7d7bad31ffd658ae2178b59faae9f6b9fcb0c8326955a0fd12b",
      "japanese": "ザクⅢ",
-     "korean": "자쿠 III",
+     "korean": "자쿠III",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -20692,7 +20692,7 @@
      "source_raw_hex": "A5 9E 02 EC 4A FF",
      "source_raw_sha256": "28fe8506e6429164354dc5335d8d0382186ad5603a1c08190cf4d0d512aae948",
      "japanese": "ザクⅢ改",
-     "korean": "자쿠 III 개량형",
+     "korean": "자쿠III 개량형",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -20728,7 +20728,7 @@
      "source_raw_hex": "A6 D2 91 EC 9F EC 6E A5 9E 01 FF",
      "source_raw_sha256": "b409a7a97a47b383dfb47d2b040ac58c870b80e6b72698a34af395eb3a2c5ce1",
      "japanese": "シャア専用ザクⅡ",
-     "korean": "샤아 전용 자쿠 II",
+     "korean": "샤아 전용 자쿠II",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -20746,7 +20746,7 @@
      "source_raw_hex": "9C D4 C8 DB 93 07 08 01 FF",
      "source_raw_sha256": "cde9e0d145a8a6a5349f81574fed9776c41ac6804b1e5a072d331ae67147082d",
      "japanese": "キュベレイmkⅡ",
-     "korean": "큐베레이 Mk-II",
+     "korean": "큐베레이MkII",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -21358,7 +21358,7 @@
      "source_raw_hex": "9B A5 18 3C 22 28 3D FF",
      "source_raw_sha256": "80441da36372c3f560507a016c3daf0802f413749f3e401a6385d882def291f8",
      "japanese": "ガザC(MS)",
-     "korean": "가자 C(MS)",
+     "korean": "가자C(MS)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -21376,7 +21376,7 @@
      "source_raw_hex": "9B A5 18 3C 22 16 3D FF",
      "source_raw_sha256": "b9a2cbeb008149be6f319d397d3546da2272f6977e7327505146f38af0322b99",
      "japanese": "ガザC(MA)",
-     "korean": "가자 C(MA)",
+     "korean": "가자C(MA)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -21394,7 +21394,7 @@
      "source_raw_hex": "9B A5 19 3C 22 28 3D FF",
      "source_raw_sha256": "11f419415d841fd2b310c645c58b2e102f1d396d33f027b960b4f73b0dc07168",
      "japanese": "ガザD(MS)",
-     "korean": "가자 D(MS)",
+     "korean": "가자D(MS)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,
@@ -21412,7 +21412,7 @@
      "source_raw_hex": "9B A5 19 3C 22 16 3D FF",
      "source_raw_sha256": "e2f434b5b989c6e8bf5e362d311d7fbd6f11ab42e034bcc292105ea2778e3a7c",
      "japanese": "ガザD(MA)",
-     "korean": "가자 D(MA)",
+     "korean": "가자D(MA)",
      "translation_source": "canonical_unit_catalogue",
      "review": {
       "required": false,

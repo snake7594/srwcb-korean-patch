@@ -141,6 +141,10 @@ def main() -> None:
             [str(REPO / "audit" / "verify_sce_script.py"), "--version", a.version])
         run("대사 페이지 길이 검증",
             [str(REPO / "audit" / "verify_page_bytes.py"), "--version", a.version])
+        run("용어 통일 검증",
+            [str(REPO / "audit" / "verify_name_canon.py"),
+             str(P.OUT / f"Super Robot Taisen Complete Box Korean {a.version} (Track 1).bin"),
+             "--extracted", str(P.EXTRACTED)])
         run("예고 타이틀 카드 검증(CB)",
             [str(REPO / "audit" / "verify_eyecatch.py"), "--cb-only"])
     if want(9):
